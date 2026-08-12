@@ -193,11 +193,12 @@ def test_update_submission_writes_review_log(mock_get_client: MagicMock) -> None
         "updated_at": CREATED_AT.isoformat(),
     }
 
-    select_execute = client_mock.table.return_value.select.return_value.eq.return_value.limit.return_value.execute
-    select_execute.return_value.data = [submission_row]
-    update_execute = (
-        client_mock.table.return_value.update.return_value.eq.return_value.execute
+    table_mock = client_mock.table.return_value
+    select_execute = (
+        table_mock.select.return_value.eq.return_value.limit.return_value.execute
     )
+    select_execute.return_value.data = [submission_row]
+    update_execute = table_mock.update.return_value.eq.return_value.execute
     update_execute.return_value.data = [submission_row]
 
     update_admin_submission(
