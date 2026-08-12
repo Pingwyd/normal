@@ -236,3 +236,46 @@ def test_assert_can_publish_blocks_clinical_reviewer_for_standard_cards() -> Non
         assert exc.code == "FORBIDDEN"
 
     assert raised
+
+
+def test_assert_can_publish_allows_founder_for_standard_cards() -> None:
+    from app.content.admin_service import _assert_can_publish
+
+    _assert_can_publish(
+        FOUNDER_CONTEXT,
+        requires_clinical_review=False,
+        target_status=CardStatus.PUBLISHED,
+    )
+
+
+def test_assert_can_publish_blocks_founder_for_clinical_cards() -> None:
+    from app.content.admin_service import _assert_can_publish
+    from app.core.errors import ApiError
+
+    try:
+        _assert_can_publish(
+            FOUNDER_CONTEXT,
+            requires_clinical_review=True,
+            target_status=CardStatus.PUBLISHED,
+        )
+        raised = False
+    except ApiError as exc:
+        raised = True
+        assert exc.code == "FORBIDDEN"
+
+    assert raised
+
+
+@patch("app.content.router.list_published_cards")
+def test_public_list_does_not_trigger_revalidation(
+    mock_list_cards: MagicMock,
+) -> None:
+    from app.content import revalidation
+
+    mock_list_cards.return_value = ([], None)
+
+    with patch.object(revalidation, "trigger_card_revalidation") as mock_revalidate:
+        response = client.get("/v1/cards")
+
+    assert response.status_code == 200
+    mock_revalidate.assert_not_called()
