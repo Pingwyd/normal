@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { CardDetailView } from "@/components/cards/card-detail-view";
+import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { fetchCardBySlug } from "@/lib/api/cards";
 import { ApiRequestError } from "@/lib/api/errors";
@@ -33,6 +34,7 @@ export default async function CardDetailPage({ params }: CardDetailPageProps) {
       <main className="px-4 py-8 sm:px-6 sm:py-10">
         <CardDetailView card={card} />
       </main>
+      <SiteFooter />
     </div>
   );
 }

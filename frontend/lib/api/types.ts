@@ -69,3 +69,22 @@ export interface BrowseSearchParams {
   after?: string;
   limit?: number;
 }
+
+export interface LikelyDuplicateMatch {
+  id: string;
+  question: string;
+  slug: string;
+  similarity_score: number;
+}
+
+export interface SubmissionCreateResponse {
+  id: string;
+  status: string;
+  likely_duplicate_of: string | null;
+  likely_duplicate: LikelyDuplicateMatch | null;
+}
+
+export interface ReportIssueCreateResponse {
+  id: string;
+  status: string;
+}

@@ -1,5 +1,11 @@
 import { ApiRequestError } from "./errors";
-import type { ApiEnvelope } from "./types";
+import type { ApiEnvelope, ApiErrorBody } from "./types";
+
+export type ApiPostResult<T> = {
+  data: T;
+  meta: ApiEnvelope<T>["meta"];
+  info: ApiErrorBody | null;
+};
 
 function getApiBaseUrl(): string {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -44,4 +50,48 @@ export async function apiGet<T>(
   }
 
   return { data: body.data, meta: body.meta };
+}
+
+export async function apiPost<T>(
+  path: string,
+  payload: unknown,
+  options?: { infoCodes?: string[] },
+): Promise<ApiPostResult<T>> {
+  const response = await fetch(`${getApiBaseUrl()}${path}`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  let body: ApiEnvelope<T>;
+  try {
+    body = (await response.json()) as ApiEnvelope<T>;
+  } catch {
+    throw new Error("The server returned an unexpected response.");
+  }
+
+  const infoCodes = options?.infoCodes ?? [];
+  if (
+    response.ok &&
+    body.error &&
+    infoCodes.includes(body.error.code) &&
+    body.data != null
+  ) {
+    return { data: body.data, meta: body.meta, info: body.error };
+  }
+
+  if (body.error) {
+    throw new ApiRequestError(body.error);
+  }
+
+  if (!response.ok || body.data == null) {
+    throw new Error(
+      `The server returned an unexpected status (${response.status}).`,
+    );
+  }
+
+  return { data: body.data, meta: body.meta, info: null };
 }

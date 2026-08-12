@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowLeft, Bookmark, ThumbsUp } from "lucide-react";
 
 import { BlockRenderer } from "@/components/content-blocks/block-renderer";
+import { ReportIssueModal } from "@/components/submissions/report-issue-modal";
 import type { CardDetail } from "@/lib/api/types";
 
 import { RelatedCards } from "./related-cards";
@@ -56,6 +57,10 @@ export function CardDetailView({ card }: CardDetailViewProps) {
       <BlockRenderer blocks={card.content_blocks} />
       <SourcesList sources={card.sources} />
       <RelatedCards relatedCards={card.related_cards} />
+
+      <section className="border-t border-[#ECEAE4] pt-6">
+        <ReportIssueModal cardId={card.id} cardQuestion={card.question} />
+      </section>
     </article>
   );
 }
