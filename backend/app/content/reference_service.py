@@ -172,6 +172,23 @@ def update_tag(tag_id: UUID, payload: TagUpdate) -> TagResponse:
     return _tag_row_to_response(response.data[0])
 
 
+def list_categories() -> list[CategoryResponse]:
+    client = get_supabase_client()
+    response = (
+        client.table("categories")
+        .select(CATEGORY_SELECT)
+        .order("name")
+        .execute()
+    )
+    return [_category_row_to_response(row) for row in response.data]
+
+
+def list_tags() -> list[TagResponse]:
+    client = get_supabase_client()
+    response = client.table("tags").select(TAG_SELECT).order("name").execute()
+    return [_tag_row_to_response(row) for row in response.data]
+
+
 def delete_tag(tag_id: UUID) -> None:
     client = get_supabase_client()
     card_usage = (
