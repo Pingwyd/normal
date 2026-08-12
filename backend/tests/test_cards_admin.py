@@ -7,6 +7,7 @@ from fastapi.testclient import TestClient
 from app.auth.dependencies import get_current_admin
 from app.auth.models import AdminContext, AdminRole
 from app.content.admin_schemas import (
+    AdminCardListItem,
     AdminCardResponse,
     CardStatus,
     DueForReviewCard,
@@ -81,6 +82,17 @@ SAMPLE_ADMIN_CARD = AdminCardResponse(
     ],
 )
 
+SAMPLE_LIST_ITEM = AdminCardListItem(
+    id=CARD_ID,
+    slug="feel-anxious",
+    question="Is it normal to feel anxious?",
+    brief="Very common.",
+    status=CardStatus.DRAFT,
+    requires_clinical_review=False,
+    category_id=CATEGORY_ID,
+    updated_at=datetime(2026, 1, 1, tzinfo=UTC),
+)
+
 SAMPLE_DUE_CARD = DueForReviewCard(
     id=CARD_ID,
     slug="feel-anxious",
@@ -145,6 +157,38 @@ def test_founder_can_update_card(mock_update: MagicMock) -> None:
     app.dependency_overrides.clear()
     assert response.status_code == 200
     assert response.json()["data"]["status"] == "published"
+
+
+def test_list_cards_requires_auth() -> None:
+    response = client.get("/v1/admin/cards")
+    assert response.status_code == 401
+
+
+@patch("app.content.admin_router.list_admin_cards")
+def test_admin_can_list_cards(mock_list_cards: MagicMock) -> None:
+    app.dependency_overrides[get_current_admin] = lambda: FOUNDER_CONTEXT
+    mock_list_cards.return_value = [SAMPLE_LIST_ITEM]
+
+    response = client.get("/v1/admin/cards?status=draft", headers=AUTH_HEADER)
+
+    app.dependency_overrides.clear()
+    assert response.status_code == 200
+    assert len(response.json()["data"]) == 1
+    assert response.json()["data"][0]["slug"] == "feel-anxious"
+    mock_list_cards.assert_called_once()
+
+
+@patch("app.content.admin_router.get_admin_card")
+def test_admin_can_get_card(mock_get_card: MagicMock) -> None:
+    app.dependency_overrides[get_current_admin] = lambda: FOUNDER_CONTEXT
+    mock_get_card.return_value = SAMPLE_ADMIN_CARD
+
+    response = client.get(f"/v1/admin/cards/{CARD_ID}", headers=AUTH_HEADER)
+
+    app.dependency_overrides.clear()
+    assert response.status_code == 200
+    assert response.json()["data"]["id"] == str(CARD_ID)
+    mock_get_card.assert_called_once_with(CARD_ID)
 
 
 @patch("app.content.admin_router.list_cards_due_for_review")

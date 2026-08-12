@@ -5,6 +5,7 @@ from app.auth.models import AdminContext, AdminRole
 from app.auth.service import get_supabase_client
 from app.content.admin_schemas import (
     AdminCardCreate,
+    AdminCardListItem,
     AdminCardResponse,
     AdminCardUpdate,
     CardStatus,
@@ -450,4 +451,37 @@ def list_cards_due_for_review(
             requires_clinical_review=row["requires_clinical_review"],
         )
         for row in response.data
+    ]
+
+
+def list_admin_cards(
+    *,
+    status: CardStatus | None = None,
+) -> list[AdminCardListItem]:
+    client = get_supabase_client()
+    query = (
+        client.table("cards")
+        .select(
+            "id, slug, question, brief, status, requires_clinical_review, "
+            "category_id, updated_at"
+        )
+        .order("updated_at", desc=True)
+    )
+    if status is not None:
+        query = query.eq("status", status.value)
+
+    response = query.execute()
+    return [
+        AdminCardListItem(
+            id=UUID(row["id"]),
+            slug=row["slug"],
+            question=row["question"],
+            brief=row["brief"],
+            status=CardStatus(row["status"]),
+            requires_clinical_review=row["requires_clinical_review"],
+            category_id=UUID(row["category_id"]),
+            updated_at=_parse_timestamp(row["updated_at"]),
+        )
+        for row in response.data
+        if _parse_timestamp(row["updated_at"]) is not None
     ]

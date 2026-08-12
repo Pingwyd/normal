@@ -87,3 +87,14 @@ class DueForReviewCard(BaseModel):
     next_review_due: datetime | None
     last_reviewed_at: datetime | None
     requires_clinical_review: bool
+
+
+class AdminCardListItem(BaseModel):
+    id: UUID
+    slug: str
+    question: str
+    brief: str
+    status: CardStatus
+    requires_clinical_review: bool
+    category_id: UUID
+    updated_at: datetime

@@ -6,9 +6,11 @@ from fastapi import APIRouter, Depends, Query
 
 from app.auth.dependencies import require_admin, require_role
 from app.auth.models import AdminContext, AdminRole
-from app.content.admin_schemas import AdminCardCreate, AdminCardUpdate
+from app.content.admin_schemas import AdminCardCreate, AdminCardUpdate, CardStatus
 from app.content.admin_service import (
     create_admin_card,
+    get_admin_card,
+    list_admin_cards,
     list_cards_due_for_review,
     update_admin_card,
 )
@@ -23,6 +25,8 @@ from app.content.reference_service import (
     create_tag,
     delete_category,
     delete_tag,
+    list_categories,
+    list_tags,
     update_category,
     update_tag,
 )
@@ -30,6 +34,33 @@ from app.core.responses import success_envelope
 
 router = APIRouter(prefix="/v1/admin", tags=["content-admin"])
 require_founder = require_role(AdminRole.FOUNDER)
+
+
+@router.get("/cards")
+async def list_cards_route(
+    _admin: Annotated[AdminContext, Depends(require_admin)],
+    status: Annotated[CardStatus | None, Query()] = None,
+) -> dict:
+    cards = list_admin_cards(status=status)
+    return success_envelope([card.model_dump(mode="json") for card in cards])
+
+
+@router.get("/cards/due-for-review")
+async def due_for_review_route(
+    _admin: Annotated[AdminContext, Depends(require_admin)],
+    before: Annotated[datetime | None, Query()] = None,
+) -> dict:
+    cards = list_cards_due_for_review(before=before)
+    return success_envelope([card.model_dump(mode="json") for card in cards])
+
+
+@router.get("/cards/{card_id}")
+async def get_card_route(
+    card_id: UUID,
+    _admin: Annotated[AdminContext, Depends(require_admin)],
+) -> dict:
+    card = get_admin_card(card_id)
+    return success_envelope(card.model_dump(mode="json"))
 
 
 @router.post("/cards")
@@ -51,13 +82,14 @@ async def update_card_route(
     return success_envelope(card.model_dump(mode="json"))
 
 
-@router.get("/cards/due-for-review")
-async def due_for_review_route(
+@router.get("/categories")
+async def list_categories_route(
     _admin: Annotated[AdminContext, Depends(require_admin)],
-    before: Annotated[datetime | None, Query()] = None,
 ) -> dict:
-    cards = list_cards_due_for_review(before=before)
-    return success_envelope([card.model_dump(mode="json") for card in cards])
+    categories = list_categories()
+    return success_envelope(
+        [category.model_dump(mode="json") for category in categories]
+    )
 
 
 @router.post("/categories")
@@ -86,6 +118,14 @@ async def delete_category_route(
 ) -> dict:
     delete_category(category_id)
     return success_envelope({"deleted": True, "id": str(category_id)})
+
+
+@router.get("/tags")
+async def list_tags_route(
+    _admin: Annotated[AdminContext, Depends(require_admin)],
+) -> dict:
+    tags = list_tags()
+    return success_envelope([tag.model_dump(mode="json") for tag in tags])
 
 
 @router.post("/tags")

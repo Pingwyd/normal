@@ -176,6 +176,26 @@ def test_founder_can_delete_tag(mock_delete_tag, founder_admin: None) -> None:
     mock_delete_tag.assert_called_once_with(TAG_ID)
 
 
+@patch("app.content.admin_router.list_categories")
+def test_admin_can_list_categories(mock_list_categories, founder_admin: None) -> None:
+    mock_list_categories.return_value = [SAMPLE_CATEGORY]
+
+    response = client.get("/v1/admin/categories", headers=AUTH_HEADER)
+
+    assert response.status_code == 200
+    assert response.json()["data"][0]["slug"] == "mind-emotions"
+
+
+@patch("app.content.admin_router.list_tags")
+def test_admin_can_list_tags(mock_list_tags, founder_admin: None) -> None:
+    mock_list_tags.return_value = [SAMPLE_TAG]
+
+    response = client.get("/v1/admin/tags", headers=AUTH_HEADER)
+
+    assert response.status_code == 200
+    assert response.json()["data"][0]["name"] == "anxiety"
+
+
 def test_clinical_reviewer_cannot_create_tag(reviewer_admin: None) -> None:
     response = client.post(
         "/v1/admin/tags",
