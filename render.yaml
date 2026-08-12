@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: normal-api
+    runtime: docker
+    rootDir: backend
+    plan: free
+    branch: main
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.0"
