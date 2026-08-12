@@ -36,9 +36,11 @@ def _assert_can_publish(
 ) -> None:
     if target_status != CardStatus.PUBLISHED:
         return
+    if requires_clinical_review:
+        if admin.role == AdminRole.CLINICAL_REVIEWER:
+            return
+        raise forbidden("You do not have permission to publish this card.")
     if admin.role == AdminRole.FOUNDER:
-        return
-    if admin.role == AdminRole.CLINICAL_REVIEWER and requires_clinical_review:
         return
     raise forbidden("You do not have permission to publish this card.")
 

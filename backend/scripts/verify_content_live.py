@@ -221,7 +221,50 @@ def main() -> int:
     assert tag_delete.status_code == 200
     print("   OK: founder created and deleted category + tag.")
 
-    print("9. Clinical reviewer is forbidden from reference data CRUD...")
+    print("9. Clinical publish gate blocks founder and allows reviewer...")
+    clinical_slug = f"content-verify-clinical-{suffix}"
+    clinical_create = client.post(
+        "/v1/admin/cards",
+        headers=founder_headers,
+        json={
+            "category_id": category_id,
+            "question": f"Clinical gate verify {suffix}?",
+            "brief": "Requires clinical review.",
+            "slug": clinical_slug,
+            "status": "draft",
+            "requires_clinical_review": True,
+        },
+    )
+    assert clinical_create.status_code == 200, clinical_create.text
+    clinical_card_id = clinical_create.json()["data"]["id"]
+
+    founder_clinical_publish = client.patch(
+        f"/v1/admin/cards/{clinical_card_id}",
+        headers=founder_headers,
+        json={"status": "published"},
+    )
+    assert founder_clinical_publish.status_code == 403, founder_clinical_publish.text
+    assert founder_clinical_publish.json()["error"]["code"] == "FORBIDDEN"
+
+    reviewer_clinical_publish = client.patch(
+        f"/v1/admin/cards/{clinical_card_id}",
+        headers=reviewer_headers,
+        json={"status": "published"},
+    )
+    assert reviewer_clinical_publish.status_code == 200, reviewer_clinical_publish.text
+
+    clinical_review_log = (
+        get_supabase_client()
+        .table("review_log")
+        .select("action, performed_by")
+        .eq("entity_id", clinical_card_id)
+        .eq("action", "published")
+        .execute()
+    )
+    assert clinical_review_log.data, "Expected review_log entry from clinical reviewer."
+    print("   OK: founder blocked, clinical reviewer published with review_log.")
+
+    print("10. Clinical reviewer is forbidden from reference data CRUD...")
     reviewer_category = client.post(
         "/v1/admin/categories",
         headers=reviewer_headers,
