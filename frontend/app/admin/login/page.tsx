@@ -21,7 +21,9 @@ export default async function AdminLoginPage({
       <main className="mx-auto flex min-h-full w-full max-w-lg flex-col justify-center px-4 py-16 sm:px-6">
         <div className="space-y-6 rounded-xl border border-[#D8D5CC] bg-white p-6">
           <div className="space-y-2 text-center">
-            <h1 className="font-display text-2xl text-[#202B26]">Admin sign in</h1>
+            <h1 className="font-display text-2xl text-[#202B26]">
+              Admin sign in
+            </h1>
             <p className="text-sm text-[#5A6560]">
               Internal access only. No public entry points.
             </p>

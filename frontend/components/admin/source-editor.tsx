@@ -2,10 +2,17 @@
 
 import { Trash2 } from "lucide-react";
 
-import { type EditorSource, defaultSource } from "@/lib/admin/card-editor-types";
+import {
+  type EditorSource,
+  defaultSource,
+} from "@/lib/admin/card-editor-types";
 import { getSourceTierLabel } from "@/lib/source-tiers";
 
-const SOURCE_TIERS = ["peer_reviewed", "expert_written", "self_report"] as const;
+const SOURCE_TIERS = [
+  "peer_reviewed",
+  "expert_written",
+  "self_report",
+] as const;
 
 type SourceEditorProps = {
   sources: EditorSource[];

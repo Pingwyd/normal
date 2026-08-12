@@ -29,7 +29,11 @@ export default async function AdminCardsPage({
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2" role="group" aria-label="Status filters">
+      <div
+        className="flex flex-wrap gap-2"
+        role="group"
+        aria-label="Status filters"
+      >
         {STATUS_OPTIONS.map((option) => {
           const href = option.value
             ? `/admin/cards?status=${option.value}`
@@ -65,7 +69,9 @@ export default async function AdminCardsPage({
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
-                    <p className="font-medium text-[#202B26]">{card.question}</p>
+                    <p className="font-medium text-[#202B26]">
+                      {card.question}
+                    </p>
                     <p className="mt-1 text-sm text-[#5A6560]">{card.brief}</p>
                   </div>
                   <div className="text-right text-xs text-[#5A6560]">

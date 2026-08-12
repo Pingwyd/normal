@@ -10,7 +10,10 @@ export async function POST(request: Request) {
   let password = "";
 
   try {
-    const body = (await request.json()) as { email?: string; password?: string };
+    const body = (await request.json()) as {
+      email?: string;
+      password?: string;
+    };
     email = body.email?.trim() ?? "";
     password = body.password ?? "";
   } catch {

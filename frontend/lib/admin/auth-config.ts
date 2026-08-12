@@ -66,10 +66,7 @@ function readEnvValue(...keys: string[]): string | undefined {
 }
 
 export function getSupabaseAuthConfig() {
-  const supabaseUrl = readEnvValue(
-    "NEXT_PUBLIC_SUPABASE_URL",
-    "SUPABASE_URL",
-  );
+  const supabaseUrl = readEnvValue("NEXT_PUBLIC_SUPABASE_URL", "SUPABASE_URL");
   const anonKey = readEnvValue(
     "NEXT_PUBLIC_SUPABASE_ANON_KEY",
     "SUPABASE_ANON_KEY",

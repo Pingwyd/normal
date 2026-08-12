@@ -31,7 +31,9 @@ export function createLocalId(): string {
   return `local-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
-export function defaultBlockData(type: ContentBlockType): Record<string, unknown> {
+export function defaultBlockData(
+  type: ContentBlockType,
+): Record<string, unknown> {
   switch (type) {
     case "paragraph":
       return { text: "" };
