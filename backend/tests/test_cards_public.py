@@ -199,9 +199,7 @@ def test_cursor_pagination_avoids_duplicates_when_new_cards_are_inserted() -> No
         [(t_new, id_new), *initial],
         key=lambda item: (-item[0].timestamp(), str(item[1])),
     )
-    page_two = _cards_after_cursor(after_insert, cursor_published_at, cursor_id)[
-        :limit
-    ]
+    page_two = _cards_after_cursor(after_insert, cursor_published_at, cursor_id)[:limit]
 
     page_one_ids = {card_id for _, card_id in page_one}
     page_two_ids = {card_id for _, card_id in page_two}
