@@ -291,6 +291,86 @@ WITH inserted_push AS (
 INSERT INTO seed_ids (key, id)
 SELECT 'push_subscription', id FROM inserted_push;
 
+WITH inserted_card_blocks_demo AS (
+    INSERT INTO cards (
+        category_id,
+        question,
+        brief,
+        slug,
+        status,
+        last_reviewed_by,
+        requires_clinical_review,
+        published_at
+    )
+    VALUES (
+        (SELECT id FROM seed_ids WHERE key = 'category'),
+        'Is it normal to see every content block type on one page?',
+        'This seed card demonstrates each supported block renderer.',
+        'content-block-types-demo',
+        'published',
+        (SELECT id FROM seed_ids WHERE key = 'admin'),
+        false,
+        NOW()
+    )
+    RETURNING id
+)
+INSERT INTO seed_ids (key, id)
+SELECT 'card_blocks_demo', id FROM inserted_card_blocks_demo;
+
+INSERT INTO content_blocks (card_id, position, type, data)
+VALUES
+    (
+        (SELECT id FROM seed_ids WHERE key = 'card_blocks_demo'),
+        1,
+        'paragraph',
+        '{"text": "This paragraph block explains the full answer in plain language."}'::jsonb
+    ),
+    (
+        (SELECT id FROM seed_ids WHERE key = 'card_blocks_demo'),
+        2,
+        'chart',
+        '{"title": "How common is this feeling?", "x_label": "Response", "y_label": "Share of people", "points": [{"label": "Often", "value": 42}, {"label": "Sometimes", "value": 31}, {"label": "Rarely", "value": 27}]}'::jsonb
+    ),
+    (
+        (SELECT id FROM seed_ids WHERE key = 'card_blocks_demo'),
+        3,
+        'table',
+        '{"caption": "Example comparison table", "headers": ["Experience", "Typical?", "Notes"], "rows": [["Racing thoughts", "Common", "Often tied to stress"], ["Sudden numbness", "Less common", "Worth checking patterns"]]}'::jsonb
+    ),
+    (
+        (SELECT id FROM seed_ids WHERE key = 'card_blocks_demo'),
+        4,
+        'pie_chart',
+        '{"title": "Survey breakdown", "segments": [{"label": "Yes", "value": 58}, {"label": "Unsure", "value": 24}, {"label": "No", "value": 18}]}'::jsonb
+    ),
+    (
+        (SELECT id FROM seed_ids WHERE key = 'card_blocks_demo'),
+        5,
+        'quote_callout',
+        '{"text": "Many people describe the same worry in different words.", "attribution": "Example clinical reviewer note"}'::jsonb
+    );
+
+INSERT INTO sources (
+    card_id,
+    title,
+    author_or_org,
+    url,
+    tier,
+    published_date,
+    accessed_date,
+    metadata
+)
+VALUES (
+    (SELECT id FROM seed_ids WHERE key = 'card_blocks_demo'),
+    'Seed Source For Block Demo',
+    'Example Health Org',
+    'https://example.org/block-demo',
+    'peer_reviewed',
+    DATE '2024-06-01',
+    CURRENT_DATE,
+    '{"context": "seed block demo"}'::jsonb
+);
+
 COMMIT;
 
 SELECT key, id FROM seed_ids ORDER BY key;

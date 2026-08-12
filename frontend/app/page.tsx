@@ -1,67 +1,109 @@
-import Image from "next/image";
+import { Suspense } from "react";
 
-export default function Home() {
+import { CategoryChips } from "@/components/browse/category-chips";
+import { LoadMoreButton } from "@/components/browse/load-more-button";
+import { SearchBar } from "@/components/browse/search-bar";
+import { CardFeedSkeleton } from "@/components/cards/card-feed-skeleton";
+import { CardGrid } from "@/components/cards/card-grid";
+import { SiteHeader } from "@/components/layout/site-header";
+import { fetchAccumulatedCards } from "@/lib/api/cards";
+import { ApiRequestError } from "@/lib/api/errors";
+import type {
+  BrowseSearchParams,
+  CardSummary,
+  PaginationMeta,
+} from "@/lib/api/types";
+import { parseBrowseSearchParams } from "@/lib/browse-url";
+
+export const dynamic = "force-dynamic";
+
+type HomePageProps = {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
+
+type BrowseFeedResult =
+  | { ok: true; cards: CardSummary[]; meta: PaginationMeta | null }
+  | { ok: false; message: string };
+
+async function loadBrowseFeed(
+  browseParams: BrowseSearchParams,
+): Promise<BrowseFeedResult> {
+  try {
+    const { cards, meta } = await fetchAccumulatedCards(browseParams);
+    return { ok: true, cards, meta };
+  } catch (error) {
+    const message =
+      error instanceof ApiRequestError
+        ? error.message
+        : error instanceof Error
+          ? error.message
+          : "Something went wrong while loading cards.";
+
+    return { ok: false, message };
+  }
+}
+
+function BrowseFeedError({ message }: { message: string }) {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+    <div className="rounded-xl border border-[#E8A97A] bg-white px-6 py-8 text-center">
+      <p className="font-display text-lg text-[#202B26]">
+        We could not load cards right now
+      </p>
+      <p className="mt-2 text-sm text-[#5A6560]">{message}</p>
+    </div>
+  );
+}
+
+async function BrowseFeed({
+  browseParams,
+}: {
+  browseParams: BrowseSearchParams;
+}) {
+  const result = await loadBrowseFeed(browseParams);
+
+  if (!result.ok) {
+    return <BrowseFeedError message={result.message} />;
+  }
+
+  return (
+    <>
+      <CardGrid cards={result.cards} />
+      <LoadMoreButton browseParams={browseParams} meta={result.meta} />
+    </>
+  );
+}
+
+export default async function HomePage({ searchParams }: HomePageProps) {
+  const resolvedSearchParams = await searchParams;
+  const browseParams = parseBrowseSearchParams(resolvedSearchParams);
+
+  return (
+    <div className="min-h-full bg-[#F2F1EC]">
+      <SiteHeader />
+      <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+        <div className="space-y-8">
+          <section className="space-y-3">
+            <h1 className="font-display text-3xl text-[#202B26] sm:text-4xl">
+              Browse common worries
+            </h1>
+            <p className="max-w-2xl text-sm leading-relaxed text-[#5A6560]">
+              Search and filter cards about everyday experiences. If something
+              is not typical, the answer will say so plainly.
+            </p>
+          </section>
+
+          <section className="space-y-4">
+            <SearchBar
+              key={browseParams.q ?? ""}
+              initialQuery={browseParams.q ?? ""}
+              browseParams={browseParams}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <CategoryChips browseParams={browseParams} />
+          </section>
+
+          <Suspense fallback={<CardFeedSkeleton />}>
+            <BrowseFeed browseParams={browseParams} />
+          </Suspense>
         </div>
       </main>
     </div>
