@@ -10,6 +10,8 @@ def configure_test_env(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("SUPABASE_URL", "https://example.supabase.co")
     monkeypatch.setenv("SUPABASE_SERVICE_ROLE_KEY", "test-service-role-key")
     monkeypatch.setenv("SUPABASE_JWT_AUD", "authenticated")
+    monkeypatch.setenv("ACCOUNT_JWT_SECRET", "test-account-jwt-secret-32chars-min")
+    monkeypatch.setenv("ACCOUNT_JWT_TTL_SECONDS", "3600")
     reset_settings()
     reset_jwk_client()
     reset_supabase_client()

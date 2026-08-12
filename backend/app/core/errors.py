@@ -52,3 +52,9 @@ def rate_limited(
             "X-RateLimit-Remaining": "0",
         },
     )
+
+
+def recovery_exhausted(
+    message: str = "No unused recovery codes remain.",
+) -> ApiError:
+    return ApiError(code="RECOVERY_EXHAUSTED", message=message, status_code=400)
