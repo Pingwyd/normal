@@ -52,10 +52,12 @@ def create_admin_user(payload: AdminUserCreate) -> AdminUserResponse:
             }
         )
         .select("id, auth_id, role, display_name, created_at, updated_at")
-        .single()
         .execute()
     )
-    return _row_to_response(response.data)
+    if not response.data:
+        msg = "Admin user creation did not return a row."
+        raise RuntimeError(msg)
+    return _row_to_response(response.data[0])
 
 
 def update_admin_user(admin_id: UUID, payload: AdminUserUpdate) -> AdminUserResponse:

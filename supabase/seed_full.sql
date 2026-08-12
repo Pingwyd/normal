@@ -40,7 +40,8 @@ WITH inserted_card_primary AS (
         slug,
         status,
         last_reviewed_by,
-        requires_clinical_review
+        requires_clinical_review,
+        published_at
     )
     VALUES (
         (SELECT id FROM seed_ids WHERE key = 'category'),
@@ -49,7 +50,8 @@ WITH inserted_card_primary AS (
         'anxious-before-big-event',
         'published',
         (SELECT id FROM seed_ids WHERE key = 'admin'),
-        false
+        false,
+        NOW()
     )
     RETURNING id
 )
@@ -63,7 +65,8 @@ WITH inserted_card_related AS (
         brief,
         slug,
         status,
-        requires_clinical_review
+        requires_clinical_review,
+        published_at
     )
     VALUES (
         (SELECT id FROM seed_ids WHERE key = 'category'),
@@ -71,7 +74,8 @@ WITH inserted_card_related AS (
         'A similar pre-event sensation many people report.',
         'butterflies-in-stomach',
         'published',
-        false
+        false,
+        NOW()
     )
     RETURNING id
 )
