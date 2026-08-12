@@ -1,4 +1,3 @@
-from datetime import UTC, datetime
 from unittest.mock import MagicMock, patch
 from uuid import UUID
 
@@ -8,8 +7,8 @@ from app.core.rate_limit import reset_rate_limiters
 from app.main import app
 from app.submissions.schemas import (
     LikelyDuplicateMatch,
-    ReportIssueCreateResponse,
     ReportedIssueStatus,
+    ReportIssueCreateResponse,
     SubmissionCreateResponse,
     SubmissionStatus,
 )

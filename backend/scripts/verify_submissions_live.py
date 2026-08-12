@@ -15,7 +15,6 @@ import os
 import sys
 import time
 from pathlib import Path
-from uuid import UUID
 
 import httpx
 from fastapi.testclient import TestClient
@@ -104,8 +103,9 @@ def main() -> int:
     assert duplicate_body["error"] is not None
     assert duplicate_body["error"]["code"] == "DUPLICATE_LIKELY"
     assert duplicate_body["data"]["likely_duplicate_of"] is not None
-    assert duplicate_body["data"]["likely_duplicate"]["slug"] == "anxious-before-big-event"
-    submission_id = duplicate_body["data"]["id"]
+    assert (
+        duplicate_body["data"]["likely_duplicate"]["slug"] == "anxious-before-big-event"
+    )
     print("   OK: DUPLICATE_LIKELY returned and submission queued.")
 
     print("2. Rate limit returns RATE_LIMITED after 10 submissions in 10 minutes...")
@@ -144,9 +144,7 @@ def main() -> int:
     assert card_detail.status_code == 200, card_detail.text
     card_id = card_detail.json()["data"]["id"]
 
-    unique_question = (
-        f"Is it normal to feel restless the night before travel {suffix}?"
-    )
+    unique_question = f"Is it normal to feel restless the night before travel {suffix}?"
     create_response = client.post(
         "/v1/submissions",
         headers={"X-Forwarded-For": f"192.0.2.{suffix[-2:]}"},
@@ -194,7 +192,10 @@ def main() -> int:
     admin_data = admin_view.json()["data"]
     assert admin_data["status"] == "submitted"
     assert admin_data["resulting_card_id"] is None
-    print("   OK: submission stays submitted with no resulting_card_id until admin action.")
+    print(
+        "   OK: submission stays submitted with no resulting_card_id "
+        "until admin action."
+    )
 
     print("5. review_log entry exists for admin publish action...")
     from app.auth.service import get_supabase_client

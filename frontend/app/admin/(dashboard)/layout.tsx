@@ -11,7 +11,9 @@ export default async function AdminDashboardLayout({
   return (
     <div className="min-h-full bg-[#F2F1EC]">
       <AdminNav displayName={session.displayName} role={session.role} />
-      <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">{children}</main>
+      <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
+        {children}
+      </main>
     </div>
   );
 }

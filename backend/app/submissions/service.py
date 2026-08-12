@@ -4,8 +4,8 @@ from app.auth.service import get_supabase_client
 from app.core.errors import not_found
 from app.submissions.schemas import (
     LikelyDuplicateMatch,
-    ReportIssueCreateResponse,
     ReportedIssueStatus,
+    ReportIssueCreateResponse,
     SubmissionCreateResponse,
     SubmissionStatus,
 )

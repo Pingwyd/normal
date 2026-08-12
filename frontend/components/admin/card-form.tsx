@@ -131,9 +131,7 @@ export function CardForm({
 
     if (!result.ok) {
       setError(
-        result.clinicalGate
-          ? getClinicalPublishMessage(role)
-          : result.message,
+        result.clinicalGate ? getClinicalPublishMessage(role) : result.message,
       );
       setIsSaving(false);
       return;
@@ -203,7 +201,10 @@ export function CardForm({
             <legend className="text-sm font-medium">Tags</legend>
             <div className="mt-2 flex flex-wrap gap-3">
               {tags.map((tag) => (
-                <label key={tag.id} className="inline-flex items-center gap-2 text-sm">
+                <label
+                  key={tag.id}
+                  className="inline-flex items-center gap-2 text-sm"
+                >
                   <input
                     type="checkbox"
                     checked={tagIds.includes(tag.id)}

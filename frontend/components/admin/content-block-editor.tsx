@@ -15,7 +15,10 @@ type ContentBlockEditorProps = {
   onChange: (blocks: EditorContentBlock[]) => void;
 };
 
-export function ContentBlockEditor({ blocks, onChange }: ContentBlockEditorProps) {
+export function ContentBlockEditor({
+  blocks,
+  onChange,
+}: ContentBlockEditorProps) {
   function updateBlock(localId: string, patch: Partial<EditorContentBlock>) {
     onChange(
       blocks.map((block) =>

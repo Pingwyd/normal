@@ -287,7 +287,9 @@ def get_admin_reported_issue(issue_id: UUID) -> AdminReportedIssueDetail:
     )
     if not response.data:
         raise not_found("That reported issue could not be found.")
-    return AdminReportedIssueDetail(**_row_to_reported_issue(response.data[0]).model_dump())
+    return AdminReportedIssueDetail(
+        **_row_to_reported_issue(response.data[0]).model_dump()
+    )
 
 
 def update_admin_reported_issue(
@@ -330,4 +332,6 @@ def update_admin_reported_issue(
         notes=review_notes,
     )
 
-    return AdminReportedIssueDetail(**_row_to_reported_issue(response.data[0]).model_dump())
+    return AdminReportedIssueDetail(
+        **_row_to_reported_issue(response.data[0]).model_dump()
+    )

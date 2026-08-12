@@ -84,6 +84,8 @@ function mapSaveError(
   }
 
   const message =
-    error instanceof Error ? error.message : "Something went wrong while saving.";
+    error instanceof Error
+      ? error.message
+      : "Something went wrong while saving.";
   return { ok: false, code: "INTERNAL_ERROR", message };
 }

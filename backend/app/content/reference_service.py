@@ -175,10 +175,7 @@ def update_tag(tag_id: UUID, payload: TagUpdate) -> TagResponse:
 def list_categories() -> list[CategoryResponse]:
     client = get_supabase_client()
     response = (
-        client.table("categories")
-        .select(CATEGORY_SELECT)
-        .order("name")
-        .execute()
+        client.table("categories").select(CATEGORY_SELECT).order("name").execute()
     )
     return [_category_row_to_response(row) for row in response.data]
 

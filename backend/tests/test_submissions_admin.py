@@ -102,7 +102,9 @@ def test_founder_can_update_submission(
     mock_update_submission: MagicMock,
     founder_admin: None,
 ) -> None:
-    updated = SAMPLE_SUBMISSION.model_copy(update={"status": SubmissionStatus.IN_REVIEW})
+    updated = SAMPLE_SUBMISSION.model_copy(
+        update={"status": SubmissionStatus.IN_REVIEW}
+    )
     mock_update_submission.return_value = updated
 
     response = client.patch(
@@ -173,8 +175,8 @@ def test_founder_can_update_reported_issue(
 
 @patch("app.submissions.admin_service.get_supabase_client")
 def test_update_submission_writes_review_log(mock_get_client: MagicMock) -> None:
-    from app.submissions.admin_service import update_admin_submission
     from app.submissions.admin_schemas import AdminSubmissionUpdate
+    from app.submissions.admin_service import update_admin_submission
 
     client_mock = MagicMock()
     mock_get_client.return_value = client_mock
@@ -191,22 +193,23 @@ def test_update_submission_writes_review_log(mock_get_client: MagicMock) -> None
         "updated_at": CREATED_AT.isoformat(),
     }
 
-    client_mock.table.return_value.select.return_value.eq.return_value.limit.return_value.execute.return_value.data = [
-        submission_row
-    ]
-    client_mock.table.return_value.update.return_value.eq.return_value.execute.return_value.data = [
-        submission_row
-    ]
+    select_execute = client_mock.table.return_value.select.return_value.eq.return_value.limit.return_value.execute
+    select_execute.return_value.data = [submission_row]
+    update_execute = (
+        client_mock.table.return_value.update.return_value.eq.return_value.execute
+    )
+    update_execute.return_value.data = [submission_row]
 
     update_admin_submission(
         FOUNDER_CONTEXT,
         SUBMISSION_ID,
-        AdminSubmissionUpdate(status=SubmissionStatus.IN_REVIEW, decision_notes="Reviewing."),
+        AdminSubmissionUpdate(
+            status=SubmissionStatus.IN_REVIEW, decision_notes="Reviewing."
+        ),
     )
 
     insert_calls = [
-        call
-        for call in client_mock.table.return_value.insert.call_args_list
+        call for call in client_mock.table.return_value.insert.call_args_list
     ]
     assert insert_calls
     review_payload = insert_calls[0].args[0]

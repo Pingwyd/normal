@@ -21,7 +21,9 @@ class SlidingWindowLimiter:
         now = monotonic()
         with self._lock:
             window_start = now - self.window_seconds
-            hits = [timestamp for timestamp in self._hits[key] if timestamp > window_start]
+            hits = [
+                timestamp for timestamp in self._hits[key] if timestamp > window_start
+            ]
             if len(hits) >= self.max_requests:
                 retry_after = max(1, int(hits[0] + self.window_seconds - now) + 1)
                 remaining = 0
@@ -37,7 +39,9 @@ _limiters: dict[str, SlidingWindowLimiter] = {}
 _limiters_lock = threading.Lock()
 
 
-def get_limiter(scope: str, *, max_requests: int, window_seconds: float) -> SlidingWindowLimiter:
+def get_limiter(
+    scope: str, *, max_requests: int, window_seconds: float
+) -> SlidingWindowLimiter:
     with _limiters_lock:
         limiter = _limiters.get(scope)
         if limiter is None:
