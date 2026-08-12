@@ -5,6 +5,7 @@ import { LoadMoreButton } from "@/components/browse/load-more-button";
 import { SearchBar } from "@/components/browse/search-bar";
 import { CardFeedSkeleton } from "@/components/cards/card-feed-skeleton";
 import { CardGrid } from "@/components/cards/card-grid";
+import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { fetchAccumulatedCards } from "@/lib/api/cards";
 import { ApiRequestError } from "@/lib/api/errors";
@@ -106,6 +107,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           </Suspense>
         </div>
       </main>
+      <SiteFooter />
     </div>
   );
 }

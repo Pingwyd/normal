@@ -10,8 +10,22 @@ type AdminNavProps = {
 };
 
 const NAV_ITEMS = [
-  { href: "/admin/cards", label: "All cards" },
-  { href: "/admin/cards/due", label: "Due for review" },
+  { href: "/admin/cards", label: "All cards", matchPrefix: "/admin/cards" },
+  {
+    href: "/admin/cards/due",
+    label: "Due for review",
+    matchPrefix: "/admin/cards/due",
+  },
+  {
+    href: "/admin/submissions",
+    label: "Submissions",
+    matchPrefix: "/admin/submissions",
+  },
+  {
+    href: "/admin/reported-issues",
+    label: "Reported issues",
+    matchPrefix: "/admin/reported-issues",
+  },
 ];
 
 export function AdminNav({ displayName, role }: AdminNavProps) {
@@ -35,7 +49,14 @@ export function AdminNav({ displayName, role }: AdminNavProps) {
         </div>
         <nav className="flex flex-wrap items-center gap-2" aria-label="Admin">
           {NAV_ITEMS.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive =
+              item.href === "/admin/cards"
+                ? pathname === "/admin/cards" ||
+                  (pathname.startsWith("/admin/cards/") &&
+                    !pathname.startsWith("/admin/cards/due") &&
+                    !pathname.startsWith("/admin/cards/new"))
+                : pathname === item.href ||
+                  pathname.startsWith(`${item.matchPrefix}/`);
             return (
               <Link
                 key={item.href}

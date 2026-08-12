@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { ApiRequestError } from "@/lib/api/errors";
+import type { PaginationMeta } from "@/lib/api/types";
 import { ADMIN_SESSION_COOKIE, type AdminSession } from "@/lib/admin/session";
 
 function getApiBaseUrl(): string {
@@ -91,4 +92,37 @@ export async function adminApiRequest<T>(
   }
 
   return body.data;
+}
+
+export async function adminApiListRequest<T>(
+  path: string,
+  init?: RequestInit,
+): Promise<{ data: T; meta: PaginationMeta | null }> {
+  const session = await requireAdminSession();
+  const response = await fetch(`${getApiBaseUrl()}${path}`, {
+    ...init,
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${session.accessToken}`,
+      "Content-Type": "application/json",
+      ...init?.headers,
+    },
+    cache: "no-store",
+  });
+
+  const body = (await response.json()) as {
+    data: T | null;
+    meta: PaginationMeta | null;
+    error: { code: string; message: string } | null;
+  };
+
+  if (body.error) {
+    throw new ApiRequestError(body.error);
+  }
+
+  if (body.data == null) {
+    throw new Error("The server returned no data.");
+  }
+
+  return { data: body.data, meta: body.meta };
 }
