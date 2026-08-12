@@ -193,7 +193,9 @@ def test_toggle_account_favorite_adds_and_removes(
     favorites_table = MagicMock()
     client_mock.table.return_value = favorites_table
 
-    find_execute = favorites_table.select.return_value.eq.return_value.eq.return_value.eq.return_value.limit.return_value.execute
+    favorites_query = favorites_table.select.return_value
+    favorites_query = favorites_query.eq.return_value.eq.return_value.eq.return_value
+    find_execute = favorites_query.limit.return_value.execute
     find_execute.side_effect = [
         MagicMock(data=[]),
         MagicMock(
