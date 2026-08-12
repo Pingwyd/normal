@@ -15,3 +15,17 @@ def success_envelope(data: Any, meta: dict[str, Any] | None = None) -> dict[str,
         "meta": meta,
         "error": None,
     }
+
+
+def success_envelope_with_info(
+    data: Any,
+    *,
+    info_code: str,
+    info_message: str,
+    meta: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    return {
+        "data": data,
+        "meta": meta,
+        "error": {"code": info_code, "message": info_message},
+    }
