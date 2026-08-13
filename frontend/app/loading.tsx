@@ -1,9 +1,5 @@
-import { CardFeedSkeleton } from "@/components/cards/card-feed-skeleton";
+import { BrowsePageSkeleton } from "@/components/skeletons/browse-page-skeleton";
 
 export default function Loading() {
-  return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
-      <CardFeedSkeleton />
-    </div>
-  );
+  return <BrowsePageSkeleton />;
 }
