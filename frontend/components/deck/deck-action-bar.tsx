@@ -42,7 +42,7 @@ export function DeckActionBar({
         onClick={onSave}
         disabled={isSavePending}
         aria-pressed={isSaved}
-        className="inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-white hover:bg-foreground/90 disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-sage-dark shadow-sm hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-60"
       >
         <ArrowRight size={16} aria-hidden="true" />
         {isSaved ? "Saved" : "Save"}
