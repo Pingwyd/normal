@@ -43,14 +43,15 @@ export function SearchBar({ initialQuery, browseParams }: SearchBarProps) {
 
   useEffect(() => {
     const trimmed = query.trim();
-    if (trimmed.length < 2) {
-      setSuggestions([]);
-      setIsOpen(false);
-      return;
-    }
-
     let cancelled = false;
+
     const timeoutId = window.setTimeout(() => {
+      if (trimmed.length < 2) {
+        setSuggestions([]);
+        setIsOpen(false);
+        return;
+      }
+
       setIsSuggesting(true);
       void fetchCardSuggestions(trimmed)
         .then((items) => {
@@ -122,6 +123,7 @@ export function SearchBar({ initialQuery, browseParams }: SearchBarProps) {
         <input
           id="browse-search"
           type="search"
+          role="combobox"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           onFocus={() => {
