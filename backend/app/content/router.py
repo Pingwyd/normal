@@ -3,10 +3,15 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query, Request
 
+from app.content.affirmations_schemas import ListAffirmationsParams
+from app.content.affirmations_service import list_published_affirmations
 from app.content.likes_dependencies import LikeContext, get_like_context
 from app.content.likes_service import get_card_like_status, toggle_card_like
+from app.content.quotes_schemas import ListQuotesParams
+from app.content.quotes_service import list_published_quotes
 from app.content.schemas import ListCardsParams
 from app.content.service import get_published_card_by_slug, list_published_cards
+from app.core.errors import validation_error
 from app.core.rate_limit import enforce_rate_limit
 from app.core.responses import success_envelope
 
@@ -70,3 +75,38 @@ async def toggle_card_like_route(
     )
     result = toggle_card_like(card_id, context)
     return success_envelope(result.model_dump(mode="json"))
+
+
+@router.get("/affirmations")
+async def list_affirmations_route(
+    mood: Annotated[str | None, Query()] = None,
+    tag: Annotated[str | None, Query()] = None,
+    limit: Annotated[int, Query(ge=1, le=50)] = 20,
+    after: Annotated[str | None, Query()] = None,
+) -> dict:
+    if mood and tag:
+        raise validation_error("Use either mood or tag, not both.")
+
+    params = ListAffirmationsParams(
+        tag_name=mood or tag,
+        limit=limit,
+        after=after,
+    )
+    affirmations, meta = list_published_affirmations(params)
+    return success_envelope(
+        [item.model_dump(mode="json") for item in affirmations],
+        meta=meta,
+    )
+
+
+@router.get("/quotes")
+async def list_quotes_route(
+    limit: Annotated[int, Query(ge=1, le=50)] = 20,
+    after: Annotated[str | None, Query()] = None,
+) -> dict:
+    params = ListQuotesParams(limit=limit, after=after)
+    quotes, meta = list_published_quotes(params)
+    return success_envelope(
+        [item.model_dump(mode="json") for item in quotes],
+        meta=meta,
+    )
