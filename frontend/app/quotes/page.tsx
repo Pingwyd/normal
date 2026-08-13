@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { DeckPanelSection } from "@/components/deck/deck-panel-section";
 import { QuoteDeckView } from "@/components/deck/quote-deck-view";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -37,16 +38,7 @@ export default async function QuotesPage() {
   return (
     <div className="min-h-full bg-background">
       <SiteHeader />
-      <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
-        <section className="mx-auto mb-8 max-w-md space-y-3 text-center">
-          <h1 className="font-display text-3xl text-foreground sm:text-4xl">
-            Quotes
-          </h1>
-          <p className="text-sm leading-relaxed text-muted sm:text-base">
-            Short, attributed quotes you can save or share without the noise.
-          </p>
-        </section>
-
+      <main className="mx-auto w-full max-w-[1100px] px-4 py-8 sm:px-7 sm:py-10">
         <div className="mx-auto mb-6 max-w-2xl">
           <PushOptInPrompt />
         </div>
@@ -59,10 +51,16 @@ export default async function QuotesPage() {
             <p className="mt-2 text-sm text-muted">{errorMessage}</p>
           </div>
         ) : (
-          <QuoteDeckView
-            initialItems={initialItems}
-            initialMeta={initialMeta}
-          />
+          <DeckPanelSection
+            eyebrow="Daily · attributed quotes"
+            title="Words worth keeping."
+            description="Swipe through short, attributed quotes you can save or share. Each one names its source so you know where it came from."
+          >
+            <QuoteDeckView
+              initialItems={initialItems}
+              initialMeta={initialMeta}
+            />
+          </DeckPanelSection>
         )}
       </main>
       <SiteFooter />

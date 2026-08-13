@@ -5,6 +5,7 @@ import { useCallback, useState } from "react";
 
 import { useFavorites } from "@/components/favorites/favorites-provider";
 import { DeckActionBar } from "@/components/deck/deck-action-bar";
+import { DeckStackFrame } from "@/components/deck/deck-stack-frame";
 import { SwipeDeck } from "@/components/deck/swipe-deck";
 import type { QuoteSummary } from "@/lib/api/daily-content-types";
 import { fetchQuotesPage } from "@/lib/quotes/client-api";
@@ -128,74 +129,79 @@ export function QuoteDeckView({
 
   return (
     <div className="space-y-4">
-      <SwipeDeck
-        item={currentItem}
-        onAction={(action) => {
-          if (action === "save") {
-            handleSaveAction();
-            return;
-          }
-          handleSkip();
-        }}
-        onTapAdvance={advance}
-        emptyState={emptyState}
-        reducedMotionFallback={
-          currentItem ? (
-            <div className="space-y-4">
-              <div className="rounded-3xl border border-border bg-surface p-6 shadow-lg">
-                <p className="font-display text-2xl leading-relaxed text-foreground">
-                  &ldquo;{currentItem.text}&rdquo;
-                </p>
-                <p className="mt-4 text-sm font-medium text-muted">
-                  {currentItem.attributed_to}
-                </p>
-                {currentItem.source_url ? (
-                  <a
-                    href={currentItem.source_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-2 inline-block text-xs text-sage-dark hover:underline"
-                  >
-                    Source
-                  </a>
-                ) : null}
+      <DeckStackFrame hint="Swipe right to save, left to skip. Tap the card to see the next one.">
+        <SwipeDeck
+          item={currentItem}
+          onAction={(action) => {
+            if (action === "save") {
+              handleSaveAction();
+              return;
+            }
+            handleSkip();
+          }}
+          onTapAdvance={advance}
+          emptyState={emptyState}
+          reducedMotionFallback={
+            currentItem ? (
+              <div className="space-y-4">
+                <div className="rounded-3xl border border-border bg-surface p-6 shadow-lg">
+                  <p className="font-display text-2xl leading-relaxed text-foreground">
+                    &ldquo;{currentItem.text}&rdquo;
+                  </p>
+                  <p className="mt-4 text-sm font-medium text-muted">
+                    {currentItem.attributed_to}
+                  </p>
+                  {currentItem.source_url ? (
+                    <a
+                      href={currentItem.source_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-2 inline-block text-xs text-sage-dark hover:underline"
+                    >
+                      Source
+                    </a>
+                  ) : null}
+                </div>
+                <DeckActionBar
+                  onSkip={handleSkip}
+                  onSave={handleSaveAction}
+                  onShare={() => {
+                    void handleShare();
+                  }}
+                  isSavePending={isSaving}
+                  isSaved={isFavorited("quote", currentItem.id)}
+                />
               </div>
-              <DeckActionBar
-                onSkip={handleSkip}
-                onSave={handleSaveAction}
-                onShare={() => {
-                  void handleShare();
-                }}
-                isSavePending={isSaving}
-                isSaved={isFavorited("quote", currentItem.id)}
-              />
-            </div>
-          ) : (
-            emptyState
-          )
-        }
-        renderCard={(item) => (
-          <>
-            <p className="font-display text-2xl leading-relaxed text-foreground">
-              &ldquo;{item.text}&rdquo;
-            </p>
-            <p className="mt-4 text-sm font-medium text-muted">
-              {item.attributed_to}
-            </p>
-            {item.source_url ? (
-              <a
-                href={item.source_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-2 inline-block text-xs text-sage-dark hover:underline"
-                onClick={(event) => event.stopPropagation()}
-              >
-                Source
-              </a>
-            ) : null}
-          </>
-        )}
-      />
+            ) : (
+              emptyState
+            )
+          }
+          renderCard={(item) => (
+            <>
+              <p className="font-mono text-[10px] uppercase tracking-wide text-secondary">
+                Attributed quote
+              </p>
+              <p className="mt-2.5 font-display text-[19px] leading-[1.4] text-foreground">
+                &ldquo;{item.text}&rdquo;
+              </p>
+              <p className="mt-4 text-sm font-medium text-ink-secondary">
+                {item.attributed_to}
+              </p>
+              {item.source_url ? (
+                <a
+                  href={item.source_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-block text-xs text-sage-dark hover:underline"
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  Source
+                </a>
+              ) : null}
+            </>
+          )}
+        />
+      </DeckStackFrame>
 
       {currentItem ? (
         <DeckActionBar
@@ -209,12 +215,8 @@ export function QuoteDeckView({
         />
       ) : null}
 
-      <p className="text-center text-xs text-muted">
-        Swipe right to save, left to skip. Tap the card to see the next one.
-      </p>
-
       {isLoading ? (
-        <p className="text-center text-xs text-muted">Loading more...</p>
+        <p className="text-center text-xs text-white/60">Loading more...</p>
       ) : null}
       {errorMessage ? (
         <p className="text-center text-xs text-warning-text" role="alert">
@@ -222,17 +224,14 @@ export function QuoteDeckView({
         </p>
       ) : null}
       {statusMessage ? (
-        <p className="text-center text-xs text-sage-dark" role="status">
+        <p className="text-center text-xs text-accent" role="status">
           {statusMessage}
         </p>
       ) : null}
       {index >= items.length && items.length > 0 ? (
-        <p className="text-center text-sm text-muted">
+        <p className="text-center text-sm text-white/70">
           You reached the end. Saved quotes appear in{" "}
-          <Link
-            href="/account/saved"
-            className="text-sage-dark hover:underline"
-          >
+          <Link href="/account/saved" className="text-accent hover:underline">
             your saved list
           </Link>
           .

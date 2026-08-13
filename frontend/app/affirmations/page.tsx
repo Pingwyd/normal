@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { AffirmationDeckView } from "@/components/deck/affirmation-deck-view";
+import { DeckPanelSection } from "@/components/deck/deck-panel-section";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { PushOptInPrompt } from "@/components/notifications/push-opt-in-prompt";
@@ -50,17 +52,7 @@ export default async function AffirmationsPage({
   return (
     <div className="min-h-full bg-background">
       <SiteHeader />
-      <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
-        <section className="mx-auto mb-8 max-w-md space-y-3 text-center">
-          <h1 className="font-display text-3xl text-foreground sm:text-4xl">
-            Affirmations
-          </h1>
-          <p className="text-sm leading-relaxed text-muted sm:text-base">
-            Swipe right to save, left to skip. No forced positivity, just
-            phrases that feel honest.
-          </p>
-        </section>
-
+      <main className="mx-auto w-full max-w-[1100px] px-4 py-8 sm:px-7 sm:py-10">
         <div className="mx-auto mb-6 max-w-2xl">
           <PushOptInPrompt />
         </div>
@@ -73,12 +65,26 @@ export default async function AffirmationsPage({
             <p className="mt-2 text-sm text-muted">{errorMessage}</p>
           </div>
         ) : (
-          <AffirmationDeckView
-            initialItems={initialItems}
-            initialMeta={initialMeta}
-            moodFilter={mood}
-            tagFilter={tag}
-          />
+          <DeckPanelSection
+            eyebrow="Daily · personalize by mood"
+            title="A small reminder, every day."
+            description="Swipe through short, reviewed affirmations filtered by what you are actually dealing with, not generic quotes. Save the ones that land. Share the ones your friends need too."
+            action={
+              <Link
+                href="/account/settings"
+                className="inline-flex rounded-full bg-accent px-5 py-2.5 text-[13.5px] font-bold text-sage-dark"
+              >
+                Get these by email
+              </Link>
+            }
+          >
+            <AffirmationDeckView
+              initialItems={initialItems}
+              initialMeta={initialMeta}
+              moodFilter={mood}
+              tagFilter={tag}
+            />
+          </DeckPanelSection>
         )}
       </main>
       <SiteFooter />
