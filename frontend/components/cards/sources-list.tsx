@@ -16,7 +16,7 @@ export function SourcesList({ sources }: SourcesListProps) {
     <section aria-labelledby="sources-heading" className="space-y-4">
       <h2
         id="sources-heading"
-        className="font-display text-2xl text-foreground"
+        className="font-display text-2xl font-medium text-foreground"
       >
         Sources
       </h2>
@@ -24,16 +24,18 @@ export function SourcesList({ sources }: SourcesListProps) {
         {sources.map((source) => (
           <li
             key={source.id}
-            className="rounded-xl border border-border bg-surface p-4"
+            className="rounded-2xl border border-border bg-surface p-[22px]"
           >
             <div className="flex flex-wrap items-start justify-between gap-2">
               <div>
-                <p className="font-medium text-foreground">{source.title}</p>
-                <p className="mt-1 text-sm text-muted">
+                <p className="font-display text-lg font-medium text-foreground">
+                  {source.title}
+                </p>
+                <p className="mt-1 text-[13.5px] text-ink-secondary">
                   {source.author_or_org}
                 </p>
               </div>
-              <span className="font-mono text-xs uppercase tracking-wide text-sage">
+              <span className="font-mono text-[10.5px] uppercase tracking-wide text-sage">
                 {getSourceTierLabel(source.tier)}
               </span>
             </div>

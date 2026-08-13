@@ -141,7 +141,7 @@ export function SwipeDeck<T>({
         onPointerCancel={resetDrag}
       >
         <div
-          className={`relative rounded-3xl border border-border bg-surface p-6 shadow-lg transition-transform ${
+          className={`relative flex min-h-[220px] flex-col justify-between rounded-[18px] bg-surface p-[26px] text-foreground shadow-[0_14px_30px_rgba(0,0,0,0.18)] transition-transform ${
             isDragging ? "cursor-grabbing" : "cursor-grab"
           }`}
           style={{

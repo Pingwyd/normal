@@ -15,21 +15,23 @@ export function RelatedCards({ relatedCards }: RelatedCardsProps) {
     <section aria-labelledby="related-heading" className="space-y-4">
       <h2
         id="related-heading"
-        className="font-display text-2xl text-foreground"
+        className="font-display text-2xl font-medium text-foreground"
       >
         Related cards
       </h2>
-      <ul className="grid gap-4 sm:grid-cols-2">
+      <ul className="grid gap-[18px] sm:grid-cols-2">
         {relatedCards.map((card) => (
           <li key={card.id}>
             <Link
               href={`/cards/${card.slug}`}
-              className="block rounded-xl border border-border bg-surface p-4 transition-shadow hover:shadow-md"
+              className="block rounded-2xl border border-border bg-surface p-[22px] transition duration-[180ms] hover:-translate-y-[3px] hover:border-transparent hover:shadow-[0_10px_24px_rgba(32,43,38,0.08)]"
             >
-              <p className="font-display text-lg leading-snug text-foreground">
+              <p className="font-display text-lg font-medium leading-snug text-foreground">
                 {card.question}
               </p>
-              <p className="mt-2 text-sm text-muted">{card.brief}</p>
+              <p className="mt-2 text-[13.5px] leading-relaxed text-ink-secondary">
+                {card.brief}
+              </p>
             </Link>
           </li>
         ))}
