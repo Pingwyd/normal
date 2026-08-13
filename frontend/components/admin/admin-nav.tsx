@@ -17,6 +17,12 @@ const NAV_ITEMS = [
     matchPrefix: "/admin/cards/due",
   },
   {
+    href: "/admin/affirmations",
+    label: "Affirmations",
+    matchPrefix: "/admin/affirmations",
+  },
+  { href: "/admin/quotes", label: "Quotes", matchPrefix: "/admin/quotes" },
+  {
     href: "/admin/submissions",
     label: "Submissions",
     matchPrefix: "/admin/submissions",
@@ -55,8 +61,16 @@ export function AdminNav({ displayName, role }: AdminNavProps) {
                   (pathname.startsWith("/admin/cards/") &&
                     !pathname.startsWith("/admin/cards/due") &&
                     !pathname.startsWith("/admin/cards/new"))
-                : pathname === item.href ||
-                  pathname.startsWith(`${item.matchPrefix}/`);
+                : item.href === "/admin/affirmations"
+                  ? pathname === "/admin/affirmations" ||
+                    (pathname.startsWith("/admin/affirmations/") &&
+                      !pathname.startsWith("/admin/affirmations/new"))
+                  : item.href === "/admin/quotes"
+                    ? pathname === "/admin/quotes" ||
+                      (pathname.startsWith("/admin/quotes/") &&
+                        !pathname.startsWith("/admin/quotes/new"))
+                    : pathname === item.href ||
+                      pathname.startsWith(`${item.matchPrefix}/`);
             return (
               <Link
                 key={item.href}

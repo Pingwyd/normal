@@ -8,7 +8,51 @@ import { useFavorites } from "@/components/favorites/favorites-provider";
 import { clearAccountSession } from "@/lib/account/session-client";
 import type { FavoriteItem } from "@/lib/api/account-types";
 import { fetchAccountFavorites } from "@/lib/favorites/client-api";
+import type { FavoriteContentType } from "@/lib/favorites/keys";
 import { readFavoriteMetadata } from "@/lib/favorites/metadata-cache";
+
+function savedItemHref(
+  contentType: FavoriteContentType,
+  contentId: string,
+  metadata: ReturnType<typeof readFavoriteMetadata>,
+): string {
+  if (contentType === "card" && metadata?.slug) {
+    return `/cards/${metadata.slug}`;
+  }
+  if (contentType === "affirmation") {
+    return `/share/affirmations/${contentId}`;
+  }
+  if (contentType === "quote") {
+    return `/share/quotes/${contentId}`;
+  }
+  return "/";
+}
+
+function savedItemLabel(
+  contentType: FavoriteContentType,
+  metadata: ReturnType<typeof readFavoriteMetadata>,
+): string {
+  if (metadata?.question) {
+    return metadata.question;
+  }
+  if (contentType === "affirmation") {
+    return "Saved affirmation";
+  }
+  if (contentType === "quote") {
+    return "Saved quote";
+  }
+  return "Saved card";
+}
+
+function savedItemTypeLabel(contentType: FavoriteContentType): string {
+  if (contentType === "affirmation") {
+    return "Affirmation";
+  }
+  if (contentType === "quote") {
+    return "Quote";
+  }
+  return "Card";
+}
 
 export function SavedCardsList() {
   const router = useRouter();
@@ -41,14 +85,14 @@ export function SavedCardsList() {
       try {
         const items = await fetchAccountFavorites();
         if (!cancelled) {
-          setFavorites(items.filter((item) => item.content_type === "card"));
+          setFavorites(items);
         }
       } catch (error) {
         if (!cancelled) {
           setErrorMessage(
             error instanceof Error
               ? error.message
-              : "Could not load saved cards.",
+              : "Could not load saved items.",
           );
         }
       } finally {
@@ -68,25 +112,23 @@ export function SavedCardsList() {
   if (!isReady || isLoading) {
     return (
       <div className="mx-auto w-full max-w-2xl rounded-xl border border-[#D8D5CC] bg-white p-6">
-        <p className="text-sm text-[#5A6560]">Loading saved cards...</p>
+        <p className="text-sm text-[#5A6560]">Loading saved items...</p>
       </div>
     );
   }
 
   if (!accountId) {
-    const localFavorites = readLocalFavoritesForMerge().filter(
-      (item) => item.content_type === "card",
-    );
+    const localFavorites = readLocalFavoritesForMerge();
 
     if (localFavorites.length === 0) {
       return (
         <div className="mx-auto w-full max-w-2xl space-y-4 rounded-xl border border-[#D8D5CC] bg-white p-6 text-center">
           <p className="font-display text-lg text-[#202B26]">
-            No saved cards on this device
+            No saved items on this device
           </p>
           <p className="text-sm text-[#5A6560]">
-            Tap Save on any card to keep it here locally, or sign in to sync
-            across devices.
+            Save cards, affirmations, or quotes to keep them here locally, or
+            sign in to sync across devices.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
@@ -124,17 +166,24 @@ export function SavedCardsList() {
               favorite.content_type,
               favorite.content_id,
             );
-            const title = metadata?.question ?? "Saved card";
-            const href = metadata?.slug ? `/cards/${metadata.slug}` : "/";
+            const title = savedItemLabel(favorite.content_type, metadata);
+            const href = savedItemHref(
+              favorite.content_type,
+              favorite.content_id,
+              metadata,
+            );
 
             return (
               <li
                 key={`${favorite.content_type}:${favorite.content_id}`}
                 className="rounded-xl border border-[#D8D5CC] bg-white p-4 shadow-sm"
               >
+                <p className="text-xs font-semibold uppercase tracking-wide text-[#4B6B5E]">
+                  {savedItemTypeLabel(favorite.content_type)}
+                </p>
                 <Link
                   href={href}
-                  className="font-display text-lg text-[#202B26] hover:text-[#4B6B5E]"
+                  className="mt-1 block font-display text-lg text-[#202B26] hover:text-[#4B6B5E]"
                 >
                   {title}
                 </Link>
@@ -160,17 +209,31 @@ export function SavedCardsList() {
     return (
       <div className="mx-auto w-full max-w-2xl space-y-3 rounded-xl border border-dashed border-[#CFCBC2] bg-white p-6 text-center">
         <p className="font-display text-lg text-[#202B26]">
-          No saved cards yet
+          No saved items yet
         </p>
         <p className="text-sm text-[#5A6560]">
-          Tap Save on any card to add it here.
+          Save cards, affirmations, or quotes to add them here.
         </p>
-        <Link
-          href="/"
-          className="text-sm font-medium text-[#33473D] hover:underline"
-        >
-          Browse cards
-        </Link>
+        <div className="flex flex-wrap justify-center gap-3">
+          <Link
+            href="/"
+            className="text-sm font-medium text-[#33473D] hover:underline"
+          >
+            Browse cards
+          </Link>
+          <Link
+            href="/affirmations"
+            className="text-sm font-medium text-[#33473D] hover:underline"
+          >
+            Affirmations
+          </Link>
+          <Link
+            href="/quotes"
+            className="text-sm font-medium text-[#33473D] hover:underline"
+          >
+            Quotes
+          </Link>
+        </div>
       </div>
     );
   }
@@ -183,21 +246,28 @@ export function SavedCardsList() {
             favorite.content_type,
             favorite.content_id,
           );
-          const title = metadata?.question ?? "Saved card";
-          const href = metadata?.slug ? `/cards/${metadata.slug}` : "/";
+          const title = savedItemLabel(favorite.content_type, metadata);
+          const href = savedItemHref(
+            favorite.content_type,
+            favorite.content_id,
+            metadata,
+          );
 
           return (
             <li
               key={favorite.id}
               className="rounded-xl border border-[#D8D5CC] bg-white p-4 shadow-sm"
             >
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#4B6B5E]">
+                {savedItemTypeLabel(favorite.content_type)}
+              </p>
               <Link
                 href={href}
-                className="font-display text-lg text-[#202B26] hover:text-[#4B6B5E]"
+                className="mt-1 block font-display text-lg text-[#202B26] hover:text-[#4B6B5E]"
               >
                 {title}
               </Link>
-              {!metadata?.slug ? (
+              {favorite.content_type === "card" && !metadata?.slug ? (
                 <p className="mt-1 text-xs text-[#5A6560]">
                   Open from browse if this card was saved on another device.
                 </p>

@@ -10,6 +10,17 @@ export function SiteHeader() {
           Is it normal?
         </Link>
         <div className="flex items-center gap-4 sm:gap-6">
+          <nav
+            className="hidden items-center gap-4 text-sm font-medium text-[#33473D] md:flex"
+            aria-label="Primary"
+          >
+            <Link href="/affirmations" className="hover:text-[#4B6B5E]">
+              Affirmations
+            </Link>
+            <Link href="/quotes" className="hover:text-[#4B6B5E]">
+              Quotes
+            </Link>
+          </nav>
           <p className="hidden text-sm text-[#5A6560] lg:block">
             Honest answers, no forced positivity
           </p>
