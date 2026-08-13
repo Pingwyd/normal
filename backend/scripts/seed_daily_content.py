@@ -320,12 +320,16 @@ def main() -> None:
     affirmation_count, tag_links = seed_affirmations(client)
     quote_count = seed_quotes(client)
 
-    affirmations_total = client.table("affirmations").select("id", count="exact").execute()
+    affirmations_total = (
+        client.table("affirmations").select("id", count="exact").execute()
+    )
     quotes_total = client.table("quotes").select("id", count="exact").execute()
 
     print(f"Inserted {affirmation_count} affirmations ({tag_links} tag links).")
     print(f"Inserted {quote_count} quotes.")
-    print(f"Totals: {affirmations_total.count} affirmations, {quotes_total.count} quotes.")
+    print(
+        f"Totals: {affirmations_total.count} affirmations, {quotes_total.count} quotes."
+    )
 
 
 if __name__ == "__main__":
