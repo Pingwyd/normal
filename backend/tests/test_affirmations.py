@@ -168,7 +168,9 @@ def test_list_published_affirmations_filters_by_tag(
     affirmation_tags_execute.return_value = MagicMock(
         data=[{"affirmation_id": str(AFFIRMATION_ID)}]
     )
-    list_execute = affirmations_table.select.return_value.eq.return_value.order.return_value.order.return_value.in_.return_value.limit.return_value.execute
+    published_query = affirmations_table.select.return_value.eq.return_value
+    ordered_query = published_query.order.return_value.order.return_value
+    list_execute = ordered_query.in_.return_value.limit.return_value.execute
     list_execute.return_value = MagicMock(
         data=[
             {
@@ -217,7 +219,8 @@ def test_update_admin_affirmation_replaces_tag_associations(
 
     client_mock.table.side_effect = table_router
 
-    affirmations_select_execute = affirmations_table.select.return_value.eq.return_value.limit.return_value.execute
+    select_chain = affirmations_table.select.return_value.eq.return_value
+    affirmations_select_execute = select_chain.limit.return_value.execute
     affirmations_table.update.return_value.eq.return_value.execute.return_value = (
         MagicMock(data=[])
     )
@@ -295,7 +298,8 @@ def test_create_admin_affirmation_inserts_tags(
         )
     )
     affirmation_tags_table.insert.return_value.execute.return_value = MagicMock(data=[])
-    affirmations_select_execute = affirmations_table.select.return_value.eq.return_value.limit.return_value.execute
+    select_chain = affirmations_table.select.return_value.eq.return_value
+    affirmations_select_execute = select_chain.limit.return_value.execute
     affirmations_select_execute.return_value = MagicMock(
         data=[
             {
