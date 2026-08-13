@@ -22,9 +22,7 @@ def _frontend_base_url() -> str:
 
 
 def build_newsletter_unsubscribe_url(unsubscribe_token: str) -> str:
-    return (
-        f"{_frontend_base_url()}/newsletter/unsubscribe" f"?token={unsubscribe_token}"
-    )
+    return f"{_frontend_base_url()}/newsletter/unsubscribe?token={unsubscribe_token}"
 
 
 def _get_enabled_newsletter_subscription(email: str) -> dict[str, object]:
