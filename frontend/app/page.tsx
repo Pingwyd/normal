@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 
 import { CategoryChips } from "@/components/browse/category-chips";
+import { BrowseSectionLabel } from "@/components/browse/browse-section-label";
 import { HeroSection } from "@/components/browse/hero-section";
 import { LoadMoreButton } from "@/components/browse/load-more-button";
 import { SearchBar } from "@/components/browse/search-bar";
@@ -16,6 +17,7 @@ import type {
   PaginationMeta,
 } from "@/lib/api/types";
 import { parseBrowseSearchParams } from "@/lib/browse-url";
+import { BROWSE_CATEGORIES } from "@/lib/browse-categories";
 
 export const dynamic = "force-dynamic";
 
@@ -69,6 +71,14 @@ async function BrowseFeed({
 
   return (
     <>
+      <BrowseSectionLabel
+        title={
+          BROWSE_CATEGORIES.find(
+            (category) => category.slug === browseParams.category,
+          )?.name ?? "All cards"
+        }
+        meta={`${result.cards.length} card${result.cards.length === 1 ? "" : "s"}`}
+      />
       <CardGrid cards={result.cards} />
       <LoadMoreButton browseParams={browseParams} meta={result.meta} />
     </>
