@@ -8,12 +8,15 @@ from app.accounts.schemas import (
     AccountRecoverRequest,
     AccountRecoveryCodesResponse,
     AccountSignupRequest,
+    AccountUpdateRequest,
 )
 from app.accounts.service import (
+    get_account_profile,
     login_account,
     recover_account,
     regenerate_recovery_codes,
     signup_account,
+    update_account_preferences,
 )
 from app.core.responses import success_envelope
 
@@ -45,3 +48,28 @@ async def regenerate_recovery_codes_route(
     codes = regenerate_recovery_codes(account.account_id)
     response = AccountRecoveryCodesResponse(recovery_codes=codes)
     return success_envelope(response.model_dump(mode="json"))
+
+
+@router.get("/me")
+async def get_account_me_route(
+    account: Annotated[AccountContext, Depends(require_account)],
+) -> dict:
+    profile = get_account_profile(account.account_id)
+    return success_envelope(profile.model_dump(mode="json"))
+
+
+@router.patch("/me")
+async def patch_account_me_route(
+    payload: AccountUpdateRequest,
+    account: Annotated[AccountContext, Depends(require_account)],
+) -> dict:
+    profile = update_account_preferences(
+        account.account_id,
+        theme_preference=(
+            payload.theme_preference.value if payload.theme_preference else None
+        ),
+        layout_version=(
+            payload.layout_version.value if payload.layout_version else None
+        ),
+    )
+    return success_envelope(profile.model_dump(mode="json"))

@@ -2,7 +2,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 type AdminListPageSkeletonProps = {
   variant:
-    "cards" | "affirmations" | "quotes" | "submissions" | "issues" | "due";
+    | "cards"
+    | "affirmations"
+    | "quotes"
+    | "submissions"
+    | "issues"
+    | "due";
 };
 
 const FILTER_COUNTS: Record<AdminListPageSkeletonProps["variant"], number> = {
@@ -37,7 +42,7 @@ export function AdminListPageSkeleton({ variant }: AdminListPageSkeletonProps) {
         ))}
       </div>
 
-      <ul className="divide-y divide-[#ECEAE4] overflow-hidden rounded-xl border border-[#D8D5CC] bg-white">
+      <ul className="divide-y divide-border-subtle overflow-hidden rounded-xl border border-border bg-surface">
         {Array.from({ length: 6 }).map((_, index) => (
           <li key={index} className="px-5 py-4">
             <div className="flex flex-wrap items-start justify-between gap-3">

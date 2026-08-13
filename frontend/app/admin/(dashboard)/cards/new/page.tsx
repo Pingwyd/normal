@@ -12,8 +12,8 @@ export default async function NewCardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-3xl text-[#202B26]">New card</h1>
-        <p className="text-sm text-[#5A6560]">
+        <h1 className="font-display text-3xl text-foreground">New card</h1>
+        <p className="text-sm text-muted">
           Build the card body, sources, and metadata before publishing.
         </p>
       </div>

@@ -26,8 +26,8 @@ export default async function EditQuotePage({ params }: EditQuotePageProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-3xl text-[#202B26]">Edit quote</h1>
-        <p className="text-sm text-[#5A6560]">
+        <h1 className="font-display text-3xl text-foreground">Edit quote</h1>
+        <p className="text-sm text-muted">
           Update text, attribution, source URL, or publication status.
         </p>
       </div>

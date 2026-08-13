@@ -39,13 +39,13 @@ export default async function EditCardPage({
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-3xl text-[#202B26]">Edit card</h1>
-          <p className="text-sm text-[#5A6560]">{card.slug}</p>
+          <h1 className="font-display text-3xl text-foreground">Edit card</h1>
+          <p className="text-sm text-muted">{card.slug}</p>
         </div>
         {card.status === "published" ? (
           <Link
             href={`/cards/${card.slug}`}
-            className="text-sm text-[#33473D] underline"
+            className="text-sm text-sage-dark underline"
             target="_blank"
             rel="noopener noreferrer"
           >

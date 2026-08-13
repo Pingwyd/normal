@@ -46,11 +46,11 @@ async function loadBrowseFeed(
 
 function BrowseFeedError({ message }: { message: string }) {
   return (
-    <div className="rounded-xl border border-[#E8A97A] bg-white px-6 py-8 text-center">
-      <p className="font-display text-lg text-[#202B26]">
+    <div className="rounded-xl border border-warning-border bg-warning-surface px-6 py-8 text-center">
+      <p className="font-display text-lg text-foreground">
         We could not load cards right now
       </p>
-      <p className="mt-2 text-sm text-[#5A6560]">{message}</p>
+      <p className="mt-2 text-sm text-muted">{message}</p>
     </div>
   );
 }
@@ -79,15 +79,15 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const browseParams = parseBrowseSearchParams(resolvedSearchParams);
 
   return (
-    <div className="min-h-full bg-[#F2F1EC]">
+    <div className="min-h-full bg-background">
       <SiteHeader />
       <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
         <div className="space-y-8">
           <section className="space-y-3">
-            <h1 className="font-display text-3xl text-[#202B26] sm:text-4xl">
+            <h1 className="font-display text-3xl text-foreground sm:text-4xl">
               Browse common worries
             </h1>
-            <p className="max-w-2xl text-sm leading-relaxed text-[#5A6560]">
+            <p className="max-w-2xl text-sm leading-relaxed text-muted">
               Search and filter cards about everyday experiences. If something
               is not typical, the answer will say so plainly.
             </p>

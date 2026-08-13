@@ -1,5 +1,10 @@
-import { DeckPageSkeleton } from "@/components/skeletons/deck-page-skeleton";
+import { DeckPageSkeleton } from "@/components/deck/deck-page-skeleton";
+import { PageLoadingShell } from "@/components/layout/page-loading-shell";
 
-export default function Loading() {
-  return <DeckPageSkeleton variant="quote" />;
+export default function QuotesLoading() {
+  return (
+    <PageLoadingShell>
+      <DeckPageSkeleton />
+    </PageLoadingShell>
+  );
 }

@@ -112,14 +112,14 @@ export function QuoteDeckView({
   }, [advance]);
 
   const emptyState = (
-    <div className="rounded-3xl border border-dashed border-[#CFCBC2] bg-white px-6 py-12 text-center">
-      <p className="font-display text-xl text-[#202B26]">No quotes to show</p>
-      <p className="mt-2 text-sm text-[#5A6560]">
+    <div className="rounded-3xl border border-dashed border-border-strong bg-surface px-6 py-12 text-center">
+      <p className="font-display text-xl text-foreground">No quotes to show</p>
+      <p className="mt-2 text-sm text-muted">
         Check back soon or browse cards on the home page.
       </p>
       <Link
         href="/"
-        className="mt-4 inline-block text-sm font-medium text-[#33473D] hover:underline"
+        className="mt-4 inline-block text-sm font-medium text-sage-dark hover:underline"
       >
         Browse cards
       </Link>
@@ -142,11 +142,11 @@ export function QuoteDeckView({
         reducedMotionFallback={
           currentItem ? (
             <div className="space-y-4">
-              <div className="rounded-3xl border border-[#D8D5CC] bg-white p-6 shadow-lg">
-                <p className="font-display text-2xl leading-relaxed text-[#202B26]">
+              <div className="rounded-3xl border border-border bg-surface p-6 shadow-lg">
+                <p className="font-display text-2xl leading-relaxed text-foreground">
                   &ldquo;{currentItem.text}&rdquo;
                 </p>
-                <p className="mt-4 text-sm font-medium text-[#5A6560]">
+                <p className="mt-4 text-sm font-medium text-muted">
                   {currentItem.attributed_to}
                 </p>
                 {currentItem.source_url ? (
@@ -154,7 +154,7 @@ export function QuoteDeckView({
                     href={currentItem.source_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-2 inline-block text-xs text-[#33473D] hover:underline"
+                    className="mt-2 inline-block text-xs text-sage-dark hover:underline"
                   >
                     Source
                   </a>
@@ -176,10 +176,10 @@ export function QuoteDeckView({
         }
         renderCard={(item) => (
           <>
-            <p className="font-display text-2xl leading-relaxed text-[#202B26]">
+            <p className="font-display text-2xl leading-relaxed text-foreground">
               &ldquo;{item.text}&rdquo;
             </p>
-            <p className="mt-4 text-sm font-medium text-[#5A6560]">
+            <p className="mt-4 text-sm font-medium text-muted">
               {item.attributed_to}
             </p>
             {item.source_url ? (
@@ -187,7 +187,7 @@ export function QuoteDeckView({
                 href={item.source_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-2 inline-block text-xs text-[#33473D] hover:underline"
+                className="mt-2 inline-block text-xs text-sage-dark hover:underline"
                 onClick={(event) => event.stopPropagation()}
               >
                 Source
@@ -209,29 +209,29 @@ export function QuoteDeckView({
         />
       ) : null}
 
-      <p className="text-center text-xs text-[#5A6560]">
+      <p className="text-center text-xs text-muted">
         Swipe right to save, left to skip. Tap the card to see the next one.
       </p>
 
       {isLoading ? (
-        <p className="text-center text-xs text-[#5A6560]">Loading more...</p>
+        <p className="text-center text-xs text-muted">Loading more...</p>
       ) : null}
       {errorMessage ? (
-        <p className="text-center text-xs text-[#8A4B2A]" role="alert">
+        <p className="text-center text-xs text-warning-text" role="alert">
           {errorMessage}
         </p>
       ) : null}
       {statusMessage ? (
-        <p className="text-center text-xs text-[#33473D]" role="status">
+        <p className="text-center text-xs text-sage-dark" role="status">
           {statusMessage}
         </p>
       ) : null}
       {index >= items.length && items.length > 0 ? (
-        <p className="text-center text-sm text-[#5A6560]">
+        <p className="text-center text-sm text-muted">
           You reached the end. Saved quotes appear in{" "}
           <Link
             href="/account/saved"
-            className="text-[#33473D] hover:underline"
+            className="text-sage-dark hover:underline"
           >
             your saved list
           </Link>

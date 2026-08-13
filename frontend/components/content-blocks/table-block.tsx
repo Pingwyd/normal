@@ -32,21 +32,21 @@ export function TableBlock({ data }: TableBlockProps) {
   const caption = typeof data.caption === "string" ? data.caption : undefined;
 
   return (
-    <figure className="overflow-x-auto rounded-xl border border-[#D8D5CC] bg-white">
+    <figure className="overflow-x-auto rounded-xl border border-border bg-surface">
       {caption ? (
-        <figcaption className="border-b border-[#ECEAE4] px-4 py-3 font-display text-lg text-[#202B26]">
+        <figcaption className="border-b border-border-subtle px-4 py-3 font-display text-lg text-foreground">
           {caption}
         </figcaption>
       ) : null}
       <table className="min-w-full text-left text-sm">
         {headers.length > 0 ? (
-          <thead className="bg-[#F7F6F2]">
+          <thead className="bg-surface-muted">
             <tr>
               {headers.map((header) => (
                 <th
                   key={header}
                   scope="col"
-                  className="px-4 py-3 font-medium text-[#33473D]"
+                  className="px-4 py-3 font-medium text-sage-dark"
                 >
                   {header}
                 </th>
@@ -56,11 +56,11 @@ export function TableBlock({ data }: TableBlockProps) {
         ) : null}
         <tbody>
           {rows.map((row, rowIndex) => (
-            <tr key={rowIndex} className="border-t border-[#ECEAE4]">
+            <tr key={rowIndex} className="border-t border-border-subtle">
               {row.map((cell, cellIndex) => (
                 <td
                   key={`${rowIndex}-${cellIndex}`}
-                  className="px-4 py-3 text-[#3A4540]"
+                  className="px-4 py-3 text-ink-secondary"
                 >
                   {cell}
                 </td>

@@ -48,9 +48,9 @@ export function PieChartBlock({ data }: PieChartBlockProps) {
   const title = typeof data.title === "string" ? data.title : undefined;
 
   return (
-    <figure className="rounded-xl border border-[#D8D5CC] bg-white p-5">
+    <figure className="rounded-xl border border-border bg-surface p-5">
       {title ? (
-        <figcaption className="mb-4 font-display text-lg text-[#202B26]">
+        <figcaption className="mb-4 font-display text-lg text-foreground">
           {title}
         </figcaption>
       ) : null}
@@ -61,7 +61,7 @@ export function PieChartBlock({ data }: PieChartBlockProps) {
           role="img"
           aria-label={title ?? "Pie chart"}
         />
-        <ul className="space-y-2 text-sm text-[#3A4540]">
+        <ul className="space-y-2 text-sm text-ink-secondary">
           {segments.map((segment, index) => (
             <li key={segment.label} className="flex items-center gap-2">
               <span

@@ -1,5 +1,10 @@
-import { BrowsePageSkeleton } from "@/components/skeletons/browse-page-skeleton";
+import { BrowsePageSkeleton } from "@/components/browse/browse-page-skeleton";
+import { PageLoadingShell } from "@/components/layout/page-loading-shell";
 
-export default function Loading() {
-  return <BrowsePageSkeleton />;
+export default function HomeLoading() {
+  return (
+    <PageLoadingShell>
+      <BrowsePageSkeleton />
+    </PageLoadingShell>
+  );
 }

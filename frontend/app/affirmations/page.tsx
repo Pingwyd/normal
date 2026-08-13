@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { AffirmationDeckView } from "@/components/deck/affirmation-deck-view";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { PushOptInPrompt } from "@/components/notifications/push-opt-in-prompt";
 import { ApiRequestError } from "@/lib/api/errors";
 import { fetchAffirmationsPageServer } from "@/lib/affirmations/server-api";
 
@@ -47,25 +48,29 @@ export default async function AffirmationsPage({
   }
 
   return (
-    <div className="min-h-full bg-[#F2F1EC]">
+    <div className="min-h-full bg-background">
       <SiteHeader />
       <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
         <section className="mx-auto mb-8 max-w-md space-y-3 text-center">
-          <h1 className="font-display text-3xl text-[#202B26] sm:text-4xl">
+          <h1 className="font-display text-3xl text-foreground sm:text-4xl">
             Affirmations
           </h1>
-          <p className="text-sm leading-relaxed text-[#5A6560] sm:text-base">
+          <p className="text-sm leading-relaxed text-muted sm:text-base">
             Swipe right to save, left to skip. No forced positivity, just
             phrases that feel honest.
           </p>
         </section>
 
+        <div className="mx-auto mb-6 max-w-2xl">
+          <PushOptInPrompt />
+        </div>
+
         {errorMessage ? (
-          <div className="mx-auto max-w-md rounded-xl border border-[#E8A97A] bg-white px-6 py-8 text-center">
-            <p className="font-display text-lg text-[#202B26]">
+          <div className="mx-auto max-w-md rounded-xl border border-warning-border bg-warning-surface px-6 py-8 text-center">
+            <p className="font-display text-lg text-foreground">
               We could not load affirmations
             </p>
-            <p className="mt-2 text-sm text-[#5A6560]">{errorMessage}</p>
+            <p className="mt-2 text-sm text-muted">{errorMessage}</p>
           </div>
         ) : (
           <AffirmationDeckView

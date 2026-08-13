@@ -73,7 +73,7 @@ export function SubmissionReviewForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-5 rounded-xl border border-[#D8D5CC] bg-white p-6"
+      className="space-y-5 rounded-xl border border-border bg-surface p-6"
     >
       <div>
         <label
@@ -88,7 +88,7 @@ export function SubmissionReviewForm({
           onChange={(event) =>
             setStatus(event.target.value as AdminSubmissionStatus)
           }
-          className="w-full rounded-lg border border-[#CFCBC2] bg-white px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border-strong bg-surface px-3 py-2 text-sm"
         >
           {STATUS_OPTIONS.map((option) => (
             <option key={option.value} value={option.value}>
@@ -111,7 +111,7 @@ export function SubmissionReviewForm({
             value={resultingCardId}
             onChange={(event) => setResultingCardId(event.target.value)}
             required
-            className="w-full rounded-lg border border-[#CFCBC2] bg-white px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-border-strong bg-surface px-3 py-2 text-sm"
           >
             <option value="">Select a card</option>
             {cards.map((card) => (
@@ -120,10 +120,10 @@ export function SubmissionReviewForm({
               </option>
             ))}
           </select>
-          <p className="mt-1 text-xs text-[#5A6560]">
+          <p className="mt-1 text-xs text-muted">
             Publishing never auto-creates a card. Link the submission to an
             existing published card, or{" "}
-            <Link href="/admin/cards/new" className="text-[#33473D] underline">
+            <Link href="/admin/cards/new" className="text-sage-dark underline">
               create one first
             </Link>
             .
@@ -143,14 +143,14 @@ export function SubmissionReviewForm({
           rows={4}
           value={decisionNotes}
           onChange={(event) => setDecisionNotes(event.target.value)}
-          className="w-full rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm leading-relaxed"
+          className="w-full rounded-lg border border-border-strong px-3 py-2 text-sm leading-relaxed"
           placeholder="Internal notes about this decision."
         />
       </div>
 
       {error ? (
         <p
-          className="rounded-lg border border-[#E8A97A] bg-[#FFF7F0] px-3 py-2 text-sm text-[#202B26]"
+          className="rounded-lg border border-warning-border bg-warning-surface px-3 py-2 text-sm text-foreground"
           role="alert"
         >
           {error}
@@ -160,7 +160,7 @@ export function SubmissionReviewForm({
       <button
         type="submit"
         disabled={isSubmitting}
-        className="rounded-full bg-[#33473D] px-5 py-2.5 text-sm font-medium text-white disabled:opacity-60"
+        className="rounded-full bg-sage-dark px-5 py-2.5 text-sm font-medium text-white disabled:opacity-60"
       >
         {isSubmitting ? "Saving..." : "Save review"}
       </button>

@@ -73,17 +73,17 @@ export function SaveButton({
         aria-label={
           saved ? `Remove saved ${label}` : `Save ${label} to your device`
         }
-        className="inline-flex items-center gap-1 rounded-full border border-transparent px-2 py-1 text-[#33473D] transition-colors hover:border-[#D8D5CC] hover:bg-white disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex items-center gap-1 rounded-full border border-transparent px-2 py-1 text-sage-dark transition-colors hover:border-border hover:bg-surface disabled:cursor-not-allowed disabled:opacity-60"
       >
         <Bookmark
           size={14}
           aria-hidden="true"
-          className={saved ? "fill-current text-[#33473D]" : "text-[#5A6560]"}
+          className={saved ? "fill-current text-sage-dark" : "text-muted"}
         />
         <span className="text-xs font-medium">{saved ? "Saved" : "Save"}</span>
       </button>
       {errorMessage ? (
-        <span className="text-xs text-[#8A4B2A]" role="alert">
+        <span className="text-xs text-warning-text" role="alert">
           {errorMessage}
         </span>
       ) : null}

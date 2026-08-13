@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Fraunces, IBM_Plex_Mono, Inter } from "next/font/google";
+import Script from "next/script";
 
 import { AppProviders } from "@/components/providers/app-providers";
+import { THEME_INIT_SCRIPT } from "@/lib/preferences/theme-init-script";
 
 import "./globals.css";
 
@@ -31,9 +33,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${fraunces.variable} ${inter.variable} ${ibmPlexMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans text-[#202B26]">
+      <body
+        suppressHydrationWarning
+        className="min-h-full flex flex-col bg-background font-sans text-foreground"
+      >
+        <Script id="theme-init" strategy="beforeInteractive">
+          {THEME_INIT_SCRIPT}
+        </Script>
         <AppProviders>{children}</AppProviders>
       </body>
     </html>

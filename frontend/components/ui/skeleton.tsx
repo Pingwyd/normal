@@ -5,7 +5,7 @@ type SkeletonProps = HTMLAttributes<HTMLDivElement>;
 export function Skeleton({ className = "", ...props }: SkeletonProps) {
   return (
     <div
-      className={`animate-pulse rounded-md bg-[#E4E2DA] ${className}`}
+      className={`animate-pulse rounded-md bg-skeleton ${className}`}
       aria-hidden="true"
       {...props}
     />

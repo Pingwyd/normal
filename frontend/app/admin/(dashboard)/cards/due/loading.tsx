@@ -1,4 +1,4 @@
-import { AdminListPageSkeleton } from "@/components/skeletons/admin-list-page-skeleton";
+import { AdminListPageSkeleton } from "@/components/admin/admin-list-page-skeleton";
 
 export default function Loading() {
   return <AdminListPageSkeleton variant="due" />;

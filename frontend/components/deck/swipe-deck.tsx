@@ -141,7 +141,7 @@ export function SwipeDeck<T>({
         onPointerCancel={resetDrag}
       >
         <div
-          className={`relative rounded-3xl border border-[#D8D5CC] bg-white p-6 shadow-lg transition-transform ${
+          className={`relative rounded-3xl border border-border bg-surface p-6 shadow-lg transition-transform ${
             isDragging ? "cursor-grabbing" : "cursor-grab"
           }`}
           style={{
@@ -154,13 +154,13 @@ export function SwipeDeck<T>({
           }}
         >
           <span
-            className="pointer-events-none absolute left-6 top-6 rounded-full bg-[#EAF2EC] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#33473D]"
+            className="pointer-events-none absolute left-6 top-6 rounded-full bg-surface-muted px-3 py-1 text-xs font-semibold uppercase tracking-wide text-sage-dark"
             style={{ opacity: saveOpacity }}
           >
             Save
           </span>
           <span
-            className="pointer-events-none absolute right-6 top-6 rounded-full bg-[#F7F0EA] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#8A4B2A]"
+            className="pointer-events-none absolute right-6 top-6 rounded-full bg-accent-soft px-3 py-1 text-xs font-semibold uppercase tracking-wide text-warning-text"
             style={{ opacity: skipOpacity }}
           >
             Skip

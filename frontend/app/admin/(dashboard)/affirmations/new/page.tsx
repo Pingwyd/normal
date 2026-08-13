@@ -7,10 +7,10 @@ export default async function NewAffirmationPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-3xl text-[#202B26]">
+        <h1 className="font-display text-3xl text-foreground">
           New affirmation
         </h1>
-        <p className="text-sm text-[#5A6560]">
+        <p className="text-sm text-muted">
           Write the affirmation text and choose tags before publishing.
         </p>
       </div>

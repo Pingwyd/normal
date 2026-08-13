@@ -24,7 +24,7 @@ export function DeckActionBar({
       <button
         type="button"
         onClick={onSkip}
-        className="inline-flex items-center gap-2 rounded-full border border-[#CFCBC2] bg-white px-5 py-2.5 text-sm font-medium text-[#33473D] hover:border-[#4B6B5E]"
+        className="inline-flex items-center gap-2 rounded-full border border-border-strong bg-surface px-5 py-2.5 text-sm font-medium text-sage-dark hover:border-sage"
       >
         <ArrowLeft size={16} aria-hidden="true" />
         Skip
@@ -32,7 +32,7 @@ export function DeckActionBar({
       <button
         type="button"
         onClick={onShare}
-        className="inline-flex items-center gap-2 rounded-full border border-[#CFCBC2] bg-white px-5 py-2.5 text-sm font-medium text-[#33473D] hover:border-[#4B6B5E]"
+        className="inline-flex items-center gap-2 rounded-full border border-border-strong bg-surface px-5 py-2.5 text-sm font-medium text-sage-dark hover:border-sage"
       >
         <Share2 size={16} aria-hidden="true" />
         {shareLabel}
@@ -42,7 +42,7 @@ export function DeckActionBar({
         onClick={onSave}
         disabled={isSavePending}
         aria-pressed={isSaved}
-        className="inline-flex items-center gap-2 rounded-full bg-[#33473D] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#4B6B5E] disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex items-center gap-2 rounded-full bg-sage-dark px-5 py-2.5 text-sm font-medium text-white hover:bg-sage disabled:cursor-not-allowed disabled:opacity-60"
       >
         <ArrowRight size={16} aria-hidden="true" />
         {isSaved ? "Saved" : "Save"}

@@ -2,11 +2,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function CardFeedSkeleton() {
   return (
-    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="card-feed-grid grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
       {Array.from({ length: 6 }).map((_, index) => (
         <div
           key={index}
-          className="flex flex-col gap-4 rounded-xl border border-[#D8D5CC] bg-white p-5"
+          className="flex flex-col gap-4 rounded-xl border border-border bg-surface p-5"
         >
           <Skeleton className="h-4 w-28" />
           <Skeleton className="h-7 w-full" />

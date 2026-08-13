@@ -23,7 +23,7 @@ export function CardDetailView({ card }: CardDetailViewProps) {
       <div>
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-sm text-[#33473D] hover:text-[#4B6B5E]"
+          className="inline-flex items-center gap-2 text-sm text-sage-dark hover:text-sage"
         >
           <ArrowLeft size={16} aria-hidden="true" />
           Back to browse
@@ -31,18 +31,18 @@ export function CardDetailView({ card }: CardDetailViewProps) {
       </div>
 
       <header className="space-y-4">
-        <p className="font-mono text-xs uppercase tracking-wide text-[#4B6B5E]">
+        <p className="font-mono text-xs uppercase tracking-wide text-sage">
           {card.category.name}
         </p>
-        <h1 className="font-display text-3xl leading-tight text-[#202B26] sm:text-4xl">
+        <h1 className="font-display text-3xl leading-tight text-foreground sm:text-4xl">
           {card.question}
         </h1>
-        <p className="text-lg leading-relaxed text-[#3A4540]">{card.brief}</p>
-        <div className="flex flex-wrap items-center gap-4 text-sm text-[#5A6560]">
+        <p className="text-lg leading-relaxed text-ink-secondary">{card.brief}</p>
+        <div className="flex flex-wrap items-center gap-4 text-sm text-muted">
           <span>
             {card.source_count} source{card.source_count === 1 ? "" : "s"}
           </span>
-          <span className="font-mono uppercase tracking-wide text-[#4B6B5E]">
+          <span className="font-mono uppercase tracking-wide text-sage">
             {reviewedLabel}
           </span>
           <span className="inline-flex items-center gap-2">
@@ -67,7 +67,7 @@ export function CardDetailView({ card }: CardDetailViewProps) {
       <SourcesList sources={card.sources} />
       <RelatedCards relatedCards={card.related_cards} />
 
-      <section className="border-t border-[#ECEAE4] pt-6">
+      <section className="border-t border-border-subtle pt-6">
         <ReportIssueModal cardId={card.id} cardQuestion={card.question} />
       </section>
     </article>

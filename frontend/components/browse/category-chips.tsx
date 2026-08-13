@@ -28,8 +28,8 @@ export function CategoryChips({ browseParams }: CategoryChipsProps) {
             scroll={false}
             className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
               isActive
-                ? "bg-[#33473D] text-white"
-                : "border border-[#CFCBC2] bg-white text-[#33473D] hover:border-[#4B6B5E]"
+                ? "bg-sage-dark text-white"
+                : "border border-border-strong bg-surface text-sage-dark hover:border-sage"
             }`}
             aria-current={isActive ? "true" : undefined}
           >

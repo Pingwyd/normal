@@ -5,7 +5,7 @@ from datetime import datetime
 from enum import StrEnum
 from uuid import UUID
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 from app.favorites.schemas import FavoriteItem, LocalFavoriteItem
 
@@ -54,6 +54,18 @@ class AccountPublic(BaseModel):
     layout_version: AccountLayoutVersion
     created_at: datetime
     updated_at: datetime
+
+
+class AccountUpdateRequest(BaseModel):
+    theme_preference: AccountThemePreference | None = None
+    layout_version: AccountLayoutVersion | None = None
+
+    @model_validator(mode="after")
+    def validate_at_least_one_field(self) -> AccountUpdateRequest:
+        if self.theme_preference is None and self.layout_version is None:
+            msg = "At least one preference field must be provided."
+            raise ValueError(msg)
+        return self
 
 
 class AccountSignupResponse(BaseModel):
