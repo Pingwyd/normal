@@ -200,3 +200,35 @@ def test_get_admin_analytics_empty_payload_returns_zeros(
 def test_analytics_rejects_invalid_days(founder_admin: None) -> None:
     response = client.get("/v1/admin/analytics?days=3", headers=AUTH_HEADER)
     assert response.status_code == 422
+
+
+def test_sample_analytics_payload_matches_manual_bucket_sum() -> None:
+    buckets = SAMPLE_ANALYTICS_PAYLOAD["submission_volume"]["buckets"]
+    bucket_total = sum(bucket["count"] for bucket in buckets)
+    assert (
+        bucket_total == SAMPLE_ANALYTICS_PAYLOAD["submission_volume"]["total_in_window"]
+    )
+
+
+@patch("app.analytics.admin_router.get_admin_analytics")
+def test_dashboard_summary_totals_from_api_payload(
+    mock_get_analytics: MagicMock,
+    founder_admin: None,
+) -> None:
+    from app.analytics.schemas import AdminAnalyticsResponse
+
+    mock_get_analytics.return_value = AdminAnalyticsResponse.model_validate(
+        SAMPLE_ANALYTICS_PAYLOAD
+    )
+
+    response = client.get("/v1/admin/analytics", headers=AUTH_HEADER)
+    data = response.json()["data"]
+
+    top_saved_total = sum(card["save_count"] for card in data["top_saved_cards"])
+    top_liked_total = sum(card["like_count"] for card in data["top_liked_cards"])
+
+    assert top_saved_total == 8
+    assert top_liked_total == 4
+    assert data["submission_volume"]["total_in_window"] == 7
+    assert data["newsletter_subscribers"]["active"] == 10
+    assert data["push_subscribers"]["active"] == 4
