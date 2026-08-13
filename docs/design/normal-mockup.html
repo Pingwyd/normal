@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Normal. — mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F2F1EC;
+    --card: #FCFBF8;
+    --ink: #202B26;
+    --ink-soft: #4B5650;
+    --sage: #4B6B5E;
+    --sage-deep: #33473D;
+    --peach: #E8A97A;
+    --periwinkle: #7086C9;
+    --line: rgba(32,43,38,0.10);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1100px; margin:0 auto; padding:0 28px;}
+  h1,h2,h3{font-family:'Fraunces',serif; font-weight:500; margin:0; letter-spacing:-0.01em;}
+  .mono{font-family:'IBM Plex Mono',monospace; letter-spacing:0.02em;}
+
+  /* NAV */
+  nav{position:sticky; top:0; z-index:50; background:rgba(242,241,236,0.88); backdrop-filter:blur(8px); border-bottom:1px solid var(--line);}
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; height:64px;}
+  .logo{font-family:'Fraunces',serif; font-size:22px; font-weight:600; color:var(--sage-deep);}
+  .logo span{color:var(--peach);}
+  .navlinks{display:flex; gap:28px; font-size:14px; color:var(--ink-soft);}
+  .navlinks a{color:inherit; text-decoration:none;}
+  .navlinks a:hover{color:var(--ink);}
+  .navcta{background:var(--sage-deep); color:#fff; border:none; padding:9px 18px; border-radius:100px; font-size:13.5px; font-family:'Inter'; font-weight:600; cursor:pointer;}
+
+  /* HERO */
+  .hero{padding:78px 0 56px; text-align:center;}
+  .eyebrow{font-size:11.5px; text-transform:uppercase; color:var(--sage); margin-bottom:18px;}
+  .hero h1{font-size:44px; line-height:1.18; max-width:680px; margin:0 auto;}
+  .typed-line{display:inline; border-bottom:3px solid var(--peach); padding-bottom:2px;}
+  .cursor{display:inline-block; width:3px; background:var(--sage-deep); margin-left:2px; animation:blink 1s steps(1) infinite;}
+  @keyframes blink{50%{opacity:0;}}
+  .reassure{max-width:480px; margin:22px auto 0; font-size:15.5px; color:var(--ink-soft); min-height:24px; opacity:0; transition:opacity .5s ease;}
+  .reassure.show{opacity:1;}
+  .searchbar{max-width:520px; margin:34px auto 0; display:flex; align-items:center; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:6px 6px 6px 20px; box-shadow:0 1px 2px rgba(32,43,38,0.04);}
+  .searchbar input{border:none; background:none; outline:none; flex:1; font-family:'Inter'; font-size:15px; padding:12px 0; color:var(--ink);}
+  .searchbar button{background:var(--sage-deep); color:#fff; border:none; padding:12px 20px; border-radius:10px; font-family:'Inter'; font-weight:600; font-size:14px; cursor:pointer;}
+
+  /* CATEGORY CHIPS */
+  .chips{display:flex; gap:10px; overflow-x:auto; padding:4px 0 8px; margin-bottom:44px; justify-content:center; flex-wrap:wrap;}
+  .chip{font-size:13.5px; padding:8px 16px; border-radius:100px; border:1px solid var(--line); background:var(--card); color:var(--ink-soft); cursor:pointer; white-space:nowrap; transition:.15s;}
+  .chip.active{background:var(--sage-deep); color:#fff; border-color:var(--sage-deep);}
+  .chip:hover{border-color:var(--sage);}
+
+  /* SECTION LABEL */
+  .section-label{display:flex; align-items:baseline; justify-content:space-between; margin:0 0 22px;}
+  .section-label h2{font-size:24px;}
+  .section-label .mono{font-size:11.5px; color:var(--ink-soft); text-transform:uppercase;}
+
+  /* CARD GRID */
+  .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-bottom:64px;}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px; display:flex; flex-direction:column; gap:14px; cursor:pointer; transition:.18s ease;}
+  .card:hover{transform:translateY(-3px); box-shadow:0 10px 24px rgba(32,43,38,0.08); border-color:transparent;}
+  .card .tag{font-size:10.5px; text-transform:uppercase; color:var(--sage);}
+  .card h3{font-size:18px; line-height:1.35; font-weight:500;}
+  .card p{font-size:13.5px; color:var(--ink-soft); line-height:1.55; margin:0;}
+  .card-foot{display:flex; align-items:center; justify-content:space-between; margin-top:auto; padding-top:8px; border-top:1px solid var(--line);}
+  .sources{font-size:10.5px; color:var(--ink-soft);}
+  .actions{display:flex; gap:10px; align-items:center;}
+  .actions button{background:none; border:none; cursor:pointer; font-size:13px; color:var(--ink-soft); display:flex; align-items:center; gap:4px;}
+  .actions button:hover{color:var(--sage-deep);}
+  .save-count{font-size:11px;}
+
+  .ad-slot{grid-column:span 3; border:1px dashed var(--line); border-radius:16px; padding:16px 22px; display:flex; align-items:center; justify-content:space-between; font-size:12.5px; color:var(--ink-soft);}
+  .ad-slot .mono{font-size:10px; background:var(--line); padding:3px 8px; border-radius:100px;}
+
+  /* AFFIRMATIONS */
+  .affirm-section{background:var(--sage-deep); border-radius:24px; padding:56px 40px; margin-bottom:64px; color:#fff; display:grid; grid-template-columns:1fr 340px; gap:40px; align-items:center;}
+  .affirm-copy .eyebrow{color:var(--peach);}
+  .affirm-copy h2{color:#fff; font-size:30px; margin-bottom:14px;}
+  .affirm-copy p{color:rgba(255,255,255,0.75); font-size:14.5px; line-height:1.6; max-width:380px; margin-bottom:22px;}
+  .affirm-copy .sub-btn{background:var(--peach); color:var(--sage-deep); border:none; padding:11px 20px; border-radius:100px; font-weight:700; font-size:13.5px; cursor:pointer;}
+  .deck{position:relative; height:220px;}
+  .aff-card{position:absolute; inset:0; background:#FCFBF8; color:var(--ink); border-radius:18px; padding:26px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 14px 30px rgba(0,0,0,0.18); transition:transform .35s ease, opacity .35s ease;}
+  .aff-card .mono{font-size:10px; color:var(--sage); text-transform:uppercase;}
+  .aff-card p{font-family:'Fraunces',serif; font-size:19px; line-height:1.4; margin:10px 0 0;}
+  .aff-foot{display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--ink-soft);}
+  .swipe-hint{text-align:center; font-size:11.5px; color:rgba(255,255,255,0.55); margin-top:12px;}
+
+  /* FOOTER */
+  footer{border-top:1px solid var(--line); padding:40px 0 50px; font-size:12.5px; color:var(--ink-soft);}
+  .crisis-strip{background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px 20px; display:flex; justify-content:space-between; align-items:center; margin-bottom:28px; font-size:13px;}
+  .crisis-strip a{color:var(--sage-deep); font-weight:600; text-decoration:none;}
+  .foot-links{display:flex; gap:20px; flex-wrap:wrap; margin-bottom:14px;}
+  .foot-links a{color:var(--ink-soft); text-decoration:none;}
+
+  @media(max-width:820px){
+    .grid{grid-template-columns:1fr;}
+    .ad-slot{grid-column:span 1;}
+    .affirm-section{grid-template-columns:1fr;}
+    .hero h1{font-size:32px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo">normal<span>.</span></div>
+    <div class="navlinks">
+      <a href="#browse">Browse</a>
+      <a href="#affirm">Daily affirmations</a>
+      <a href="#">Submit a question</a>
+    </div>
+    <button class="navcta">Save favorites</button>
+  </div>
+</nav>
+
+<section class="hero wrap">
+  <div class="eyebrow mono">A QUIET PLACE TO CHECK IF YOU'RE OKAY</div>
+  <h1>Is it normal to <span class="typed-line" id="typedLine">&nbsp;</span><span class="cursor" id="cursor"></span></h1>
+  <div class="reassure" id="reassure">Yes — and here's the research on why.</div>
+  <div class="searchbar">
+    <input type="text" placeholder="Type what's on your mind…">
+    <button>Search</button>
+  </div>
+  <div class="chips">
+    <div class="chip active">Mind &amp; Emotions</div>
+    <div class="chip">Body</div>
+    <div class="chip">Relationships</div>
+    <div class="chip">Life Changes</div>
+    <div class="chip">Crisis Support</div>
+  </div>
+</section>
+
+<main class="wrap" id="browse">
+  <div class="section-label">
+    <h2>Mind &amp; Emotions</h2>
+    <span class="mono">184 cards</span>
+  </div>
+
+  <div class="grid" id="cardGrid"></div>
+
+  <div class="section-label" id="affirm">
+    <h2>Today's affirmations</h2>
+    <span class="mono">tap the card to see the next one</span>
+  </div>
+
+  <div class="affirm-section">
+    <div class="affirm-copy">
+      <div class="eyebrow mono">DAILY · PERSONALIZE BY MOOD</div>
+      <h2>A small reminder, every day.</h2>
+      <p>Swipe through short, reviewed affirmations — filtered by what you're actually dealing with, not generic quotes. Save the ones that land. Share the ones your friends need too.</p>
+      <button class="sub-btn">Get these by email →</button>
+    </div>
+    <div>
+      <div class="deck" id="deck"></div>
+      <div class="swipe-hint">← tap card to bring in the next one →</div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="crisis-strip">
+      <span>If you're in crisis or thinking about harming yourself, you don't need to browse — talk to someone now.</span>
+      <a href="#">Find a crisis line →</a>
+    </div>
+    <div class="foot-links">
+      <a href="#">About</a><a href="#">How we source content</a><a href="#">Meet our clinical reviewer</a>
+      <a href="#">Privacy</a><a href="#">Disclaimer</a><a href="#">Submit a question</a>
+    </div>
+    <div>This site shares general information and is not a substitute for professional medical or mental health advice.</div>
+  </div>
+</footer>
+
+<script>
+  // Hero typing animation
+  const prompts = [
+    "feel anxious for no reason?",
+    "still think about an old friendship?",
+    "cry over something small?",
+    "feel behind everyone else?",
+  ];
+  const typedEl = document.getElementById('typedLine');
+  const reassureEl = document.getElementById('reassure');
+  let p = 0;
+  function typePrompt(text, cb){
+    let i = 0; typedEl.textContent = '';
+    const iv = setInterval(()=>{
+      typedEl.textContent = text.slice(0,i);
+      i++;
+      if(i > text.length){ clearInterval(iv); cb(); }
+    }, 32);
+  }
+  function erasePrompt(cb){
+    let text = typedEl.textContent;
+    const iv = setInterval(()=>{
+      text = text.slice(0,-1);
+      typedEl.textContent = text;
+      if(text.length===0){ clearInterval(iv); cb(); }
+    }, 18);
+  }
+  function cycle(){
+    reassureEl.classList.remove('show');
+    typePrompt(prompts[p], ()=>{
+      setTimeout(()=>{ reassureEl.classList.add('show'); }, 200);
+      setTimeout(()=>{
+        reassureEl.classList.remove('show');
+        erasePrompt(()=>{ p = (p+1)%prompts.length; cycle(); });
+      }, 2400);
+    });
+  }
+  cycle();
+
+  // Card data
+  const cards = [
+    {tag:"Mind & Emotions", q:"Is it normal to feel anxious before a test even when I've studied?", a:"Yes — anticipatory anxiety is one of the most common test-related responses, even when you're well prepared.", src:"2 sources", saves:"312"},
+    {tag:"Mind & Emotions", q:"Is it normal to feel nothing after something big happens?", a:"Emotional numbness is a recognized short-term response to stress — it's your mind pacing what it processes.", src:"3 sources", saves:"198"},
+    {tag:"Mind & Emotions", q:"Is it normal to still miss a friendship that ended badly?", a:"Yes — grief isn't reserved for loss through death; ended friendships are consistently linked to real grief responses.", src:"2 sources", saves:"441"},
+    {tag:"Mind & Emotions", q:"Is it normal to feel behind everyone else my age?", a:"Very common, and largely fueled by curated comparison — most people report feeling this at some point.", src:"4 sources", saves:"567"},
+    {tag:"Mind & Emotions", q:"Is it normal to cry over small things sometimes?", a:"Small triggers often tap into unrelated built-up stress — the tears are rarely really about the small thing.", src:"2 sources", saves:"229"},
+    {tag:"Mind & Emotions", q:"Is it normal to feel lonely even surrounded by people?", a:"Yes — loneliness is about felt connection, not headcount, and it's common even in busy social lives.", src:"3 sources", saves:"384"},
+  ];
+  const grid = document.getElementById('cardGrid');
+  cards.forEach((c,idx)=>{
+    const el = document.createElement('div');
+    el.className = 'card';
+    el.innerHTML = `
+      <div class="tag mono">${c.tag}</div>
+      <h3>${c.q}</h3>
+      <p>${c.a}</p>
+      <div class="card-foot">
+        <span class="sources mono">${c.src} · reviewed</span>
+        <div class="actions">
+          <button>♡ <span class="save-count">${c.saves}</span></button>
+          <button>↗</button>
+        </div>
+      </div>`;
+    grid.appendChild(el);
+    if(idx===2){
+      const ad = document.createElement('div');
+      ad.className = 'ad-slot';
+      ad.innerHTML = `<span>Ad placement — browse pages only, never detail pages</span><span class="mono">SPONSORED</span>`;
+      grid.appendChild(ad);
+    }
+  });
+
+  // Affirmation swipe deck
+  const affirmations = [
+    "You're allowed to move at your own pace.",
+    "Feeling behind isn't the same as being behind.",
+    "One hard day doesn't erase your progress.",
+    "You don't owe anyone constant productivity.",
+    "It's okay to outgrow what used to feel safe.",
+  ];
+  let ai = 0;
+  const deck = document.getElementById('deck');
+  function renderDeck(){
+    deck.innerHTML = '';
+    for(let i=2;i>=0;i--){
+      const idx = (ai+i)%affirmations.length;
+      const card = document.createElement('div');
+      card.className = 'aff-card';
+      const rot = i===0?0:(i===1?-4:4);
+      const scale = 1-(i*0.04);
+      const y = i*10;
+      card.style.transform = `translateY(${y}px) rotate(${rot}deg) scale(${scale})`;
+      card.style.zIndex = 10-i;
+      card.innerHTML = `
+        <div class="mono">Today's affirmation</div>
+        <p>${affirmations[idx]}</p>
+        <div class="aff-foot"><span>♡ Save</span><span>↗ Share</span></div>`;
+      if(i===0){
+        card.addEventListener('click', ()=>{
+          card.style.transform = `translateX(140px) rotate(14deg)`;
+          card.style.opacity = '0';
+          setTimeout(()=>{ ai=(ai+1)%affirmations.length; renderDeck(); }, 280);
+        });
+      }
+      deck.appendChild(card);
+    }
+  }
+  renderDeck();
+</script>
+</body>
+</html>

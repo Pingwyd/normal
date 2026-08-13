@@ -5,12 +5,12 @@
   --foreground: #202b26;
   --color-paper: #f2f1ec;
   --color-ink: #202b26;
-  --color-ink-secondary: #3a4540;
-  --color-muted: #5a6560;
-  --color-border: #d8d5cc;
-  --color-border-strong: #cfcbc2;
-  --color-border-subtle: #eceae4;
-  --color-surface: #ffffff;
+  --color-ink-secondary: #4b5650;
+  --color-muted: #4b5650;
+  --color-border: rgba(32, 43, 38, 0.1);
+  --color-border-strong: rgba(32, 43, 38, 0.16);
+  --color-border-subtle: rgba(32, 43, 38, 0.06);
+  --color-surface: #fcfbf8;
   --color-surface-muted: #f5f4ef;
   --color-sage: #4b6b5e;
   --color-sage-dark: #33473d;

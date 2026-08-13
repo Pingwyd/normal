@@ -10,6 +10,7 @@ import "./globals.css";
 const fraunces = Fraunces({
   variable: "--font-display",
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
 });
 
 const inter = Inter({
