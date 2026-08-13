@@ -49,7 +49,7 @@ export function AdminLoginForm() {
           required
           value={email}
           onChange={(event) => setEmail(event.target.value)}
-          className="w-full rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border-strong px-3 py-2 text-sm"
         />
       </div>
       <div>
@@ -66,18 +66,18 @@ export function AdminLoginForm() {
           required
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          className="w-full rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border-strong px-3 py-2 text-sm"
         />
       </div>
       {error ? (
-        <p className="rounded-lg border border-[#E8A97A] bg-[#FFF7F0] px-3 py-2 text-sm text-[#202B26]">
+        <p className="rounded-lg border border-warning-border bg-warning-surface px-3 py-2 text-sm text-foreground">
           {error}
         </p>
       ) : null}
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full rounded-full bg-[#33473D] px-4 py-2.5 text-sm font-medium text-white disabled:opacity-60"
+        className="w-full rounded-full bg-sage-dark px-4 py-2.5 text-sm font-medium text-white disabled:opacity-60"
       >
         {isSubmitting ? "Signing in..." : "Sign in"}
       </button>

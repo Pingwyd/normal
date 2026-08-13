@@ -1,5 +1,10 @@
-import { SuggestPageSkeleton } from "@/components/skeletons/suggest-page-skeleton";
+import { PageLoadingShell } from "@/components/layout/page-loading-shell";
+import { SuggestPageSkeleton } from "@/components/submissions/suggest-page-skeleton";
 
-export default function Loading() {
-  return <SuggestPageSkeleton />;
+export default function SuggestLoading() {
+  return (
+    <PageLoadingShell>
+      <SuggestPageSkeleton />
+    </PageLoadingShell>
+  );
 }

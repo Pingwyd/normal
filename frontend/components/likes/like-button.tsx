@@ -147,19 +147,19 @@ export function LikeButton({
         disabled={!isReady}
         aria-pressed={liked}
         aria-label={liked ? `Unlike ${label}` : `Mark ${label} as useful`}
-        className="inline-flex items-center gap-1 rounded-full border border-transparent px-2 py-1 text-[#33473D] transition-colors hover:border-[#D8D5CC] hover:bg-white disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex items-center gap-1 rounded-full border border-transparent px-2 py-1 text-sage-dark transition-colors hover:border-border hover:bg-surface disabled:cursor-not-allowed disabled:opacity-60"
       >
         <ThumbsUp
           size={14}
           aria-hidden="true"
-          className={liked ? "fill-current text-[#33473D]" : "text-[#5A6560]"}
+          className={liked ? "fill-current text-sage-dark" : "text-muted"}
         />
         <span className="text-xs font-medium">
           {likeCount} found this useful
         </span>
       </button>
       {errorMessage ? (
-        <span className="text-xs text-[#8A4B2A]" role="status">
+        <span className="text-xs text-warning-text" role="status">
           {errorMessage}
         </span>
       ) : null}

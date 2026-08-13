@@ -14,23 +14,26 @@ export function SourcesList({ sources }: SourcesListProps) {
 
   return (
     <section aria-labelledby="sources-heading" className="space-y-4">
-      <h2 id="sources-heading" className="font-display text-2xl text-[#202B26]">
+      <h2
+        id="sources-heading"
+        className="font-display text-2xl text-foreground"
+      >
         Sources
       </h2>
       <ul className="space-y-4">
         {sources.map((source) => (
           <li
             key={source.id}
-            className="rounded-xl border border-[#D8D5CC] bg-white p-4"
+            className="rounded-xl border border-border bg-surface p-4"
           >
             <div className="flex flex-wrap items-start justify-between gap-2">
               <div>
-                <p className="font-medium text-[#202B26]">{source.title}</p>
-                <p className="mt-1 text-sm text-[#5A6560]">
+                <p className="font-medium text-foreground">{source.title}</p>
+                <p className="mt-1 text-sm text-muted">
                   {source.author_or_org}
                 </p>
               </div>
-              <span className="font-mono text-xs uppercase tracking-wide text-[#4B6B5E]">
+              <span className="font-mono text-xs uppercase tracking-wide text-sage">
                 {getSourceTierLabel(source.tier)}
               </span>
             </div>
@@ -38,7 +41,7 @@ export function SourcesList({ sources }: SourcesListProps) {
               href={source.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-3 inline-flex items-center gap-1 text-sm text-[#33473D] hover:text-[#4B6B5E]"
+              className="mt-3 inline-flex items-center gap-1 text-sm text-sage-dark hover:text-sage"
             >
               View source
               <ExternalLink size={14} aria-hidden="true" />

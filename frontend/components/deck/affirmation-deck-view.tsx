@@ -123,16 +123,16 @@ export function AffirmationDeckView({
   }, [advance]);
 
   const emptyState = (
-    <div className="rounded-3xl border border-dashed border-[#CFCBC2] bg-white px-6 py-12 text-center">
-      <p className="font-display text-xl text-[#202B26]">
+    <div className="rounded-3xl border border-dashed border-border-strong bg-surface px-6 py-12 text-center">
+      <p className="font-display text-xl text-foreground">
         No affirmations to show
       </p>
-      <p className="mt-2 text-sm text-[#5A6560]">
+      <p className="mt-2 text-sm text-muted">
         Check back soon or browse cards on the home page.
       </p>
       <Link
         href="/"
-        className="mt-4 inline-block text-sm font-medium text-[#33473D] hover:underline"
+        className="mt-4 inline-block text-sm font-medium text-sage-dark hover:underline"
       >
         Browse cards
       </Link>
@@ -155,8 +155,8 @@ export function AffirmationDeckView({
         reducedMotionFallback={
           currentItem ? (
             <div className="space-y-4">
-              <div className="rounded-3xl border border-[#D8D5CC] bg-white p-6 shadow-lg">
-                <p className="font-display text-2xl leading-relaxed text-[#202B26]">
+              <div className="rounded-3xl border border-border bg-surface p-6 shadow-lg">
+                <p className="font-display text-2xl leading-relaxed text-foreground">
                   {currentItem.text}
                 </p>
                 {currentItem.tags.length > 0 ? (
@@ -164,7 +164,7 @@ export function AffirmationDeckView({
                     {currentItem.tags.map((tag) => (
                       <li
                         key={tag.id}
-                        className="rounded-full bg-[#EAF2EC] px-3 py-1 text-xs font-medium text-[#33473D]"
+                        className="rounded-full bg-surface-muted px-3 py-1 text-xs font-medium text-sage-dark"
                       >
                         {tag.name}
                       </li>
@@ -188,7 +188,7 @@ export function AffirmationDeckView({
         }
         renderCard={(item) => (
           <>
-            <p className="font-display text-2xl leading-relaxed text-[#202B26]">
+            <p className="font-display text-2xl leading-relaxed text-foreground">
               {item.text}
             </p>
             {item.tags.length > 0 ? (
@@ -196,7 +196,7 @@ export function AffirmationDeckView({
                 {item.tags.map((tag) => (
                   <li
                     key={tag.id}
-                    className="rounded-full bg-[#EAF2EC] px-3 py-1 text-xs font-medium text-[#33473D]"
+                    className="rounded-full bg-surface-muted px-3 py-1 text-xs font-medium text-sage-dark"
                   >
                     {tag.name}
                   </li>
@@ -219,29 +219,29 @@ export function AffirmationDeckView({
         />
       ) : null}
 
-      <p className="text-center text-xs text-[#5A6560]">
+      <p className="text-center text-xs text-muted">
         Swipe right to save, left to skip. Tap the card to see the next one.
       </p>
 
       {isLoading ? (
-        <p className="text-center text-xs text-[#5A6560]">Loading more...</p>
+        <p className="text-center text-xs text-muted">Loading more...</p>
       ) : null}
       {errorMessage ? (
-        <p className="text-center text-xs text-[#8A4B2A]" role="alert">
+        <p className="text-center text-xs text-warning-text" role="alert">
           {errorMessage}
         </p>
       ) : null}
       {statusMessage ? (
-        <p className="text-center text-xs text-[#33473D]" role="status">
+        <p className="text-center text-xs text-sage-dark" role="status">
           {statusMessage}
         </p>
       ) : null}
       {index >= items.length && items.length > 0 ? (
-        <p className="text-center text-sm text-[#5A6560]">
+        <p className="text-center text-sm text-muted">
           You reached the end. Saved affirmations appear in{" "}
           <Link
             href="/account/saved"
-            className="text-[#33473D] hover:underline"
+            className="text-sage-dark hover:underline"
           >
             your saved list
           </Link>

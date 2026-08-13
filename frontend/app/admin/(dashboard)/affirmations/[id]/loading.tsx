@@ -1,4 +1,4 @@
-import { AdminFormPageSkeleton } from "@/components/skeletons/admin-form-page-skeleton";
+import { AdminFormPageSkeleton } from "@/components/admin/admin-form-page-skeleton";
 
 export default function Loading() {
   return <AdminFormPageSkeleton variant="affirmation" />;

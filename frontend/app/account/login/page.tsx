@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function AccountLoginPage() {
   return (
-    <div className="min-h-full bg-[#F2F1EC]">
+    <div className="min-h-full bg-background">
       <SiteHeader />
       <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
         <AccountLoginForm />

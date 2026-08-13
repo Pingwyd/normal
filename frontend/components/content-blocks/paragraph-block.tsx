@@ -9,7 +9,7 @@ export function ParagraphBlock({ data }: ParagraphBlockProps) {
   }
 
   return (
-    <p className="text-base leading-relaxed text-[#3A4540] whitespace-pre-wrap">
+    <p className="text-base leading-relaxed text-ink-secondary whitespace-pre-wrap">
       {text}
     </p>
   );

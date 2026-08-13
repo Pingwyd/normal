@@ -1,5 +1,10 @@
-import { SavedListPageSkeleton } from "@/components/skeletons/saved-list-page-skeleton";
+import { SavedPageSkeleton } from "@/components/account/saved-page-skeleton";
+import { PageLoadingShell } from "@/components/layout/page-loading-shell";
 
-export default function Loading() {
-  return <SavedListPageSkeleton />;
+export default function AccountSavedLoading() {
+  return (
+    <PageLoadingShell>
+      <SavedPageSkeleton />
+    </PageLoadingShell>
+  );
 }

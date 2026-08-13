@@ -32,10 +32,10 @@ export default async function EditAffirmationPage({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-3xl text-[#202B26]">
+        <h1 className="font-display text-3xl text-foreground">
           Edit affirmation
         </h1>
-        <p className="text-sm text-[#5A6560]">
+        <p className="text-sm text-muted">
           Update text, tags, or publication status.
         </p>
       </div>

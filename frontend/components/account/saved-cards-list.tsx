@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { SavedListSkeleton } from "@/components/account/saved-page-skeleton";
 import { useFavorites } from "@/components/favorites/favorites-provider";
 import { clearAccountSession } from "@/lib/account/session-client";
 import type { FavoriteItem } from "@/lib/api/account-types";
@@ -110,11 +111,7 @@ export function SavedCardsList() {
   }, [accountId, isReady]);
 
   if (!isReady || isLoading) {
-    return (
-      <div className="mx-auto w-full max-w-2xl rounded-xl border border-[#D8D5CC] bg-white p-6">
-        <p className="text-sm text-[#5A6560]">Loading saved items...</p>
-      </div>
-    );
+    return <SavedListSkeleton />;
   }
 
   if (!accountId) {
@@ -122,24 +119,24 @@ export function SavedCardsList() {
 
     if (localFavorites.length === 0) {
       return (
-        <div className="mx-auto w-full max-w-2xl space-y-4 rounded-xl border border-[#D8D5CC] bg-white p-6 text-center">
-          <p className="font-display text-lg text-[#202B26]">
+        <div className="mx-auto w-full max-w-2xl space-y-4 rounded-xl border border-border bg-surface p-6 text-center">
+          <p className="font-display text-lg text-foreground">
             No saved items on this device
           </p>
-          <p className="text-sm text-[#5A6560]">
+          <p className="text-sm text-muted">
             Save cards, affirmations, or quotes to keep them here locally, or
             sign in to sync across devices.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/"
-              className="rounded-full border border-[#33473D] bg-white px-4 py-2 text-sm font-medium text-[#33473D]"
+              className="rounded-full border border-sage-dark bg-surface px-4 py-2 text-sm font-medium text-sage-dark"
             >
               Browse cards
             </Link>
             <Link
               href="/account/login"
-              className="rounded-full bg-[#33473D] px-4 py-2 text-sm font-medium text-white"
+              className="rounded-full bg-sage-dark px-4 py-2 text-sm font-medium text-white"
             >
               Sign in
             </Link>
@@ -150,11 +147,11 @@ export function SavedCardsList() {
 
     return (
       <div className="mx-auto w-full max-w-2xl space-y-4">
-        <p className="text-sm text-[#5A6560]">
+        <p className="text-sm text-muted">
           Saved on this device only.{" "}
           <Link
             href="/account/signup"
-            className="text-[#33473D] hover:underline"
+            className="text-sage-dark hover:underline"
           >
             Create an account
           </Link>{" "}
@@ -176,14 +173,14 @@ export function SavedCardsList() {
             return (
               <li
                 key={`${favorite.content_type}:${favorite.content_id}`}
-                className="rounded-xl border border-[#D8D5CC] bg-white p-4 shadow-sm"
+                className="rounded-xl border border-border bg-surface p-4 shadow-sm"
               >
-                <p className="text-xs font-semibold uppercase tracking-wide text-[#4B6B5E]">
+                <p className="text-xs font-semibold uppercase tracking-wide text-sage">
                   {savedItemTypeLabel(favorite.content_type)}
                 </p>
                 <Link
                   href={href}
-                  className="mt-1 block font-display text-lg text-[#202B26] hover:text-[#4B6B5E]"
+                  className="mt-1 block font-display text-lg text-foreground hover:text-sage"
                 >
                   {title}
                 </Link>
@@ -197,8 +194,8 @@ export function SavedCardsList() {
 
   if (errorMessage) {
     return (
-      <div className="mx-auto w-full max-w-2xl rounded-xl border border-[#E8A97A] bg-[#FFF7F0] p-6">
-        <p className="text-sm text-[#202B26]" role="alert">
+      <div className="mx-auto w-full max-w-2xl rounded-xl border border-warning-border bg-warning-surface p-6">
+        <p className="text-sm text-foreground" role="alert">
           {errorMessage}
         </p>
       </div>
@@ -207,29 +204,29 @@ export function SavedCardsList() {
 
   if (favorites.length === 0) {
     return (
-      <div className="mx-auto w-full max-w-2xl space-y-3 rounded-xl border border-dashed border-[#CFCBC2] bg-white p-6 text-center">
-        <p className="font-display text-lg text-[#202B26]">
+      <div className="mx-auto w-full max-w-2xl space-y-3 rounded-xl border border-dashed border-border-strong bg-surface p-6 text-center">
+        <p className="font-display text-lg text-foreground">
           No saved items yet
         </p>
-        <p className="text-sm text-[#5A6560]">
+        <p className="text-sm text-muted">
           Save cards, affirmations, or quotes to add them here.
         </p>
         <div className="flex flex-wrap justify-center gap-3">
           <Link
             href="/"
-            className="text-sm font-medium text-[#33473D] hover:underline"
+            className="text-sm font-medium text-sage-dark hover:underline"
           >
             Browse cards
           </Link>
           <Link
             href="/affirmations"
-            className="text-sm font-medium text-[#33473D] hover:underline"
+            className="text-sm font-medium text-sage-dark hover:underline"
           >
             Affirmations
           </Link>
           <Link
             href="/quotes"
-            className="text-sm font-medium text-[#33473D] hover:underline"
+            className="text-sm font-medium text-sage-dark hover:underline"
           >
             Quotes
           </Link>
@@ -256,19 +253,19 @@ export function SavedCardsList() {
           return (
             <li
               key={favorite.id}
-              className="rounded-xl border border-[#D8D5CC] bg-white p-4 shadow-sm"
+              className="rounded-xl border border-border bg-surface p-4 shadow-sm"
             >
-              <p className="text-xs font-semibold uppercase tracking-wide text-[#4B6B5E]">
+              <p className="text-xs font-semibold uppercase tracking-wide text-sage">
                 {savedItemTypeLabel(favorite.content_type)}
               </p>
               <Link
                 href={href}
-                className="mt-1 block font-display text-lg text-[#202B26] hover:text-[#4B6B5E]"
+                className="mt-1 block font-display text-lg text-foreground hover:text-sage"
               >
                 {title}
               </Link>
               {favorite.content_type === "card" && !metadata?.slug ? (
-                <p className="mt-1 text-xs text-[#5A6560]">
+                <p className="mt-1 text-xs text-muted">
                   Open from browse if this card was saved on another device.
                 </p>
               ) : null}
@@ -287,7 +284,7 @@ export function SavedCardsList() {
             router.refresh();
           })();
         }}
-        className="rounded-full border border-[#33473D] bg-white px-4 py-2 text-sm font-medium text-[#33473D]"
+        className="rounded-full border border-sage-dark bg-surface px-4 py-2 text-sm font-medium text-sage-dark"
       >
         Sign out
       </button>

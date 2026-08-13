@@ -1,5 +1,10 @@
-import { ShareContentPageSkeleton } from "@/components/skeletons/share-content-page-skeleton";
+import { PageLoadingShell } from "@/components/layout/page-loading-shell";
+import { ShareContentPageSkeleton } from "@/components/share/share-content-page-skeleton";
 
 export default function Loading() {
-  return <ShareContentPageSkeleton variant="quote" />;
+  return (
+    <PageLoadingShell>
+      <ShareContentPageSkeleton variant="quote" />
+    </PageLoadingShell>
+  );
 }

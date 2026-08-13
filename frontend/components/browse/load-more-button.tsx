@@ -24,7 +24,7 @@ export function LoadMoreButton({ browseParams, meta }: LoadMoreButtonProps) {
       <Link
         href={href}
         scroll={false}
-        className="rounded-full border border-[#33473D] bg-white px-6 py-3 text-sm font-medium text-[#33473D] transition-colors hover:bg-[#33473D] hover:text-white"
+        className="rounded-full border border-sage-dark bg-surface px-6 py-3 text-sm font-medium text-sage-dark transition-colors hover:bg-sage-dark hover:text-white"
       >
         Load more
       </Link>

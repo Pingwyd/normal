@@ -38,29 +38,29 @@ export default async function AdminReportedIssueDetailPage({
       <div>
         <Link
           href="/admin/reported-issues"
-          className="text-sm text-[#33473D] hover:text-[#4B6B5E]"
+          className="text-sm text-sage-dark hover:text-sage"
         >
           Back to reported issues
         </Link>
-        <h1 className="mt-3 font-display text-3xl text-[#202B26]">
+        <h1 className="mt-3 font-display text-3xl text-foreground">
           Review reported issue
         </h1>
-        <p className="mt-2 text-sm text-[#5A6560]">
+        <p className="mt-2 text-sm text-muted">
           Reported {formatAdminDateTime(issue.created_at)}
         </p>
       </div>
 
-      <section className="rounded-xl border border-[#D8D5CC] bg-white p-6">
+      <section className="rounded-xl border border-border bg-surface p-6">
         <dl className="grid gap-3 text-sm sm:grid-cols-2">
           <div>
-            <dt className="text-[#5A6560]">Current status</dt>
-            <dd className="font-mono uppercase tracking-wide text-[#4B6B5E]">
+            <dt className="text-muted">Current status</dt>
+            <dd className="font-mono uppercase tracking-wide text-sage">
               {issue.status.replaceAll("_", " ")}
             </dd>
           </div>
           <div>
-            <dt className="text-[#5A6560]">Last updated</dt>
-            <dd className="text-[#202B26]">
+            <dt className="text-muted">Last updated</dt>
+            <dd className="text-foreground">
               {formatAdminDateTime(issue.updated_at)}
             </dd>
           </div>

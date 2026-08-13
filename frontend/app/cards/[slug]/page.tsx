@@ -29,7 +29,7 @@ export default async function CardDetailPage({ params }: CardDetailPageProps) {
   const card = await loadCard(slug);
 
   return (
-    <div className="min-h-full bg-[#F2F1EC]">
+    <div className="min-h-full bg-background">
       <SiteHeader />
       <main className="px-4 py-8 sm:px-6 sm:py-10">
         <CardDetailView card={card} />

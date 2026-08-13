@@ -15,7 +15,7 @@ export function AdminFormPageSkeleton({ variant }: AdminFormPageSkeletonProps) {
         <Skeleton className="h-4 w-80" />
       </div>
 
-      <div className="space-y-6 rounded-xl border border-[#D8D5CC] bg-white p-6">
+      <div className="space-y-6 rounded-xl border border-border bg-surface p-6">
         {variant === "card" ? (
           <>
             <div className="grid gap-4 sm:grid-cols-2">

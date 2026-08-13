@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { useFavorites } from "@/components/favorites/favorites-provider";
+import { usePreferences } from "@/components/preferences/preferences-provider";
+import { PasswordInput } from "@/components/ui/password-input";
 import { establishAccountSession } from "@/lib/account/session-client";
 import { recoverAccount } from "@/lib/api/accounts";
 import { ApiRequestError } from "@/lib/api/errors";
@@ -12,6 +14,8 @@ import { ApiRequestError } from "@/lib/api/errors";
 export function AccountRecoverForm() {
   const router = useRouter();
   const { applyAuthenticatedSession } = useFavorites();
+  const { applyAuthenticatedSession: applyPreferencesSession } =
+    usePreferences();
   const [username, setUsername] = useState("");
   const [recoveryCode, setRecoveryCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -41,6 +45,7 @@ export function AccountRecoverForm() {
       );
       await establishAccountSession(data.access_token);
       applyAuthenticatedSession(data.account, data.favorites);
+      await applyPreferencesSession(data.account);
       router.replace("/account/saved");
       router.refresh();
     } catch (error) {
@@ -64,13 +69,13 @@ export function AccountRecoverForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mx-auto w-full max-w-xl space-y-5 rounded-xl border border-[#D8D5CC] bg-white p-6"
+      className="mx-auto w-full max-w-xl space-y-5 rounded-xl border border-border bg-surface p-6"
     >
       <div className="space-y-2">
-        <h2 className="font-display text-2xl text-[#202B26]">
+        <h2 className="font-display text-2xl text-foreground">
           Recover with a code
         </h2>
-        <p className="text-sm leading-relaxed text-[#5A6560]">
+        <p className="text-sm leading-relaxed text-muted">
           Enter one unused recovery code from signup. That code will be burned
           after a successful reset.
         </p>
@@ -90,7 +95,7 @@ export function AccountRecoverForm() {
           required
           value={username}
           onChange={(event) => setUsername(event.target.value)}
-          className="w-full rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border-strong px-3 py-2 text-sm"
         />
       </div>
 
@@ -108,7 +113,7 @@ export function AccountRecoverForm() {
           required
           value={recoveryCode}
           onChange={(event) => setRecoveryCode(event.target.value)}
-          className="w-full rounded-lg border border-[#CFCBC2] px-3 py-2 font-mono text-sm"
+          className="w-full rounded-lg border border-border-strong px-3 py-2 font-mono text-sm"
         />
       </div>
 
@@ -119,14 +124,12 @@ export function AccountRecoverForm() {
         >
           New password *
         </label>
-        <input
+        <PasswordInput
           id="recover-password"
-          type="password"
           autoComplete="new-password"
           required
           value={newPassword}
           onChange={(event) => setNewPassword(event.target.value)}
-          className="w-full rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
         />
       </div>
 
@@ -137,20 +140,18 @@ export function AccountRecoverForm() {
         >
           Confirm new password *
         </label>
-        <input
+        <PasswordInput
           id="recover-confirm-password"
-          type="password"
           autoComplete="new-password"
           required
           value={confirmPassword}
           onChange={(event) => setConfirmPassword(event.target.value)}
-          className="w-full rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
         />
       </div>
 
       {errorMessage ? (
         <p
-          className="rounded-lg border border-[#E8A97A] bg-[#FFF7F0] px-3 py-2 text-sm text-[#202B26]"
+          className="rounded-lg border border-warning-border bg-warning-surface px-3 py-2 text-sm text-foreground"
           role="alert"
         >
           {errorMessage}
@@ -160,14 +161,14 @@ export function AccountRecoverForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full rounded-full bg-[#33473D] px-4 py-2.5 text-sm font-medium text-white disabled:opacity-60"
+        className="w-full rounded-full bg-sage-dark px-4 py-2.5 text-sm font-medium text-white disabled:opacity-60"
       >
         {isSubmitting ? "Resetting password..." : "Reset password"}
       </button>
 
-      <p className="text-center text-sm text-[#5A6560]">
+      <p className="text-center text-sm text-muted">
         Remember your password?{" "}
-        <Link href="/account/login" className="text-[#33473D] hover:underline">
+        <Link href="/account/login" className="text-sage-dark hover:underline">
           Sign in
         </Link>
       </p>
