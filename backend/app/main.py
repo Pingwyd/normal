@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.accounts.router import router as accounts_router
+from app.analytics.admin_router import router as analytics_admin_router
 from app.auth.router import router as auth_router
 from app.content.admin_router import router as content_admin_router
 from app.content.router import router as content_router
@@ -41,6 +42,7 @@ app.include_router(content_router)
 app.include_router(content_admin_router)
 app.include_router(submissions_router)
 app.include_router(submissions_admin_router)
+app.include_router(analytics_admin_router)
 
 
 @app.exception_handler(ApiError)
