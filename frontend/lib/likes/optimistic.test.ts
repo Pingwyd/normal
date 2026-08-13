@@ -1,10 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  nextLikeTarget,
-  shouldSyncLike,
-  visibleLikeState,
-} from "./optimistic";
+import { nextLikeTarget, shouldSyncLike, visibleLikeState } from "./optimistic";
 
 describe("nextLikeTarget", () => {
   it("flips the desired liked state on each click", () => {
@@ -24,9 +20,7 @@ describe("shouldSyncLike", () => {
 
 describe("visibleLikeState", () => {
   it("shows the target liked state while keeping the server count", () => {
-    expect(
-      visibleLikeState(true, { liked: false, likeCount: 3 }),
-    ).toEqual({
+    expect(visibleLikeState(true, { liked: false, likeCount: 3 })).toEqual({
       liked: true,
       likeCount: 3,
     });

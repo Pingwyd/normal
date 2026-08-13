@@ -3,10 +3,7 @@
 import { ThumbsUp } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import {
-  fetchCardLikeStatus,
-  toggleCardLike,
-} from "@/lib/likes/client-api";
+import { fetchCardLikeStatus, toggleCardLike } from "@/lib/likes/client-api";
 import { getOrCreateDeviceId } from "@/lib/likes/device-id";
 import { readLocalLike, writeLocalLike } from "@/lib/likes/local-storage";
 import {
@@ -66,10 +63,7 @@ export function LikeButton({
     }
 
     while (
-      shouldSyncLike(
-        targetLikedRef.current,
-        serverSnapshotRef.current.liked,
-      )
+      shouldSyncLike(targetLikedRef.current, serverSnapshotRef.current.liked)
     ) {
       inFlightRef.current = true;
 
@@ -152,11 +146,7 @@ export function LikeButton({
         onClick={handleClick}
         disabled={!isReady}
         aria-pressed={liked}
-        aria-label={
-          liked
-            ? `Unlike ${label}`
-            : `Mark ${label} as useful`
-        }
+        aria-label={liked ? `Unlike ${label}` : `Mark ${label} as useful`}
         className="inline-flex items-center gap-1 rounded-full border border-transparent px-2 py-1 text-[#33473D] transition-colors hover:border-[#D8D5CC] hover:bg-white disabled:cursor-not-allowed disabled:opacity-60"
       >
         <ThumbsUp

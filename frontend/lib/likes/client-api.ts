@@ -8,7 +8,9 @@ function buildLikeHeaders(): HeadersInit {
   };
 }
 
-async function parseLikeResponse(response: Response): Promise<CardLikeResponse> {
+async function parseLikeResponse(
+  response: Response,
+): Promise<CardLikeResponse> {
   const body = (await response.json()) as {
     data: CardLikeResponse | null;
     error: { code: string; message: string } | null;
@@ -33,7 +35,9 @@ export async function fetchCardLikeStatus(
   return parseLikeResponse(response);
 }
 
-export async function toggleCardLike(cardId: string): Promise<CardLikeResponse> {
+export async function toggleCardLike(
+  cardId: string,
+): Promise<CardLikeResponse> {
   const response = await fetch(`/api/cards/${cardId}/like`, {
     method: "POST",
     headers: buildLikeHeaders(),
