@@ -161,3 +161,59 @@ export async function fetchAdminReportedIssue(issueId: string) {
     `/v1/admin/reported-issues/${issueId}`,
   );
 }
+
+export type AdminAffirmationListItem = {
+  id: string;
+  text: string;
+  status: "draft" | "published";
+  updated_at: string;
+};
+
+export type AdminAffirmationDetail = {
+  id: string;
+  text: string;
+  status: "draft" | "published";
+  tag_ids: string[];
+  created_at: string;
+  updated_at: string;
+};
+
+export type AdminQuoteListItem = {
+  id: string;
+  text: string;
+  attributed_to: string;
+  status: "draft" | "published";
+  updated_at: string;
+};
+
+export type AdminQuoteDetail = {
+  id: string;
+  text: string;
+  attributed_to: string;
+  source_url: string | null;
+  status: "draft" | "published";
+  created_at: string;
+  updated_at: string;
+};
+
+export async function fetchAdminAffirmations(status?: string) {
+  const query = status ? `?status=${encodeURIComponent(status)}` : "";
+  return adminApiRequest<AdminAffirmationListItem[]>(
+    `/v1/admin/affirmations${query}`,
+  );
+}
+
+export async function fetchAdminAffirmation(affirmationId: string) {
+  return adminApiRequest<AdminAffirmationDetail>(
+    `/v1/admin/affirmations/${affirmationId}`,
+  );
+}
+
+export async function fetchAdminQuotes(status?: string) {
+  const query = status ? `?status=${encodeURIComponent(status)}` : "";
+  return adminApiRequest<AdminQuoteListItem[]>(`/v1/admin/quotes${query}`);
+}
+
+export async function fetchAdminQuote(quoteId: string) {
+  return adminApiRequest<AdminQuoteDetail>(`/v1/admin/quotes/${quoteId}`);
+}
