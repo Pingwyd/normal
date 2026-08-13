@@ -37,7 +37,8 @@ export type FavoriteItem = {
 };
 
 export type FavoriteListItem = FavoriteItem & {
-  content: FavoriteCardContent | FavoriteAffirmationContent | FavoriteQuoteContent;
+  content:
+    FavoriteCardContent | FavoriteAffirmationContent | FavoriteQuoteContent;
 };
 
 export type FavoriteToggleResponse = {
