@@ -10,7 +10,11 @@ type CategoryChipsProps = {
 
 export function CategoryChips({ browseParams }: CategoryChipsProps) {
   return (
-    <div className="flex flex-wrap gap-2" role="group" aria-label="Categories">
+    <div
+      className="mb-11 flex flex-wrap justify-center gap-2.5 overflow-x-auto px-1 py-1"
+      role="group"
+      aria-label="Categories"
+    >
       {BROWSE_CATEGORIES.map((category) => {
         const isActive =
           (category.slug ?? undefined) === (browseParams.category ?? undefined);
@@ -26,10 +30,10 @@ export function CategoryChips({ browseParams }: CategoryChipsProps) {
             key={category.name}
             href={href}
             scroll={false}
-            className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+            className={`whitespace-nowrap rounded-full border px-4 py-2 text-[13.5px] transition-colors ${
               isActive
-                ? "bg-sage-dark text-white"
-                : "border border-border-strong bg-surface text-sage-dark hover:border-sage"
+                ? "border-sage-dark bg-sage-dark text-white"
+                : "border-border bg-surface text-ink-secondary hover:border-sage"
             }`}
             aria-current={isActive ? "true" : undefined}
           >

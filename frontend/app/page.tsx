@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 
 import { CategoryChips } from "@/components/browse/category-chips";
+import { HeroSection } from "@/components/browse/hero-section";
 import { LoadMoreButton } from "@/components/browse/load-more-button";
 import { SearchBar } from "@/components/browse/search-bar";
 import { CardFeedSkeleton } from "@/components/cards/card-feed-skeleton";
@@ -81,31 +82,21 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   return (
     <div className="min-h-full bg-background">
       <SiteHeader />
-      <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
-        <div className="space-y-8">
-          <section className="space-y-3">
-            <h1 className="font-display text-3xl text-foreground sm:text-4xl">
-              Browse common worries
-            </h1>
-            <p className="max-w-2xl text-sm leading-relaxed text-muted">
-              Search and filter cards about everyday experiences. If something
-              is not typical, the answer will say so plainly.
-            </p>
-          </section>
+      <main className="mx-auto w-full max-w-[1100px] px-4 sm:px-7">
+        <HeroSection />
 
-          <section className="space-y-4">
-            <SearchBar
-              key={browseParams.q ?? ""}
-              initialQuery={browseParams.q ?? ""}
-              browseParams={browseParams}
-            />
-            <CategoryChips browseParams={browseParams} />
-          </section>
+        <section className="space-y-[34px]">
+          <SearchBar
+            key={browseParams.q ?? ""}
+            initialQuery={browseParams.q ?? ""}
+            browseParams={browseParams}
+          />
+          <CategoryChips browseParams={browseParams} />
+        </section>
 
-          <Suspense fallback={<CardFeedSkeleton />}>
-            <BrowseFeed browseParams={browseParams} />
-          </Suspense>
-        </div>
+        <Suspense fallback={<CardFeedSkeleton />}>
+          <BrowseFeed browseParams={browseParams} />
+        </Suspense>
       </main>
       <SiteFooter />
     </div>
