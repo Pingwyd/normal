@@ -10,6 +10,11 @@ type AdminNavProps = {
 };
 
 const NAV_ITEMS = [
+  {
+    href: "/admin/insights",
+    label: "Insights",
+    matchPrefix: "/admin/insights",
+  },
   { href: "/admin/cards", label: "All cards", matchPrefix: "/admin/cards" },
   {
     href: "/admin/cards/due",
