@@ -6,6 +6,8 @@ import { useState } from "react";
 
 import { RecoveryCodesPanel } from "@/components/account/recovery-codes-panel";
 import { useFavorites } from "@/components/favorites/favorites-provider";
+import { usePreferences } from "@/components/preferences/preferences-provider";
+import { PasswordInput } from "@/components/ui/password-input";
 import { establishAccountSession } from "@/lib/account/session-client";
 import { signupAccount } from "@/lib/api/accounts";
 import { ApiRequestError } from "@/lib/api/errors";
@@ -24,6 +26,8 @@ export function AccountSignupForm() {
   const router = useRouter();
   const { readLocalFavoritesForMerge, applyAuthenticatedSession } =
     useFavorites();
+  const { applyAuthenticatedSession: applyPreferencesSession } =
+    usePreferences();
   const [step, setStep] = useState<SignupStep>({ kind: "form" });
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -71,6 +75,7 @@ export function AccountSignupForm() {
       );
       await establishAccountSession(data.access_token);
       applyAuthenticatedSession(data.account, data.favorites);
+      await applyPreferencesSession(data.account);
       setStep({
         kind: "recovery-codes",
         username: data.account.username,
@@ -107,22 +112,22 @@ export function AccountSignupForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mx-auto w-full max-w-xl space-y-5 rounded-xl border border-[#D8D5CC] bg-white p-6"
+      className="mx-auto w-full max-w-xl space-y-5 rounded-xl border border-border bg-surface p-6"
     >
       <div className="space-y-2">
-        <h2 className="font-display text-2xl text-[#202B26]">Create account</h2>
-        <p className="text-sm leading-relaxed text-[#5A6560]">
+        <h2 className="font-display text-2xl text-foreground">Create account</h2>
+        <p className="text-sm leading-relaxed text-muted">
           Optional account for syncing saved cards across devices. No email or
           real name required.
         </p>
       </div>
 
       <div
-        className="rounded-lg border border-[#7086C9] bg-[#F4F6FC] px-4 py-3 text-sm leading-relaxed text-[#202B26]"
+        className="rounded-lg border border-info-border bg-info-surface px-4 py-3 text-sm leading-relaxed text-foreground"
         role="note"
       >
         <p className="font-medium">Important</p>
-        <p className="mt-1 text-[#3A4540]">
+        <p className="mt-1 text-ink-secondary">
           We do not store your email or real name. If you lose your password and
           all 8 recovery codes, your account cannot be recovered. This is
           intentional so we can keep your account private.
@@ -143,7 +148,7 @@ export function AccountSignupForm() {
           required
           value={username}
           onChange={(event) => setUsername(event.target.value)}
-          className="w-full rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border-strong px-3 py-2 text-sm"
         />
       </div>
 
@@ -154,14 +159,12 @@ export function AccountSignupForm() {
         >
           Password *
         </label>
-        <input
+        <PasswordInput
           id="account-password"
-          type="password"
           autoComplete="new-password"
           required
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          className="w-full rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
         />
       </div>
 
@@ -172,18 +175,16 @@ export function AccountSignupForm() {
         >
           Confirm password *
         </label>
-        <input
+        <PasswordInput
           id="account-confirm-password"
-          type="password"
           autoComplete="new-password"
           required
           value={confirmPassword}
           onChange={(event) => setConfirmPassword(event.target.value)}
-          className="w-full rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
         />
       </div>
 
-      <label className="flex items-start gap-3 text-sm leading-relaxed text-[#3A4540]">
+      <label className="flex items-start gap-3 text-sm leading-relaxed text-ink-secondary">
         <input
           type="checkbox"
           checked={acceptedWarning}
@@ -198,7 +199,7 @@ export function AccountSignupForm() {
 
       {errorMessage ? (
         <p
-          className="rounded-lg border border-[#E8A97A] bg-[#FFF7F0] px-3 py-2 text-sm text-[#202B26]"
+          className="rounded-lg border border-warning-border bg-warning-surface px-3 py-2 text-sm text-foreground"
           role="alert"
         >
           {errorMessage}
@@ -208,14 +209,14 @@ export function AccountSignupForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full rounded-full bg-[#33473D] px-4 py-2.5 text-sm font-medium text-white disabled:opacity-60"
+        className="w-full rounded-full bg-sage-dark px-4 py-2.5 text-sm font-medium text-white disabled:opacity-60"
       >
         {isSubmitting ? "Creating account..." : "Create account"}
       </button>
 
-      <p className="text-center text-sm text-[#5A6560]">
+      <p className="text-center text-sm text-muted">
         Already have an account?{" "}
-        <Link href="/account/login" className="text-[#33473D] hover:underline">
+        <Link href="/account/login" className="text-sage-dark hover:underline">
           Sign in
         </Link>
       </p>

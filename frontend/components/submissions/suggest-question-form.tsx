@@ -81,29 +81,29 @@ export function SuggestQuestionForm() {
 
   if (submitState.kind === "success") {
     return (
-      <div className="mx-auto w-full max-w-xl space-y-4 rounded-xl border border-[#D8D5CC] bg-white p-6">
-        <h2 className="font-display text-2xl text-[#202B26]">
+      <div className="mx-auto w-full max-w-xl space-y-4 rounded-xl border border-border bg-surface p-6">
+        <h2 className="font-display text-2xl text-foreground">
           Thanks, we received your suggestion
         </h2>
-        <p className="text-sm leading-relaxed text-[#3A4540]">
+        <p className="text-sm leading-relaxed text-ink-secondary">
           Your question is in our private review queue. We read every
           submission, but not every suggestion becomes a published card.
         </p>
         {submitState.duplicate ? (
           <div
-            className="rounded-lg border border-[#7086C9] bg-[#F4F6FC] px-4 py-3 text-sm text-[#202B26]"
+            className="rounded-lg border border-info-border bg-info-surface px-4 py-3 text-sm text-foreground"
             role="status"
           >
             <p className="font-medium">
               This looks similar to an existing card
             </p>
-            <p className="mt-1 text-[#3A4540]">
+            <p className="mt-1 text-ink-secondary">
               We still queued your suggestion for review. You may find this
               helpful in the meantime:
             </p>
             <Link
               href={`/cards/${submitState.duplicate.slug}`}
-              className="mt-2 inline-block font-medium text-[#33473D] hover:text-[#4B6B5E]"
+              className="mt-2 inline-block font-medium text-sage-dark hover:text-sage"
             >
               {submitState.duplicate.question}
             </Link>
@@ -112,7 +112,7 @@ export function SuggestQuestionForm() {
         <button
           type="button"
           onClick={() => setSubmitState({ kind: "idle" })}
-          className="rounded-full border border-[#33473D] bg-white px-5 py-2.5 text-sm font-medium text-[#33473D] hover:bg-[#33473D] hover:text-white"
+          className="rounded-full border border-sage-dark bg-surface px-5 py-2.5 text-sm font-medium text-sage-dark hover:bg-sage-dark hover:text-white"
         >
           Suggest another question
         </button>
@@ -123,7 +123,7 @@ export function SuggestQuestionForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mx-auto w-full max-w-xl space-y-5 rounded-xl border border-[#D8D5CC] bg-white p-6"
+      className="mx-auto w-full max-w-xl space-y-5 rounded-xl border border-border bg-surface p-6"
     >
       <div className="space-y-2">
         <label htmlFor="question-text" className="block text-sm font-medium">
@@ -139,19 +139,19 @@ export function SuggestQuestionForm() {
           value={questionText}
           onChange={(event) => setQuestionText(event.target.value)}
           placeholder="feel anxious before big events even when I am prepared"
-          className="w-full rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm leading-relaxed"
+          className="w-full rounded-lg border border-border-strong px-3 py-2 text-sm leading-relaxed"
           aria-describedby="question-help question-count"
         />
-        <p id="question-help" className="text-sm text-[#5A6560]">
+        <p id="question-help" className="text-sm text-muted">
           Write the worry in your own words. We will format it as an &quot;Is it
           normal to...&quot; question when you submit.
         </p>
-        <div className="flex items-center justify-between gap-4 text-xs text-[#5A6560]">
+        <div className="flex items-center justify-between gap-4 text-xs text-muted">
           <p id="question-count">
             {charCount} / {MAX_LENGTH} characters
           </p>
           {formattedPreview ? (
-            <p className="truncate text-[#33473D]">
+            <p className="truncate text-sage-dark">
               Preview: {formattedPreview}
             </p>
           ) : null}
@@ -160,7 +160,7 @@ export function SuggestQuestionForm() {
 
       {submitState.kind === "error" ? (
         <p
-          className="rounded-lg border border-[#E8A97A] bg-[#FFF7F0] px-3 py-2 text-sm text-[#202B26]"
+          className="rounded-lg border border-warning-border bg-warning-surface px-3 py-2 text-sm text-foreground"
           role="alert"
         >
           {submitState.message}
@@ -170,7 +170,7 @@ export function SuggestQuestionForm() {
       <button
         type="submit"
         disabled={isSubmitting || !isValidLength}
-        className="w-full rounded-full bg-[#33473D] px-4 py-2.5 text-sm font-medium text-white disabled:opacity-60"
+        className="w-full rounded-full bg-sage-dark px-4 py-2.5 text-sm font-medium text-white disabled:opacity-60"
       >
         {isSubmitting ? "Sending..." : "Submit suggestion"}
       </button>

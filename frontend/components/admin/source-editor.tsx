@@ -35,18 +35,18 @@ export function SourceEditor({ sources, onChange }: SourceEditorProps) {
   return (
     <section className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="font-display text-xl text-[#202B26]">Sources</h2>
+        <h2 className="font-display text-xl text-foreground">Sources</h2>
         <button
           type="button"
           onClick={() => onChange([...sources, defaultSource()])}
-          className="rounded-full border border-[#CFCBC2] px-3 py-1.5 text-xs font-medium text-[#33473D] hover:border-[#4B6B5E]"
+          className="rounded-full border border-border-strong px-3 py-1.5 text-xs font-medium text-sage-dark hover:border-sage"
         >
           Add source
         </button>
       </div>
 
       {sources.length === 0 ? (
-        <p className="rounded-lg border border-dashed border-[#CFCBC2] px-4 py-6 text-sm text-[#5A6560]">
+        <p className="rounded-lg border border-dashed border-border-strong px-4 py-6 text-sm text-muted">
           No sources yet.
         </p>
       ) : null}
@@ -55,17 +55,17 @@ export function SourceEditor({ sources, onChange }: SourceEditorProps) {
         {sources.map((source, index) => (
           <div
             key={source.localId}
-            className="rounded-xl border border-[#D8D5CC] bg-white p-4"
+            className="rounded-xl border border-border bg-surface p-4"
           >
             <div className="mb-3 flex items-center justify-between">
-              <p className="font-mono text-xs uppercase tracking-wide text-[#4B6B5E]">
+              <p className="font-mono text-xs uppercase tracking-wide text-sage">
                 Source {index + 1}
               </p>
               <button
                 type="button"
                 aria-label="Remove source"
                 onClick={() => removeSource(source.localId)}
-                className="rounded border border-[#CFCBC2] p-1"
+                className="rounded border border-border-strong p-1"
               >
                 <Trash2 size={14} />
               </button>
@@ -77,7 +77,7 @@ export function SourceEditor({ sources, onChange }: SourceEditorProps) {
                 onChange={(event) =>
                   updateSource(source.localId, { title: event.target.value })
                 }
-                className="rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm sm:col-span-2"
+                className="rounded-lg border border-border-strong px-3 py-2 text-sm sm:col-span-2"
                 placeholder="Title"
               />
               <input
@@ -88,7 +88,7 @@ export function SourceEditor({ sources, onChange }: SourceEditorProps) {
                     author_or_org: event.target.value,
                   })
                 }
-                className="rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
+                className="rounded-lg border border-border-strong px-3 py-2 text-sm"
                 placeholder="Author or organization"
               />
               <input
@@ -97,7 +97,7 @@ export function SourceEditor({ sources, onChange }: SourceEditorProps) {
                 onChange={(event) =>
                   updateSource(source.localId, { url: event.target.value })
                 }
-                className="rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
+                className="rounded-lg border border-border-strong px-3 py-2 text-sm"
                 placeholder="URL"
               />
               <select
@@ -105,7 +105,7 @@ export function SourceEditor({ sources, onChange }: SourceEditorProps) {
                 onChange={(event) =>
                   updateSource(source.localId, { tier: event.target.value })
                 }
-                className="rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
+                className="rounded-lg border border-border-strong px-3 py-2 text-sm"
               >
                 {SOURCE_TIERS.map((tier) => (
                   <option key={tier} value={tier}>
@@ -121,7 +121,7 @@ export function SourceEditor({ sources, onChange }: SourceEditorProps) {
                     accessed_date: event.target.value,
                   })
                 }
-                className="rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
+                className="rounded-lg border border-border-strong px-3 py-2 text-sm"
               />
             </div>
           </div>

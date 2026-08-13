@@ -57,14 +57,14 @@ export function ContentBlockEditor({
   return (
     <section className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="font-display text-xl text-[#202B26]">Content blocks</h2>
+        <h2 className="font-display text-xl text-foreground">Content blocks</h2>
         <div className="flex flex-wrap gap-2">
           {CONTENT_BLOCK_TYPES.map((type) => (
             <button
               key={type}
               type="button"
               onClick={() => addBlock(type)}
-              className="rounded-full border border-[#CFCBC2] px-3 py-1.5 text-xs font-medium text-[#33473D] hover:border-[#4B6B5E]"
+              className="rounded-full border border-border-strong px-3 py-1.5 text-xs font-medium text-sage-dark hover:border-sage"
             >
               Add {type.replaceAll("_", " ")}
             </button>
@@ -73,7 +73,7 @@ export function ContentBlockEditor({
       </div>
 
       {blocks.length === 0 ? (
-        <p className="rounded-lg border border-dashed border-[#CFCBC2] px-4 py-6 text-sm text-[#5A6560]">
+        <p className="rounded-lg border border-dashed border-border-strong px-4 py-6 text-sm text-muted">
           No content blocks yet. Add one to build the card body.
         </p>
       ) : null}
@@ -82,10 +82,10 @@ export function ContentBlockEditor({
         {blocks.map((block, index) => (
           <div
             key={block.localId}
-            className="rounded-xl border border-[#D8D5CC] bg-white p-4"
+            className="rounded-xl border border-border bg-surface p-4"
           >
             <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-              <p className="font-mono text-xs uppercase tracking-wide text-[#4B6B5E]">
+              <p className="font-mono text-xs uppercase tracking-wide text-sage">
                 {index + 1}. {block.type.replaceAll("_", " ")}
               </p>
               <div className="flex items-center gap-1">
@@ -94,7 +94,7 @@ export function ContentBlockEditor({
                   aria-label="Move block up"
                   disabled={index === 0}
                   onClick={() => moveBlock(block.localId, -1)}
-                  className="rounded border border-[#CFCBC2] p-1 disabled:opacity-40"
+                  className="rounded border border-border-strong p-1 disabled:opacity-40"
                 >
                   <ArrowUp size={14} />
                 </button>
@@ -103,7 +103,7 @@ export function ContentBlockEditor({
                   aria-label="Move block down"
                   disabled={index === blocks.length - 1}
                   onClick={() => moveBlock(block.localId, 1)}
-                  className="rounded border border-[#CFCBC2] p-1 disabled:opacity-40"
+                  className="rounded border border-border-strong p-1 disabled:opacity-40"
                 >
                   <ArrowDown size={14} />
                 </button>
@@ -111,7 +111,7 @@ export function ContentBlockEditor({
                   type="button"
                   aria-label="Remove block"
                   onClick={() => removeBlock(block.localId)}
-                  className="rounded border border-[#CFCBC2] p-1 text-[#33473D]"
+                  className="rounded border border-border-strong p-1 text-sage-dark"
                 >
                   <Trash2 size={14} />
                 </button>
@@ -143,7 +143,7 @@ function BlockFields({
         rows={4}
         value={String(data.text ?? "")}
         onChange={(event) => onChange({ ...data, text: event.target.value })}
-        className="w-full rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
+        className="w-full rounded-lg border border-border-strong px-3 py-2 text-sm"
         placeholder="Paragraph text"
       />
     );
@@ -156,7 +156,7 @@ function BlockFields({
           rows={3}
           value={String(data.text ?? "")}
           onChange={(event) => onChange({ ...data, text: event.target.value })}
-          className="w-full rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border-strong px-3 py-2 text-sm"
           placeholder="Quote text"
         />
         <input
@@ -164,7 +164,7 @@ function BlockFields({
           onChange={(event) =>
             onChange({ ...data, attribution: event.target.value })
           }
-          className="w-full rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border-strong px-3 py-2 text-sm"
           placeholder="Attribution (optional)"
         />
       </div>
@@ -210,7 +210,7 @@ function BlockFields({
       <input
         value={String(data.caption ?? "")}
         onChange={(event) => onChange({ ...data, caption: event.target.value })}
-        className="w-full rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
+        className="w-full rounded-lg border border-border-strong px-3 py-2 text-sm"
         placeholder="Table caption (optional)"
       />
       <input
@@ -221,7 +221,7 @@ function BlockFields({
             headers: event.target.value.split(",").map((item) => item.trim()),
           })
         }
-        className="w-full rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
+        className="w-full rounded-lg border border-border-strong px-3 py-2 text-sm"
         placeholder="Headers, comma separated"
       />
       {rows.map((row, rowIndex) => (
@@ -235,14 +235,14 @@ function BlockFields({
               .map((item) => item.trim());
             onChange({ ...data, headers, rows: nextRows });
           }}
-          className="w-full rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border-strong px-3 py-2 text-sm"
           placeholder={`Row ${rowIndex + 1}, comma separated`}
         />
       ))}
       <button
         type="button"
         onClick={() => onChange({ ...data, headers, rows: [...rows, [""]] })}
-        className="text-sm text-[#33473D] underline"
+        className="text-sm text-sage-dark underline"
       >
         Add row
       </button>
@@ -268,7 +268,7 @@ function ChartLikeEditor({
       <input
         value={String(data.title ?? "")}
         onChange={(event) => onChange({ ...data, title: event.target.value })}
-        className="w-full rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
+        className="w-full rounded-lg border border-border-strong px-3 py-2 text-sm"
         placeholder="Title (optional)"
       />
       {pointsKey === "points" ? (
@@ -278,7 +278,7 @@ function ChartLikeEditor({
             onChange={(event) =>
               onChange({ ...data, x_label: event.target.value })
             }
-            className="rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
+            className="rounded-lg border border-border-strong px-3 py-2 text-sm"
             placeholder="X label"
           />
           <input
@@ -286,7 +286,7 @@ function ChartLikeEditor({
             onChange={(event) =>
               onChange({ ...data, y_label: event.target.value })
             }
-            className="rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
+            className="rounded-lg border border-border-strong px-3 py-2 text-sm"
             placeholder="Y label"
           />
         </div>
@@ -300,7 +300,7 @@ function ChartLikeEditor({
               next[index] = { ...next[index], label: event.target.value };
               onChange({ ...data, [pointsKey]: next });
             }}
-            className="rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
+            className="rounded-lg border border-border-strong px-3 py-2 text-sm"
             placeholder={pointLabel}
           />
           <input
@@ -314,7 +314,7 @@ function ChartLikeEditor({
               };
               onChange({ ...data, [pointsKey]: next });
             }}
-            className="rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
+            className="rounded-lg border border-border-strong px-3 py-2 text-sm"
             placeholder="Value"
           />
         </div>
@@ -327,7 +327,7 @@ function ChartLikeEditor({
             [pointsKey]: [...points, { label: "", value: 0 }],
           })
         }
-        className="text-sm text-[#33473D] underline"
+        className="text-sm text-sage-dark underline"
       >
         Add {pointsKey === "segments" ? "segment" : "point"}
       </button>

@@ -1,9 +1,10 @@
-import { CardFeedSkeleton } from "@/components/cards/card-feed-skeleton";
+import { BrowsePageSkeleton } from "@/components/browse/browse-page-skeleton";
+import { PageLoadingShell } from "@/components/layout/page-loading-shell";
 
-export default function Loading() {
+export default function HomeLoading() {
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
-      <CardFeedSkeleton />
-    </div>
+    <PageLoadingShell>
+      <BrowsePageSkeleton />
+    </PageLoadingShell>
   );
 }

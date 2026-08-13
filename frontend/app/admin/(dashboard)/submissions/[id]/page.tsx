@@ -34,42 +34,42 @@ export default async function AdminSubmissionDetailPage({
       <div>
         <Link
           href="/admin/submissions"
-          className="text-sm text-[#33473D] hover:text-[#4B6B5E]"
+          className="text-sm text-sage-dark hover:text-sage"
         >
           Back to submissions
         </Link>
-        <h1 className="mt-3 font-display text-3xl text-[#202B26]">
+        <h1 className="mt-3 font-display text-3xl text-foreground">
           Review submission
         </h1>
-        <p className="mt-2 text-sm text-[#5A6560]">
+        <p className="mt-2 text-sm text-muted">
           Submitted {formatAdminDateTime(submission.created_at)}
         </p>
       </div>
 
-      <section className="space-y-4 rounded-xl border border-[#D8D5CC] bg-white p-6">
-        <h2 className="font-display text-xl text-[#202B26]">
+      <section className="space-y-4 rounded-xl border border-border bg-surface p-6">
+        <h2 className="font-display text-xl text-foreground">
           {submission.question_text}
         </h2>
         <dl className="grid gap-3 text-sm sm:grid-cols-2">
           <div>
-            <dt className="text-[#5A6560]">Current status</dt>
-            <dd className="font-mono uppercase tracking-wide text-[#4B6B5E]">
+            <dt className="text-muted">Current status</dt>
+            <dd className="font-mono uppercase tracking-wide text-sage">
               {submission.status.replaceAll("_", " ")}
             </dd>
           </div>
           <div>
-            <dt className="text-[#5A6560]">Last updated</dt>
-            <dd className="text-[#202B26]">
+            <dt className="text-muted">Last updated</dt>
+            <dd className="text-foreground">
               {formatAdminDateTime(submission.updated_at)}
             </dd>
           </div>
           {submission.likely_duplicate_of ? (
             <div className="sm:col-span-2">
-              <dt className="text-[#5A6560]">Possible duplicate</dt>
+              <dt className="text-muted">Possible duplicate</dt>
               <dd>
                 <Link
                   href={`/admin/cards/${submission.likely_duplicate_of}`}
-                  className="text-[#33473D] underline"
+                  className="text-sage-dark underline"
                 >
                   View likely matching card
                 </Link>
@@ -78,11 +78,11 @@ export default async function AdminSubmissionDetailPage({
           ) : null}
           {submission.resulting_card_id ? (
             <div className="sm:col-span-2">
-              <dt className="text-[#5A6560]">Linked card</dt>
+              <dt className="text-muted">Linked card</dt>
               <dd>
                 <Link
                   href={`/admin/cards/${submission.resulting_card_id}`}
-                  className="text-[#33473D] underline"
+                  className="text-sage-dark underline"
                 >
                   View published card
                 </Link>
@@ -91,8 +91,8 @@ export default async function AdminSubmissionDetailPage({
           ) : null}
           {submission.decision_notes ? (
             <div className="sm:col-span-2">
-              <dt className="text-[#5A6560]">Decision notes</dt>
-              <dd className="text-[#202B26]">{submission.decision_notes}</dd>
+              <dt className="text-muted">Decision notes</dt>
+              <dd className="text-foreground">{submission.decision_notes}</dd>
             </div>
           ) : null}
         </dl>

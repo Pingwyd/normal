@@ -4,7 +4,10 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 
+import { AccountFormPageSkeleton } from "@/components/account/account-form-page-skeleton";
 import { useFavorites } from "@/components/favorites/favorites-provider";
+import { usePreferences } from "@/components/preferences/preferences-provider";
+import { PasswordInput } from "@/components/ui/password-input";
 import { establishAccountSession } from "@/lib/account/session-client";
 import { loginAccount } from "@/lib/api/accounts";
 import { ApiRequestError } from "@/lib/api/errors";
@@ -14,6 +17,8 @@ function AccountLoginFormInner() {
   const searchParams = useSearchParams();
   const { readLocalFavoritesForMerge, applyAuthenticatedSession } =
     useFavorites();
+  const { applyAuthenticatedSession: applyPreferencesSession } =
+    usePreferences();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -32,6 +37,7 @@ function AccountLoginFormInner() {
       );
       await establishAccountSession(data.access_token);
       applyAuthenticatedSession(data.account, data.favorites);
+      await applyPreferencesSession(data.account);
 
       const nextPath = searchParams.get("next") ?? "/account/saved";
       router.replace(nextPath);
@@ -52,11 +58,11 @@ function AccountLoginFormInner() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mx-auto w-full max-w-xl space-y-5 rounded-xl border border-[#D8D5CC] bg-white p-6"
+      className="mx-auto w-full max-w-xl space-y-5 rounded-xl border border-border bg-surface p-6"
     >
       <div className="space-y-2">
-        <h2 className="font-display text-2xl text-[#202B26]">Sign in</h2>
-        <p className="text-sm leading-relaxed text-[#5A6560]">
+        <h2 className="font-display text-2xl text-foreground">Sign in</h2>
+        <p className="text-sm leading-relaxed text-muted">
           Sign in to sync saved cards across devices. Any saves on this device
           will merge into your account.
         </p>
@@ -76,7 +82,7 @@ function AccountLoginFormInner() {
           required
           value={username}
           onChange={(event) => setUsername(event.target.value)}
-          className="w-full rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border-strong px-3 py-2 text-sm"
         />
       </div>
 
@@ -87,20 +93,18 @@ function AccountLoginFormInner() {
         >
           Password *
         </label>
-        <input
+        <PasswordInput
           id="login-password"
-          type="password"
           autoComplete="current-password"
           required
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          className="w-full rounded-lg border border-[#CFCBC2] px-3 py-2 text-sm"
         />
       </div>
 
       {errorMessage ? (
         <p
-          className="rounded-lg border border-[#E8A97A] bg-[#FFF7F0] px-3 py-2 text-sm text-[#202B26]"
+          className="rounded-lg border border-warning-border bg-warning-surface px-3 py-2 text-sm text-foreground"
           role="alert"
         >
           {errorMessage}
@@ -110,16 +114,16 @@ function AccountLoginFormInner() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full rounded-full bg-[#33473D] px-4 py-2.5 text-sm font-medium text-white disabled:opacity-60"
+        className="w-full rounded-full bg-sage-dark px-4 py-2.5 text-sm font-medium text-white disabled:opacity-60"
       >
         {isSubmitting ? "Signing in..." : "Sign in"}
       </button>
 
-      <div className="space-y-2 text-center text-sm text-[#5A6560]">
+      <div className="space-y-2 text-center text-sm text-muted">
         <p>
           <Link
             href="/account/recover"
-            className="text-[#33473D] hover:underline"
+            className="text-sage-dark hover:underline"
           >
             Forgot password? Use a recovery code
           </Link>
@@ -128,7 +132,7 @@ function AccountLoginFormInner() {
           New here?{" "}
           <Link
             href="/account/signup"
-            className="text-[#33473D] hover:underline"
+            className="text-sage-dark hover:underline"
           >
             Create account
           </Link>
@@ -140,13 +144,7 @@ function AccountLoginFormInner() {
 
 export function AccountLoginForm() {
   return (
-    <Suspense
-      fallback={
-        <div className="mx-auto w-full max-w-xl rounded-xl border border-[#D8D5CC] bg-white p-6 text-sm text-[#5A6560]">
-          Loading sign-in form...
-        </div>
-      }
-    >
+    <Suspense fallback={<AccountFormPageSkeleton fieldCount={2} />}>
       <AccountLoginFormInner />
     </Suspense>
   );

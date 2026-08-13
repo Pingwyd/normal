@@ -38,9 +38,9 @@ export function ChartBlock({ data }: ChartBlockProps) {
   const yLabel = typeof data.y_label === "string" ? data.y_label : undefined;
 
   return (
-    <figure className="rounded-xl border border-[#D8D5CC] bg-white p-5">
+    <figure className="rounded-xl border border-border bg-surface p-5">
       {title ? (
-        <figcaption className="mb-4 font-display text-lg text-[#202B26]">
+        <figcaption className="mb-4 font-display text-lg text-foreground">
           {title}
         </figcaption>
       ) : null}
@@ -55,20 +55,20 @@ export function ChartBlock({ data }: ChartBlockProps) {
             className="flex flex-1 flex-col items-center gap-2"
           >
             <div
-              className="w-full rounded-t-md bg-[#4B6B5E]"
+              className="w-full rounded-t-md bg-sage"
               style={{
                 height: `${Math.max(12, (point.value / maxValue) * 160)}px`,
               }}
               title={`${point.label}: ${point.value}`}
             />
-            <span className="text-center text-xs text-[#5A6560]">
+            <span className="text-center text-xs text-muted">
               {point.label}
             </span>
           </div>
         ))}
       </div>
       {(xLabel || yLabel) && (
-        <div className="mt-4 flex justify-between text-xs text-[#7A8480]">
+        <div className="mt-4 flex justify-between text-xs text-muted">
           <span>{yLabel}</span>
           <span>{xLabel}</span>
         </div>

@@ -339,3 +339,96 @@ def test_regenerate_recovery_codes_returns_eight_codes(
 
     assert response.status_code == 200
     assert len(response.json()["data"]["recovery_codes"]) == 8
+
+
+def test_get_account_me_requires_auth() -> None:
+    response = client.get("/v1/accounts/me")
+    assert response.status_code == 401
+
+
+@patch("app.accounts.router.get_account_profile")
+@patch("app.accounts.dependencies.get_supabase_client")
+def test_get_account_me_returns_profile(
+    mock_get_client: MagicMock,
+    mock_get_profile: MagicMock,
+) -> None:
+    table_mock = mock_get_client.return_value.table.return_value
+    select_execute = (
+        table_mock.select.return_value.eq.return_value.limit.return_value.execute
+    )
+    select_execute.return_value.data = [{"id": str(ACCOUNT_ID), "username": "testuser"}]
+    mock_get_profile.return_value = SAMPLE_ACCOUNT
+    token = issue_account_access_token(ACCOUNT_ID)
+
+    response = client.get(
+        "/v1/accounts/me",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["error"] is None
+    assert body["data"]["username"] == "testuser"
+    assert body["data"]["theme_preference"] == "system"
+
+
+def test_patch_account_me_requires_auth() -> None:
+    response = client.patch(
+        "/v1/accounts/me",
+        json={"theme_preference": "dark"},
+    )
+    assert response.status_code == 401
+
+
+@patch("app.accounts.router.update_account_preferences")
+@patch("app.accounts.dependencies.get_supabase_client")
+def test_patch_account_me_updates_preferences(
+    mock_get_client: MagicMock,
+    mock_update: MagicMock,
+) -> None:
+    table_mock = mock_get_client.return_value.table.return_value
+    select_execute = (
+        table_mock.select.return_value.eq.return_value.limit.return_value.execute
+    )
+    select_execute.return_value.data = [{"id": str(ACCOUNT_ID), "username": "testuser"}]
+    updated = SAMPLE_ACCOUNT.model_copy(
+        update={"theme_preference": AccountThemePreference.DARK}
+    )
+    mock_update.return_value = updated
+    token = issue_account_access_token(ACCOUNT_ID)
+
+    response = client.patch(
+        "/v1/accounts/me",
+        headers={"Authorization": f"Bearer {token}"},
+        json={"theme_preference": "dark"},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["data"]["theme_preference"] == "dark"
+
+
+@patch("app.accounts.service.get_supabase_client")
+def test_update_account_preferences_service(mock_get_client: MagicMock) -> None:
+    client_mock = mock_get_client.return_value
+    accounts_table = client_mock.table.return_value
+    accounts_table.update.return_value.eq.return_value.execute.return_value.data = [
+        {
+            "id": str(ACCOUNT_ID),
+            "username": "testuser",
+            "theme_preference": "dark",
+            "layout_version": "new",
+            "created_at": CREATED_AT.isoformat(),
+            "updated_at": UPDATED_AT.isoformat(),
+        }
+    ]
+
+    from app.accounts.service import update_account_preferences
+
+    result = update_account_preferences(
+        ACCOUNT_ID,
+        theme_preference="dark",
+        layout_version="new",
+    )
+
+    assert result.theme_preference == AccountThemePreference.DARK
+    assert result.layout_version == AccountLayoutVersion.NEW

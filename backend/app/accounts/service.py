@@ -10,6 +10,7 @@ from app.accounts.dependencies import (
 )
 from app.accounts.schemas import (
     AccountLoginRequest,
+    AccountPublic,
     AccountRecoverRequest,
     AccountSessionResponse,
     AccountSignupRequest,
@@ -196,3 +197,50 @@ def regenerate_recovery_codes(account_id: UUID) -> list[str]:
     recovery_codes = generate_recovery_codes()
     _insert_recovery_codes(account_id, recovery_codes)
     return recovery_codes
+
+
+def _get_account_by_id(account_id: UUID) -> dict[str, object] | None:
+    client = get_supabase_client()
+    response = (
+        client.table("accounts")
+        .select(
+            "id, username, theme_preference, layout_version, created_at, updated_at"
+        )
+        .eq("id", str(account_id))
+        .limit(1)
+        .execute()
+    )
+    if not response.data:
+        return None
+    return response.data[0]
+
+
+def get_account_profile(account_id: UUID) -> AccountPublic:
+    account_row = _get_account_by_id(account_id)
+    if account_row is None:
+        raise validation_error("Account not found.")
+    return row_to_account_public(account_row)
+
+
+def update_account_preferences(
+    account_id: UUID,
+    *,
+    theme_preference: str | None = None,
+    layout_version: str | None = None,
+) -> AccountPublic:
+    updates: dict[str, str] = {
+        "updated_at": datetime.now(UTC).isoformat(),
+    }
+    if theme_preference is not None:
+        updates["theme_preference"] = theme_preference
+    if layout_version is not None:
+        updates["layout_version"] = layout_version
+
+    client = get_supabase_client()
+    response = (
+        client.table("accounts").update(updates).eq("id", str(account_id)).execute()
+    )
+    if not response.data:
+        raise validation_error("Could not update account preferences.")
+
+    return row_to_account_public(response.data[0])

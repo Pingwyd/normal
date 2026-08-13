@@ -39,7 +39,7 @@ export function SearchBar({ initialQuery, browseParams }: SearchBarProps) {
       <span className="sr-only">Search cards</span>
       <Search
         size={18}
-        className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#5A6560]"
+        className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted"
         aria-hidden="true"
       />
       <input
@@ -47,7 +47,7 @@ export function SearchBar({ initialQuery, browseParams }: SearchBarProps) {
         value={query}
         onChange={(event) => setQuery(event.target.value)}
         placeholder="Search worries, like feeling anxious..."
-        className="w-full rounded-full border border-[#CFCBC2] bg-white py-3 pl-11 pr-4 text-sm text-[#202B26] outline-none ring-[#4B6B5E] placeholder:text-[#7A8480] focus:ring-2"
+        className="w-full rounded-full border border-border-strong bg-surface py-3 pl-11 pr-4 text-sm text-foreground outline-none ring-sage placeholder:text-muted focus:ring-2"
       />
     </label>
   );

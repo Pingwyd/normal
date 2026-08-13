@@ -151,8 +151,8 @@ export function CardForm({
 
   return (
     <div className="space-y-8">
-      <section className="space-y-4 rounded-xl border border-[#D8D5CC] bg-white p-5">
-        <h2 className="font-display text-xl text-[#202B26]">Core fields</h2>
+      <section className="space-y-4 rounded-xl border border-border bg-surface p-5">
+        <h2 className="font-display text-xl text-foreground">Core fields</h2>
         <div className="grid gap-4">
           <label className="block text-sm">
             Question
@@ -160,7 +160,7 @@ export function CardForm({
               required
               value={question}
               onChange={(event) => setQuestion(event.target.value)}
-              className="mt-1 w-full rounded-lg border border-[#CFCBC2] px-3 py-2"
+              className="mt-1 w-full rounded-lg border border-border-strong px-3 py-2"
             />
           </label>
           <label className="block text-sm">
@@ -170,7 +170,7 @@ export function CardForm({
               rows={3}
               value={brief}
               onChange={(event) => setBrief(event.target.value)}
-              className="mt-1 w-full rounded-lg border border-[#CFCBC2] px-3 py-2"
+              className="mt-1 w-full rounded-lg border border-border-strong px-3 py-2"
             />
           </label>
           <label className="block text-sm">
@@ -179,7 +179,7 @@ export function CardForm({
               required
               value={slug}
               onChange={(event) => setSlug(event.target.value)}
-              className="mt-1 w-full rounded-lg border border-[#CFCBC2] px-3 py-2"
+              className="mt-1 w-full rounded-lg border border-border-strong px-3 py-2"
             />
           </label>
           <label className="block text-sm">
@@ -188,7 +188,7 @@ export function CardForm({
               required
               value={categoryId}
               onChange={(event) => setCategoryId(event.target.value)}
-              className="mt-1 w-full rounded-lg border border-[#CFCBC2] px-3 py-2"
+              className="mt-1 w-full rounded-lg border border-border-strong px-3 py-2"
             >
               {categories.map((category) => (
                 <option key={category.id} value={category.id}>
@@ -233,7 +233,7 @@ export function CardForm({
 
       {error ? (
         <p
-          className="rounded-lg border border-[#E8A97A] bg-[#FFF7F0] px-4 py-3 text-sm text-[#202B26]"
+          className="rounded-lg border border-warning-border bg-warning-surface px-4 py-3 text-sm text-foreground"
           role="alert"
         >
           {error}
@@ -241,7 +241,7 @@ export function CardForm({
       ) : null}
 
       {founderBlockedFromPublish ? (
-        <p className="text-sm text-[#5A6560]">
+        <p className="text-sm text-muted">
           {getClinicalPublishMessage(role)}
         </p>
       ) : null}
@@ -251,7 +251,7 @@ export function CardForm({
           type="button"
           disabled={isSaving}
           onClick={() => handleSave("draft")}
-          className="rounded-full border border-[#33473D] px-5 py-2.5 text-sm font-medium text-[#33473D] disabled:opacity-60"
+          className="rounded-full border border-sage-dark px-5 py-2.5 text-sm font-medium text-sage-dark disabled:opacity-60"
         >
           Save draft
         </button>
@@ -259,13 +259,13 @@ export function CardForm({
           type="button"
           disabled={isSaving || founderBlockedFromPublish}
           onClick={() => handleSave("published")}
-          className="rounded-full bg-[#33473D] px-5 py-2.5 text-sm font-medium text-white disabled:opacity-60"
+          className="rounded-full bg-sage-dark px-5 py-2.5 text-sm font-medium text-white disabled:opacity-60"
         >
           Publish
         </button>
         <Link
           href="/admin/cards"
-          className="rounded-full px-5 py-2.5 text-sm text-[#5A6560] hover:text-[#33473D]"
+          className="rounded-full px-5 py-2.5 text-sm text-muted hover:text-sage-dark"
         >
           Cancel
         </Link>

@@ -50,17 +50,17 @@ export default async function ShareQuotePage({ params }: ShareQuotePageProps) {
   }
 
   return (
-    <div className="min-h-full bg-[#F2F1EC]">
+    <div className="min-h-full bg-background">
       <SiteHeader />
       <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
-        <article className="mx-auto max-w-md rounded-3xl border border-[#D8D5CC] bg-white p-8 shadow-lg">
-          <p className="text-xs font-semibold uppercase tracking-wide text-[#4B6B5E]">
+        <article className="mx-auto max-w-md rounded-3xl border border-border bg-surface p-8 shadow-lg">
+          <p className="text-xs font-semibold uppercase tracking-wide text-sage">
             Quote
           </p>
-          <p className="mt-4 font-display text-2xl leading-relaxed text-[#202B26]">
+          <p className="mt-4 font-display text-2xl leading-relaxed text-foreground">
             &ldquo;{quote.text}&rdquo;
           </p>
-          <p className="mt-4 text-sm font-medium text-[#5A6560]">
+          <p className="mt-4 text-sm font-medium text-muted">
             {quote.attributed_to}
           </p>
           {quote.source_url ? (
@@ -68,7 +68,7 @@ export default async function ShareQuotePage({ params }: ShareQuotePageProps) {
               href={quote.source_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-2 inline-block text-xs text-[#33473D] hover:underline"
+              className="mt-2 inline-block text-xs text-sage-dark hover:underline"
             >
               Source
             </a>
@@ -76,13 +76,13 @@ export default async function ShareQuotePage({ params }: ShareQuotePageProps) {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/quotes"
-              className="rounded-full bg-[#33473D] px-4 py-2 text-sm font-medium text-white hover:bg-[#4B6B5E]"
+              className="rounded-full bg-sage-dark px-4 py-2 text-sm font-medium text-white hover:bg-sage"
             >
               Browse quotes
             </Link>
             <Link
               href="/"
-              className="rounded-full border border-[#33473D] bg-white px-4 py-2 text-sm font-medium text-[#33473D]"
+              className="rounded-full border border-sage-dark bg-surface px-4 py-2 text-sm font-medium text-sage-dark"
             >
               Home
             </Link>

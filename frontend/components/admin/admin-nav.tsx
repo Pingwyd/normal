@@ -45,11 +45,11 @@ export function AdminNav({ displayName, role }: AdminNavProps) {
   }
 
   return (
-    <header className="border-b border-[#D8D5CC] bg-white">
+    <header className="border-b border-border bg-surface">
       <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6">
         <div>
-          <p className="font-display text-lg text-[#202B26]">Admin</p>
-          <p className="text-xs text-[#5A6560]">
+          <p className="font-display text-lg text-foreground">Admin</p>
+          <p className="text-xs text-muted">
             {displayName} ({role.replaceAll("_", " ")})
           </p>
         </div>
@@ -77,8 +77,8 @@ export function AdminNav({ displayName, role }: AdminNavProps) {
                 href={item.href}
                 className={`rounded-full px-4 py-2 text-sm font-medium ${
                   isActive
-                    ? "bg-[#33473D] text-white"
-                    : "border border-[#CFCBC2] text-[#33473D] hover:border-[#4B6B5E]"
+                    ? "bg-sage-dark text-white"
+                    : "border border-border-strong text-sage-dark hover:border-sage"
                 }`}
               >
                 {item.label}
@@ -87,7 +87,7 @@ export function AdminNav({ displayName, role }: AdminNavProps) {
           })}
           <Link
             href="/admin/cards/new"
-            className="inline-flex items-center gap-1 rounded-full bg-[#4B6B5E] px-4 py-2 text-sm font-medium text-white hover:bg-[#33473D]"
+            className="inline-flex items-center gap-1 rounded-full bg-sage px-4 py-2 text-sm font-medium text-white hover:bg-sage-dark"
           >
             <Plus size={16} aria-hidden="true" />
             New card
@@ -95,7 +95,7 @@ export function AdminNav({ displayName, role }: AdminNavProps) {
           <button
             type="button"
             onClick={handleLogout}
-            className="inline-flex items-center gap-1 rounded-full border border-[#CFCBC2] px-4 py-2 text-sm text-[#33473D] hover:border-[#4B6B5E]"
+            className="inline-flex items-center gap-1 rounded-full border border-border-strong px-4 py-2 text-sm text-sage-dark hover:border-sage"
           >
             <LogOut size={16} aria-hidden="true" />
             Sign out

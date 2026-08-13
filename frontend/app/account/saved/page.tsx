@@ -10,14 +10,14 @@ export const metadata = {
 
 export default function AccountSavedPage() {
   return (
-    <div className="min-h-full bg-[#F2F1EC]">
+    <div className="min-h-full bg-background">
       <SiteHeader />
       <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
         <section className="mx-auto mb-8 max-w-2xl space-y-3 text-center">
-          <h1 className="font-display text-3xl text-[#202B26] sm:text-4xl">
+          <h1 className="font-display text-3xl text-foreground sm:text-4xl">
             Saved items
           </h1>
-          <p className="text-sm leading-relaxed text-[#5A6560] sm:text-base">
+          <p className="text-sm leading-relaxed text-muted sm:text-base">
             Cards, affirmations, and quotes you save on this device or sync to
             your account appear here.
           </p>
