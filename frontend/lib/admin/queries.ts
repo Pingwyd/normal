@@ -217,3 +217,56 @@ export async function fetchAdminQuotes(status?: string) {
 export async function fetchAdminQuote(quoteId: string) {
   return adminApiRequest<AdminQuoteDetail>(`/v1/admin/quotes/${quoteId}`);
 }
+
+export type AdminAnalyticsTopSavedCard = {
+  card_id: string;
+  question: string;
+  slug: string;
+  save_count: number;
+};
+
+export type AdminAnalyticsTopLikedCard = {
+  card_id: string;
+  question: string;
+  slug: string;
+  like_count: number;
+};
+
+export type AdminAnalyticsSubmissionBucket = {
+  date: string;
+  count: number;
+};
+
+export type AdminAnalyticsSubscriberCounts = {
+  active: number;
+  total: number;
+};
+
+export type AdminAnalytics = {
+  top_saved_cards: AdminAnalyticsTopSavedCard[];
+  top_liked_cards: AdminAnalyticsTopLikedCard[];
+  submission_volume: {
+    window_days: number;
+    total_in_window: number;
+    buckets: AdminAnalyticsSubmissionBucket[];
+  };
+  newsletter_subscribers: AdminAnalyticsSubscriberCounts;
+  push_subscribers: AdminAnalyticsSubscriberCounts;
+};
+
+export async function fetchAdminAnalytics(options?: {
+  days?: number;
+  topLimit?: number;
+}) {
+  const params = new URLSearchParams();
+  if (options?.days != null) {
+    params.set("days", String(options.days));
+  }
+  if (options?.topLimit != null) {
+    params.set("top_limit", String(options.topLimit));
+  }
+  const query = params.toString();
+  return adminApiRequest<AdminAnalytics>(
+    `/v1/admin/analytics${query ? `?${query}` : ""}`,
+  );
+}
