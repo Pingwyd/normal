@@ -28,7 +28,9 @@ function buildCardsQuery(params: BrowseSearchParams): string {
   return query ? `?${query}` : "";
 }
 
-export async function fetchCardSuggestions(query: string): Promise<CardSummary[]> {
+export async function fetchCardSuggestions(
+  query: string,
+): Promise<CardSummary[]> {
   const trimmed = query.trim();
   if (!trimmed) {
     return [];
