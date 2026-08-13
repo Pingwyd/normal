@@ -37,6 +37,12 @@ class Settings:
     cors_origins: tuple[str, ...]
     frontend_revalidate_url: str | None
     revalidation_secret: str | None
+    resend_api_key: str | None
+    newsletter_from_email: str | None
+    frontend_base_url: str | None
+    vapid_private_key: str | None
+    vapid_public_key: str | None
+    vapid_contact_email: str | None
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -50,6 +56,12 @@ class Settings:
         cors_origins = _parse_cors_origins()
         frontend_revalidate_url = os.getenv("FRONTEND_REVALIDATE_URL") or None
         revalidation_secret = os.getenv("REVALIDATION_SECRET") or None
+        resend_api_key = os.getenv("RESEND_API_KEY") or None
+        newsletter_from_email = os.getenv("NEWSLETTER_FROM_EMAIL") or None
+        frontend_base_url = (os.getenv("FRONTEND_BASE_URL") or "").rstrip("/") or None
+        vapid_private_key = os.getenv("VAPID_PRIVATE_KEY") or None
+        vapid_public_key = os.getenv("VAPID_PUBLIC_KEY") or None
+        vapid_contact_email = os.getenv("VAPID_CONTACT_EMAIL") or None
 
         if not supabase_url or not supabase_service_role_key:
             msg = "SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set"
@@ -67,6 +79,12 @@ class Settings:
             cors_origins=cors_origins,
             frontend_revalidate_url=frontend_revalidate_url,
             revalidation_secret=revalidation_secret,
+            resend_api_key=resend_api_key,
+            newsletter_from_email=newsletter_from_email,
+            frontend_base_url=frontend_base_url,
+            vapid_private_key=vapid_private_key,
+            vapid_public_key=vapid_public_key,
+            vapid_contact_email=vapid_contact_email,
         )
 
 
