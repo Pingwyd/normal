@@ -7,7 +7,9 @@ export default function CardNotFound() {
     <div className="min-h-full bg-background">
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6">
-        <h1 className="font-display text-3xl text-foreground">Card not found</h1>
+        <h1 className="font-display text-3xl text-foreground">
+          Card not found
+        </h1>
         <p className="mt-3 text-sm text-muted">
           That card may have been removed or the link is incorrect.
         </p>

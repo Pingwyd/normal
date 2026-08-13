@@ -2,12 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 type AdminListPageSkeletonProps = {
   variant:
-    | "cards"
-    | "affirmations"
-    | "quotes"
-    | "submissions"
-    | "issues"
-    | "due";
+    "cards" | "affirmations" | "quotes" | "submissions" | "issues" | "due";
 };
 
 const FILTER_COUNTS: Record<AdminListPageSkeletonProps["variant"], number> = {

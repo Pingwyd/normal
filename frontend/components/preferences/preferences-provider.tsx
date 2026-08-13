@@ -12,7 +12,10 @@ import {
 } from "react";
 
 import type { AccountPublic } from "@/lib/api/account-types";
-import { upsertPushSubscription, updateNewsletterSubscription } from "@/lib/notifications/client-api";
+import {
+  upsertPushSubscription,
+  updateNewsletterSubscription,
+} from "@/lib/notifications/client-api";
 import { shouldClaimLocalPreferences } from "@/lib/preferences/claim";
 import {
   fetchAccountProfile,
@@ -83,9 +86,8 @@ function applyDocumentPreferences(
   }
 
   document.documentElement.dataset.theme = themePreference;
-  document.documentElement.dataset.themeResolved = resolveThemeClass(
-    themePreference,
-  );
+  document.documentElement.dataset.themeResolved =
+    resolveThemeClass(themePreference);
   document.body.dataset.layout = layoutVersion;
 }
 
@@ -103,7 +105,9 @@ export function PreferencesProvider({ children }: { children: ReactNode }) {
       : "classic",
   );
   const [newsletterEmail, setNewsletterEmailState] = useState(() =>
-    typeof window !== "undefined" ? readLocalPreferences().newsletter_email : "",
+    typeof window !== "undefined"
+      ? readLocalPreferences().newsletter_email
+      : "",
   );
   const [newsletterEnabled, setNewsletterEnabledState] = useState(() =>
     typeof window !== "undefined"
@@ -129,7 +133,9 @@ export function PreferencesProvider({ children }: { children: ReactNode }) {
 
     setPushPermission(getPushPermissionState());
     const subscription = await getExistingPushSubscription();
-    setPushEnabled(Boolean(subscription) && Notification.permission === "granted");
+    setPushEnabled(
+      Boolean(subscription) && Notification.permission === "granted",
+    );
   }, [pushSupported]);
 
   const persistLocalSnapshot = useCallback(
@@ -167,11 +173,7 @@ export function PreferencesProvider({ children }: { children: ReactNode }) {
 
   const loadAnonymousPreferences = useCallback(() => {
     const local = readLocalPreferences();
-    applyPreferenceState(
-      local.theme_preference,
-      local.layout_version,
-      local,
-    );
+    applyPreferenceState(local.theme_preference, local.layout_version, local);
   }, [applyPreferenceState]);
 
   const loadAuthenticatedPreferences = useCallback(
@@ -248,7 +250,12 @@ export function PreferencesProvider({ children }: { children: ReactNode }) {
     return () => {
       cancelled = true;
     };
-  }, [loadAnonymousPreferences, loadAuthenticatedPreferences, refreshPushState, syncPushSubscriptionForSession]);
+  }, [
+    loadAnonymousPreferences,
+    loadAuthenticatedPreferences,
+    refreshPushState,
+    syncPushSubscriptionForSession,
+  ]);
 
   useEffect(() => {
     if (themePreference !== "system" || typeof window === "undefined") {
@@ -342,14 +349,17 @@ export function PreferencesProvider({ children }: { children: ReactNode }) {
     [applyPreferenceState, themePreference],
   );
 
-  const setNewsletterEmail = useCallback((value: string) => {
-    setNewsletterEmailState(value);
-    const local = readLocalPreferences();
-    persistLocalSnapshot({
-      ...local,
-      newsletter_email: value,
-    });
-  }, [persistLocalSnapshot]);
+  const setNewsletterEmail = useCallback(
+    (value: string) => {
+      setNewsletterEmailState(value);
+      const local = readLocalPreferences();
+      persistLocalSnapshot({
+        ...local,
+        newsletter_email: value,
+      });
+    },
+    [persistLocalSnapshot],
+  );
 
   const setNewsletterEnabled = useCallback(
     async (enabled: boolean) => {
@@ -364,7 +374,10 @@ export function PreferencesProvider({ children }: { children: ReactNode }) {
       }
 
       try {
-        const result = await updateNewsletterSubscription(trimmedEmail, enabled);
+        const result = await updateNewsletterSubscription(
+          trimmedEmail,
+          enabled,
+        );
         setNewsletterEmailState(result.email);
         setNewsletterEnabledState(result.enabled);
         const local = readLocalPreferences();

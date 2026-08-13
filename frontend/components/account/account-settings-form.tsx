@@ -143,7 +143,9 @@ export function AccountSettingsForm() {
       />
 
       <section className="space-y-3 border-t border-border-subtle pt-6">
-        <h2 className="text-sm font-medium text-foreground">Push notifications</h2>
+        <h2 className="text-sm font-medium text-foreground">
+          Push notifications
+        </h2>
         <p className="text-sm leading-relaxed text-muted">
           Get occasional reminders for affirmations and quotes. You can turn
           this off here at any time.
@@ -187,7 +189,9 @@ export function AccountSettingsForm() {
       </section>
 
       <section className="space-y-3 border-t border-border-subtle pt-6">
-        <h2 className="text-sm font-medium text-foreground">Affirmations newsletter</h2>
+        <h2 className="text-sm font-medium text-foreground">
+          Affirmations newsletter
+        </h2>
         <p className="text-sm leading-relaxed text-muted">
           Optional email updates. This is separate from having an account.
         </p>

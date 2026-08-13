@@ -45,7 +45,9 @@ function NewsletterUnsubscribeInner() {
         });
 
         setStatus("success");
-        setMessage("You have been unsubscribed from the affirmations newsletter.");
+        setMessage(
+          "You have been unsubscribed from the affirmations newsletter.",
+        );
       } catch (error) {
         if (cancelled) {
           return;

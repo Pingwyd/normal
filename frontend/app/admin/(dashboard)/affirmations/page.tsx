@@ -21,7 +21,9 @@ export default async function AdminAffirmationsPage({
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl text-foreground">Affirmations</h1>
+          <h1 className="font-display text-3xl text-foreground">
+            Affirmations
+          </h1>
           <p className="text-sm text-muted">
             Create and publish affirmations for the swipe deck.
           </p>

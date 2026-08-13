@@ -8,7 +8,9 @@ export default async function AdminDueForReviewPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-3xl text-foreground">Due for review</h1>
+        <h1 className="font-display text-3xl text-foreground">
+          Due for review
+        </h1>
         <p className="text-sm text-muted">
           Published cards with a review date that has passed or is approaching.
         </p>

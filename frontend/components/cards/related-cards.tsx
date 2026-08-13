@@ -13,7 +13,10 @@ export function RelatedCards({ relatedCards }: RelatedCardsProps) {
 
   return (
     <section aria-labelledby="related-heading" className="space-y-4">
-      <h2 id="related-heading" className="font-display text-2xl text-foreground">
+      <h2
+        id="related-heading"
+        className="font-display text-2xl text-foreground"
+      >
         Related cards
       </h2>
       <ul className="grid gap-4 sm:grid-cols-2">

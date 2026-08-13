@@ -22,7 +22,8 @@ export function isPushSupported(): boolean {
   );
 }
 
-export function getPushPermissionState(): NotificationPermission | "unsupported" {
+export function getPushPermissionState():
+  NotificationPermission | "unsupported" {
   if (!isPushSupported()) {
     return "unsupported";
   }

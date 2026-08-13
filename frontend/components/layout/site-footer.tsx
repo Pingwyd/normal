@@ -44,7 +44,9 @@ export function SiteFooter() {
       <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-2">
-            <p className="font-display text-lg text-foreground">Is it normal?</p>
+            <p className="font-display text-lg text-foreground">
+              Is it normal?
+            </p>
             <p className="max-w-md text-sm leading-relaxed text-muted">
               Honest, sourced answers about everyday worries. Clinical review
               supports sensitive topics where noted.

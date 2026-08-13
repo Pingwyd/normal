@@ -38,7 +38,9 @@ export async function upsertPushSubscription(
   };
 
   if (!response.ok || body.error || !body.data) {
-    throw new Error(body.error?.message ?? "Could not update push notifications.");
+    throw new Error(
+      body.error?.message ?? "Could not update push notifications.",
+    );
   }
 
   return body.data;
@@ -63,7 +65,9 @@ export async function updateNewsletterSubscription(
   };
 
   if (!response.ok || body.error || !body.data) {
-    throw new Error(body.error?.message ?? "Could not update newsletter settings.");
+    throw new Error(
+      body.error?.message ?? "Could not update newsletter settings.",
+    );
   }
 
   return body.data;
@@ -86,7 +90,9 @@ export async function unsubscribeNewsletterByToken(
   };
 
   if (!response.ok || body.error || !body.data) {
-    throw new Error(body.error?.message ?? "Could not unsubscribe from the newsletter.");
+    throw new Error(
+      body.error?.message ?? "Could not unsubscribe from the newsletter.",
+    );
   }
 
   return body.data;

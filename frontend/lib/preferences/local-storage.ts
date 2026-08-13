@@ -13,15 +13,13 @@ const LAYOUT_VALUES: LayoutVersion[] = ["classic", "new"];
 
 function isThemePreference(value: unknown): value is ThemePreference {
   return (
-    typeof value === "string" &&
-    THEME_VALUES.includes(value as ThemePreference)
+    typeof value === "string" && THEME_VALUES.includes(value as ThemePreference)
   );
 }
 
 function isLayoutVersion(value: unknown): value is LayoutVersion {
   return (
-    typeof value === "string" &&
-    LAYOUT_VALUES.includes(value as LayoutVersion)
+    typeof value === "string" && LAYOUT_VALUES.includes(value as LayoutVersion)
   );
 }
 

@@ -14,7 +14,10 @@ export function SourcesList({ sources }: SourcesListProps) {
 
   return (
     <section aria-labelledby="sources-heading" className="space-y-4">
-      <h2 id="sources-heading" className="font-display text-2xl text-foreground">
+      <h2
+        id="sources-heading"
+        className="font-display text-2xl text-foreground"
+      >
         Sources
       </h2>
       <ul className="space-y-4">

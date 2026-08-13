@@ -26,7 +26,9 @@ export async function fetchAccountProfile(): Promise<AccountPublic | null> {
   };
 
   if (body.error || !body.data) {
-    throw new Error(body.error?.message ?? "Could not load account preferences.");
+    throw new Error(
+      body.error?.message ?? "Could not load account preferences.",
+    );
   }
 
   return body.data;

@@ -21,7 +21,9 @@ export function CardSummaryTile({ card }: CardSummaryTileProps) {
         <h2 className="font-display text-xl leading-snug text-foreground">
           {card.question}
         </h2>
-        <p className="text-sm leading-relaxed text-ink-secondary">{card.brief}</p>
+        <p className="text-sm leading-relaxed text-ink-secondary">
+          {card.brief}
+        </p>
       </Link>
       <div className="mt-4 flex items-center justify-between border-t border-border-subtle pt-4 text-xs text-muted">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">

@@ -115,7 +115,9 @@ export function AccountSignupForm() {
       className="mx-auto w-full max-w-xl space-y-5 rounded-xl border border-border bg-surface p-6"
     >
       <div className="space-y-2">
-        <h2 className="font-display text-2xl text-foreground">Create account</h2>
+        <h2 className="font-display text-2xl text-foreground">
+          Create account
+        </h2>
         <p className="text-sm leading-relaxed text-muted">
           Optional account for syncing saved cards across devices. No email or
           real name required.

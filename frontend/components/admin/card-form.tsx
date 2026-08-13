@@ -241,9 +241,7 @@ export function CardForm({
       ) : null}
 
       {founderBlockedFromPublish ? (
-        <p className="text-sm text-muted">
-          {getClinicalPublishMessage(role)}
-        </p>
+        <p className="text-sm text-muted">{getClinicalPublishMessage(role)}</p>
       ) : null}
 
       <div className="flex flex-wrap gap-3">
