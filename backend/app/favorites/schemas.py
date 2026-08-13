@@ -4,7 +4,7 @@ from datetime import datetime
 from enum import StrEnum
 from uuid import UUID
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class FavoriteContentType(StrEnum):
@@ -23,6 +23,38 @@ class FavoriteItem(BaseModel):
     content_type: FavoriteContentType
     content_id: UUID
     created_at: datetime
+
+
+class FavoriteCategorySummary(BaseModel):
+    name: str
+    slug: str
+
+
+class FavoriteCardContent(BaseModel):
+    question: str
+    slug: str
+    brief: str
+    category: FavoriteCategorySummary
+
+
+class FavoriteAffirmationTagSummary(BaseModel):
+    id: UUID
+    name: str
+
+
+class FavoriteAffirmationContent(BaseModel):
+    text: str
+    tags: list[FavoriteAffirmationTagSummary] = Field(default_factory=list)
+
+
+class FavoriteQuoteContent(BaseModel):
+    text: str
+    attributed_to: str
+    source_url: str | None = None
+
+
+class FavoriteListItem(FavoriteItem):
+    content: FavoriteCardContent | FavoriteAffirmationContent | FavoriteQuoteContent
 
 
 class FavoriteToggleRequest(BaseModel):
