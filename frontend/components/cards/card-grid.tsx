@@ -1,6 +1,12 @@
+import type { ReactNode } from "react";
+
 import type { CardSummary } from "@/lib/api/types";
 
+import { BrowseAdSlot } from "@/components/browse/browse-ad-slot";
+
 import { CardSummaryTile } from "./card-summary-tile";
+
+const AD_SLOT_AFTER_INDEX = 2;
 
 type CardGridProps = {
   cards: CardSummary[];
@@ -20,11 +26,17 @@ export function CardGrid({ cards }: CardGridProps) {
     );
   }
 
+  const gridItems: ReactNode[] = [];
+  safeCards.forEach((card, index) => {
+    gridItems.push(<CardSummaryTile key={card.id} card={card} />);
+    if (index === AD_SLOT_AFTER_INDEX) {
+      gridItems.push(<BrowseAdSlot key="browse-ad-slot" />);
+    }
+  });
+
   return (
-    <div className="card-feed-grid grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      {safeCards.map((card) => (
-        <CardSummaryTile key={card.id} card={card} />
-      ))}
+    <div className="card-feed-grid mb-16 grid grid-cols-1 gap-[18px] lg:grid-cols-3">
+      {gridItems}
     </div>
   );
 }
