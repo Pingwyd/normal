@@ -28,6 +28,16 @@ function buildCardsQuery(params: BrowseSearchParams): string {
   return query ? `?${query}` : "";
 }
 
+export async function fetchCardSuggestions(query: string): Promise<CardSummary[]> {
+  const trimmed = query.trim();
+  if (!trimmed) {
+    return [];
+  }
+
+  const { cards } = await fetchCardPage({ q: trimmed, limit: 5 });
+  return cards;
+}
+
 export async function fetchCardPage(
   params: BrowseSearchParams,
 ): Promise<{ cards: CardSummary[]; meta: PaginationMeta | null }> {
