@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { ArrowLeft, Bookmark, ThumbsUp } from "lucide-react";
+import { ArrowLeft, ThumbsUp } from "lucide-react";
 
+import { SaveButton } from "@/components/favorites/save-button";
 import { BlockRenderer } from "@/components/content-blocks/block-renderer";
 import { ReportIssueModal } from "@/components/submissions/report-issue-modal";
 import type { CardDetail } from "@/lib/api/types";
@@ -43,9 +44,15 @@ export function CardDetailView({ card }: CardDetailViewProps) {
           <span className="font-mono uppercase tracking-wide text-[#4B6B5E]">
             {reviewedLabel}
           </span>
-          <span className="inline-flex items-center gap-1">
-            <Bookmark size={14} aria-hidden="true" />
-            {card.save_count} saved
+          <span className="inline-flex items-center gap-2">
+            <SaveButton
+              contentType="card"
+              contentId={card.id}
+              label={card.question}
+              cardSlug={card.slug}
+              cardQuestion={card.question}
+            />
+            <span>{card.save_count} total saves</span>
           </span>
           <span className="inline-flex items-center gap-1">
             <ThumbsUp size={14} aria-hidden="true" />

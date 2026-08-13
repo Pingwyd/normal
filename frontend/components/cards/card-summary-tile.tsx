@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Bookmark, Share2 } from "lucide-react";
+import { Share2 } from "lucide-react";
 
+import { SaveButton } from "@/components/favorites/save-button";
 import type { CardSummary } from "@/lib/api/types";
 
 type CardSummaryTileProps = {
@@ -32,10 +33,14 @@ export function CardSummaryTile({ card }: CardSummaryTileProps) {
           </span>
         </div>
         <div className="flex items-center gap-3">
-          <span className="inline-flex items-center gap-1">
-            <Bookmark size={14} aria-hidden="true" />
-            {card.save_count}
-          </span>
+          <SaveButton
+            contentType="card"
+            contentId={card.id}
+            label={card.question}
+            cardSlug={card.slug}
+            cardQuestion={card.question}
+          />
+          <span className="text-[#5A6560]">{card.save_count} total saves</span>
           <Link
             href={`/cards/${card.slug}`}
             className="inline-flex items-center gap-1 text-[#33473D] hover:text-[#4B6B5E]"
