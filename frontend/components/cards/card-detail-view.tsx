@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { ArrowLeft, ThumbsUp } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 import { SaveButton } from "@/components/favorites/save-button";
+import { LikeButton } from "@/components/likes/like-button";
 import { BlockRenderer } from "@/components/content-blocks/block-renderer";
 import { ReportIssueModal } from "@/components/submissions/report-issue-modal";
 import type { CardDetail } from "@/lib/api/types";
@@ -54,10 +55,11 @@ export function CardDetailView({ card }: CardDetailViewProps) {
             />
             <span>{card.save_count} total saves</span>
           </span>
-          <span className="inline-flex items-center gap-1">
-            <ThumbsUp size={14} aria-hidden="true" />
-            {card.like_count} found this useful
-          </span>
+          <LikeButton
+            cardId={card.id}
+            initialLikeCount={card.like_count}
+            label={card.question}
+          />
         </div>
       </header>
 
