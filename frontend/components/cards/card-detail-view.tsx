@@ -30,21 +30,21 @@ export function CardDetailView({ card }: CardDetailViewProps) {
         </Link>
       </div>
 
-      <header className="space-y-4">
-        <p className="font-mono text-xs uppercase tracking-wide text-sage">
+      <header className="space-y-4 border-b border-border pb-8">
+        <p className="font-mono text-[10.5px] uppercase tracking-wide text-sage">
           {card.category.name}
         </p>
-        <h1 className="font-display text-3xl leading-tight text-foreground sm:text-4xl">
+        <h1 className="font-display text-3xl font-medium leading-tight text-foreground sm:text-4xl">
           {card.question}
         </h1>
         <p className="text-lg leading-relaxed text-ink-secondary">
           {card.brief}
         </p>
-        <div className="flex flex-wrap items-center gap-4 text-sm text-muted">
-          <span>
+        <div className="flex flex-wrap items-center gap-4 text-sm text-ink-secondary">
+          <span className="font-mono text-[10.5px] uppercase tracking-wide">
             {card.source_count} source{card.source_count === 1 ? "" : "s"}
           </span>
-          <span className="font-mono uppercase tracking-wide text-sage">
+          <span className="font-mono text-[10.5px] uppercase tracking-wide text-sage">
             {reviewedLabel}
           </span>
           <span className="inline-flex items-center gap-2">

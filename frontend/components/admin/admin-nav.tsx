@@ -50,12 +50,14 @@ export function AdminNav({ displayName, role }: AdminNavProps) {
   }
 
   return (
-    <header className="border-b border-border bg-surface">
+    <header className="sticky top-0 z-40 border-b border-border bg-background/88 backdrop-blur-md">
       <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6">
         <div>
-          <p className="font-display text-lg text-foreground">Admin</p>
-          <p className="text-xs text-muted">
-            {displayName} ({role.replaceAll("_", " ")})
+          <p className="font-display text-lg font-semibold text-sage-dark">
+            normal<span className="text-accent">.</span> admin
+          </p>
+          <p className="font-mono text-[10.5px] uppercase tracking-wide text-ink-secondary">
+            {displayName} · {role.replaceAll("_", " ")}
           </p>
         </div>
         <nav className="flex flex-wrap items-center gap-2" aria-label="Admin">
@@ -83,7 +85,7 @@ export function AdminNav({ displayName, role }: AdminNavProps) {
                 className={`rounded-full px-4 py-2 text-sm font-medium ${
                   isActive
                     ? "bg-sage-dark text-white"
-                    : "border border-border-strong text-sage-dark hover:border-sage"
+                    : "border border-border bg-surface text-sage-dark hover:border-sage"
                 }`}
               >
                 {item.label}
