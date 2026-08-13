@@ -11,13 +11,22 @@ async function getAccountAccessToken(): Promise<string | null> {
   return cookieStore.get(ACCOUNT_SESSION_COOKIE)?.value ?? null;
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   const accessToken = await getAccountAccessToken();
   if (!accessToken) {
     return NextResponse.json({ data: [] });
   }
 
-  const response = await proxyAccountApi("/v1/favorites", accessToken, {
+  const contentType = new URL(request.url).searchParams
+    .get("content_type")
+    ?.trim();
+  const allowedContentTypes = new Set(["card", "affirmation", "quote"]);
+  const favoritesPath =
+    contentType && allowedContentTypes.has(contentType)
+      ? `/v1/favorites?content_type=${encodeURIComponent(contentType)}`
+      : "/v1/favorites";
+
+  const response = await proxyAccountApi(favoritesPath, accessToken, {
     method: "GET",
   });
 

@@ -1,7 +1,7 @@
 import type { FavoriteContentType } from "@/lib/favorites/keys";
 
 import type {
-  FavoriteItem,
+  FavoriteListItem,
   FavoriteToggleResponse,
 } from "@/lib/api/account-types";
 
@@ -21,8 +21,13 @@ export async function fetchAccountSession(): Promise<{ id: string } | null> {
   return body.account;
 }
 
-export async function fetchAccountFavorites(): Promise<FavoriteItem[]> {
-  const response = await fetch("/api/account/favorites", {
+export async function fetchAccountFavorites(
+  contentType?: FavoriteContentType,
+): Promise<FavoriteListItem[]> {
+  const query = contentType
+    ? `?content_type=${encodeURIComponent(contentType)}`
+    : "";
+  const response = await fetch(`/api/account/favorites${query}`, {
     method: "GET",
     cache: "no-store",
   });
@@ -35,7 +40,7 @@ export async function fetchAccountFavorites(): Promise<FavoriteItem[]> {
     throw new Error("Could not load saved items.");
   }
 
-  const body = (await response.json()) as { data: FavoriteItem[] };
+  const body = (await response.json()) as { data: FavoriteListItem[] };
   return body.data ?? [];
 }
 

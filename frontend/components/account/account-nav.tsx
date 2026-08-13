@@ -62,6 +62,12 @@ export function AccountNav() {
   return (
     <div className="flex items-center gap-3 sm:gap-4">
       <Link
+        href="/account/saved"
+        className="text-sm font-medium text-sage-dark hover:text-sage"
+      >
+        Saved
+      </Link>
+      <Link
         href="/account/settings"
         className="text-sm font-medium text-sage-dark hover:text-sage"
       >
