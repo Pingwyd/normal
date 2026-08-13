@@ -14,6 +14,7 @@ normal-app/
 │   ├── app/                  # public routes + gated /admin route group
 │   ├── components/
 │   ├── lib/                  # API client, shared utils
+│   ├── vercel.json           # frontend infra-as-config (Vercel Root Directory: frontend)
 │   └── package.json
 ├── backend/                  # FastAPI — deployed to Render (Docker)
 │   ├── app/
@@ -26,7 +27,6 @@ normal-app/
 │   └── requirements.txt
 ├── docs/                     # phase documents (this series)
 ├── render.yaml                # backend infra-as-config
-├── vercel.json                 # frontend infra-as-config
 └── README.md
 ```
 
@@ -77,7 +77,7 @@ Merge to `main` triggers each platform's **native auto-deploy** (Vercel and Rend
 | Dependency management | `pip` + `requirements.txt` | `npm` |
 | Package manager rationale | Simple, sufficient at this scale; `poetry`/`uv` reasonable later if dependency complexity grows | No strong reason to reach for `pnpm`/`yarn` given team size of one |
 
-**Infra-as-config**: `render.yaml` and `vercel.json` checked into the repo — build/environment settings are version-controlled rather than only set via dashboard clicks, so they're reviewable in PRs and reproducible if a service needs to be recreated.
+**Infra-as-config**: `render.yaml` and `frontend/vercel.json` checked into the repo — build/environment settings are version-controlled rather than only set via dashboard clicks, so they're reviewable in PRs and reproducible if a service needs to be recreated.
 
 ---
 
