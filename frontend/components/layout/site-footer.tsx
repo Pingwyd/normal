@@ -15,8 +15,8 @@ export function SiteFooter() {
       <div className="mx-auto w-full max-w-[1100px]">
         <div className="mb-7 flex flex-col gap-4 rounded-xl border border-border bg-surface px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="max-w-xl text-[13px] leading-relaxed text-ink-secondary">
-            If you are in crisis or thinking about harming yourself, you do
-            not need to browse. Talk to someone now.
+            If you are in crisis or thinking about harming yourself, you do not
+            need to browse. Talk to someone now.
           </p>
           <a
             href="https://www.samaritans.org/how-we-can-help/contact-samaritan/"
