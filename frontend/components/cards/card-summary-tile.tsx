@@ -14,7 +14,10 @@ export function CardSummaryTile({ card }: CardSummaryTileProps) {
 
   return (
     <article className="group flex h-full cursor-pointer flex-col gap-3.5 rounded-2xl border border-border bg-surface p-[22px] transition duration-[180ms] hover:-translate-y-[3px] hover:border-transparent hover:shadow-[0_10px_24px_rgba(32,43,38,0.08)]">
-      <Link href={`/cards/${card.slug}`} className="flex flex-1 flex-col gap-3.5">
+      <Link
+        href={`/cards/${card.slug}`}
+        className="flex flex-1 flex-col gap-3.5"
+      >
         <p className="font-mono text-[10.5px] uppercase tracking-wide text-sage">
           {card.category.name}
         </p>

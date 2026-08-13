@@ -37,7 +37,9 @@ export function CardDetailView({ card }: CardDetailViewProps) {
         <h1 className="font-display text-3xl font-medium leading-tight text-foreground sm:text-4xl">
           {card.question}
         </h1>
-        <p className="text-lg leading-relaxed text-ink-secondary">{card.brief}</p>
+        <p className="text-lg leading-relaxed text-ink-secondary">
+          {card.brief}
+        </p>
         <div className="flex flex-wrap items-center gap-4 text-sm text-ink-secondary">
           <span className="font-mono text-[10.5px] uppercase tracking-wide">
             {card.source_count} source{card.source_count === 1 ? "" : "s"}

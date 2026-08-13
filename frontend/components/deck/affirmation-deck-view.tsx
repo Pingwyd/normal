@@ -144,73 +144,73 @@ export function AffirmationDeckView({
     <div className="space-y-4">
       <DeckStackFrame hint="Swipe right to save, left to skip. Tap the card to see the next one.">
         <SwipeDeck
-        item={currentItem}
-        onAction={(action) => {
-          if (action === "save") {
-            handleSaveAction();
-            return;
-          }
-          handleSkip();
-        }}
-        onTapAdvance={advance}
-        emptyState={emptyState}
-        reducedMotionFallback={
-          currentItem ? (
-            <div className="space-y-4">
-              <div className="rounded-3xl border border-border bg-surface p-6 shadow-lg">
-                <p className="font-display text-2xl leading-relaxed text-foreground">
-                  {currentItem.text}
-                </p>
-                {currentItem.tags.length > 0 ? (
-                  <ul className="mt-4 flex flex-wrap gap-2">
-                    {currentItem.tags.map((tag) => (
-                      <li
-                        key={tag.id}
-                        className="rounded-full bg-surface-muted px-3 py-1 text-xs font-medium text-sage-dark"
-                      >
-                        {tag.name}
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
+          item={currentItem}
+          onAction={(action) => {
+            if (action === "save") {
+              handleSaveAction();
+              return;
+            }
+            handleSkip();
+          }}
+          onTapAdvance={advance}
+          emptyState={emptyState}
+          reducedMotionFallback={
+            currentItem ? (
+              <div className="space-y-4">
+                <div className="rounded-3xl border border-border bg-surface p-6 shadow-lg">
+                  <p className="font-display text-2xl leading-relaxed text-foreground">
+                    {currentItem.text}
+                  </p>
+                  {currentItem.tags.length > 0 ? (
+                    <ul className="mt-4 flex flex-wrap gap-2">
+                      {currentItem.tags.map((tag) => (
+                        <li
+                          key={tag.id}
+                          className="rounded-full bg-surface-muted px-3 py-1 text-xs font-medium text-sage-dark"
+                        >
+                          {tag.name}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </div>
+                <DeckActionBar
+                  onSkip={handleSkip}
+                  onSave={handleSaveAction}
+                  onShare={() => {
+                    void handleShare();
+                  }}
+                  isSavePending={isSaving}
+                  isSaved={isFavorited("affirmation", currentItem.id)}
+                />
               </div>
-              <DeckActionBar
-                onSkip={handleSkip}
-                onSave={handleSaveAction}
-                onShare={() => {
-                  void handleShare();
-                }}
-                isSavePending={isSaving}
-                isSaved={isFavorited("affirmation", currentItem.id)}
-              />
-            </div>
-          ) : (
-            emptyState
-          )
-        }
-        renderCard={(item) => (
-          <>
-            <p className="font-mono text-[10px] uppercase tracking-wide text-sage">
-              Today&apos;s affirmation
-            </p>
-            <p className="mt-2.5 font-display text-[19px] leading-[1.4] text-foreground">
-              {item.text}
-            </p>
-            {item.tags.length > 0 ? (
-              <ul className="mt-4 flex flex-wrap gap-2">
-                {item.tags.map((tag) => (
-                  <li
-                    key={tag.id}
-                    className="rounded-full bg-surface-muted px-3 py-1 text-xs font-medium text-sage-dark"
-                  >
-                    {tag.name}
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-          </>
-        )}
-      />
+            ) : (
+              emptyState
+            )
+          }
+          renderCard={(item) => (
+            <>
+              <p className="font-mono text-[10px] uppercase tracking-wide text-sage">
+                Today&apos;s affirmation
+              </p>
+              <p className="mt-2.5 font-display text-[19px] leading-[1.4] text-foreground">
+                {item.text}
+              </p>
+              {item.tags.length > 0 ? (
+                <ul className="mt-4 flex flex-wrap gap-2">
+                  {item.tags.map((tag) => (
+                    <li
+                      key={tag.id}
+                      className="rounded-full bg-surface-muted px-3 py-1 text-xs font-medium text-sage-dark"
+                    >
+                      {tag.name}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </>
+          )}
+        />
       </DeckStackFrame>
 
       {currentItem ? (
@@ -241,10 +241,7 @@ export function AffirmationDeckView({
       {index >= items.length && items.length > 0 ? (
         <p className="text-center text-sm text-white/70">
           You reached the end. Saved affirmations appear in{" "}
-          <Link
-            href="/account/saved"
-            className="text-accent hover:underline"
-          >
+          <Link href="/account/saved" className="text-accent hover:underline">
             your saved list
           </Link>
           .

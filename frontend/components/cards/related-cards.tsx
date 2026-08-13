@@ -12,7 +12,7 @@ export function RelatedCards({ relatedCards }: RelatedCardsProps) {
   }
 
   return (
-      <section aria-labelledby="related-heading" className="space-y-4">
+    <section aria-labelledby="related-heading" className="space-y-4">
       <h2
         id="related-heading"
         className="font-display text-2xl font-medium text-foreground"

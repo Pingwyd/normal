@@ -171,7 +171,11 @@ export function SearchBar({ initialQuery, browseParams }: SearchBarProps) {
           className="absolute inset-x-0 top-[calc(100%+8px)] z-20 overflow-hidden rounded-[14px] border border-border bg-surface shadow-lg"
         >
           {suggestions.map((suggestion, index) => (
-            <li key={suggestion.id} role="option" aria-selected={index === activeIndex}>
+            <li
+              key={suggestion.id}
+              role="option"
+              aria-selected={index === activeIndex}
+            >
               <button
                 type="button"
                 className={`block w-full px-4 py-3 text-left text-sm ${
