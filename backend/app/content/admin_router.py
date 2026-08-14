@@ -25,6 +25,8 @@ from app.content.affirmations_service import (
     update_admin_affirmation,
 )
 from app.content.daily_content_schemas import DailyContentStatus
+from app.content.draft_import_schemas import CardDraftImport
+from app.content.draft_import_service import import_card_draft
 from app.content.quotes_schemas import AdminQuoteCreate, AdminQuoteUpdate
 from app.content.quotes_service import (
     create_admin_quote,
@@ -87,6 +89,15 @@ async def create_card_route(
     admin: Annotated[AdminContext, Depends(require_admin)],
 ) -> dict:
     card = create_admin_card(admin, payload)
+    return success_envelope(card.model_dump(mode="json"))
+
+
+@router.post("/cards/import-draft")
+async def import_card_draft_route(
+    payload: CardDraftImport,
+    admin: Annotated[AdminContext, Depends(require_admin)],
+) -> dict:
+    card = import_card_draft(admin, payload)
     return success_envelope(card.model_dump(mode="json"))
 
 
