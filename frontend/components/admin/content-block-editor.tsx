@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { ArrowDown, ArrowUp, Trash2 } from "lucide-react";
 
 import {
@@ -13,11 +14,17 @@ import {
 type ContentBlockEditorProps = {
   blocks: EditorContentBlock[];
   onChange: (blocks: EditorContentBlock[]) => void;
+  showContextNotes?: boolean;
+  emptyMessage?: string;
 };
+
+const DATA_BLOCK_TYPES = new Set(["chart", "table", "pie_chart"]);
 
 export function ContentBlockEditor({
   blocks,
   onChange,
+  showContextNotes = false,
+  emptyMessage = "No content blocks yet. Add one to build the card body.",
 }: ContentBlockEditorProps) {
   function updateBlock(localId: string, patch: Partial<EditorContentBlock>) {
     onChange(
@@ -74,7 +81,7 @@ export function ContentBlockEditor({
 
       {blocks.length === 0 ? (
         <p className="rounded-lg border border-dashed border-border-strong px-4 py-6 text-sm text-muted">
-          No content blocks yet. Add one to build the card body.
+          {emptyMessage}
         </p>
       ) : null}
 
@@ -119,7 +126,13 @@ export function ContentBlockEditor({
             </div>
             <BlockFields
               block={block}
+              showContextNote={
+                showContextNotes && DATA_BLOCK_TYPES.has(block.type)
+              }
               onChange={(data) => updateBlockData(block.localId, data)}
+              onContextNoteChange={(context_note) =>
+                updateBlock(block.localId, { context_note })
+              }
             />
           </div>
         ))}
@@ -130,12 +143,43 @@ export function ContentBlockEditor({
 
 function BlockFields({
   block,
+  showContextNote = false,
   onChange,
+  onContextNoteChange,
 }: {
   block: EditorContentBlock;
+  showContextNote?: boolean;
   onChange: (data: Record<string, unknown>) => void;
+  onContextNoteChange?: (contextNote: string) => void;
 }) {
   const data = block.data;
+
+  function withContextNoteField(content: ReactNode) {
+    if (!showContextNote || !onContextNoteChange) {
+      return content;
+    }
+    return (
+      <div className="space-y-3">
+        {content}
+        <div className="space-y-1">
+          <label
+            htmlFor={`context-note-${block.localId}`}
+            className="text-sm font-medium text-foreground"
+          >
+            Context note *
+          </label>
+          <textarea
+            id={`context-note-${block.localId}`}
+            rows={2}
+            value={block.context_note ?? ""}
+            onChange={(event) => onContextNoteChange(event.target.value)}
+            className="w-full rounded-lg border border-border-strong px-3 py-2 text-sm"
+            placeholder="e.g. Informal poll of about 40 people in my life, not a scientific study."
+          />
+        </div>
+      </div>
+    );
+  }
 
   if (block.type === "paragraph") {
     return (
@@ -175,13 +219,13 @@ function BlockFields({
     const points = Array.isArray(data.points)
       ? (data.points as Array<{ label: string; value: number }>)
       : [];
-    return (
+    return withContextNoteField(
       <ChartLikeEditor
         data={data}
         points={points}
         onChange={onChange}
         pointLabel="Point label"
-      />
+      />,
     );
   }
 
@@ -189,14 +233,14 @@ function BlockFields({
     const segments = Array.isArray(data.segments)
       ? (data.segments as Array<{ label: string; value: number }>)
       : [];
-    return (
+    return withContextNoteField(
       <ChartLikeEditor
         data={data}
         points={segments}
         onChange={onChange}
         pointLabel="Segment label"
         pointsKey="segments"
-      />
+      />,
     );
   }
 
@@ -205,7 +249,7 @@ function BlockFields({
     : [""];
   const rows = Array.isArray(data.rows) ? (data.rows as string[][]) : [[""]];
 
-  return (
+  return withContextNoteField(
     <div className="space-y-2">
       <input
         value={String(data.caption ?? "")}
@@ -246,7 +290,7 @@ function BlockFields({
       >
         Add row
       </button>
-    </div>
+    </div>,
   );
 }
 

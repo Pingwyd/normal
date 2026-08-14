@@ -28,6 +28,12 @@ const NAV_ITEMS = [
   },
   { href: "/admin/quotes", label: "Quotes", matchPrefix: "/admin/quotes" },
   {
+    href: "/admin/reflections",
+    label: "Reflections",
+    matchPrefix: "/admin/reflections",
+    founderOnly: true as const,
+  },
+  {
     href: "/admin/submissions",
     label: "Submissions",
     matchPrefix: "/admin/submissions",
@@ -61,7 +67,9 @@ export function AdminNav({ displayName, role }: AdminNavProps) {
           </p>
         </div>
         <nav className="flex flex-wrap items-center gap-2" aria-label="Admin">
-          {NAV_ITEMS.map((item) => {
+          {NAV_ITEMS.filter(
+            (item) => !item.founderOnly || role === "founder",
+          ).map((item) => {
             const isActive =
               item.href === "/admin/cards"
                 ? pathname === "/admin/cards" ||
@@ -76,8 +84,12 @@ export function AdminNav({ displayName, role }: AdminNavProps) {
                     ? pathname === "/admin/quotes" ||
                       (pathname.startsWith("/admin/quotes/") &&
                         !pathname.startsWith("/admin/quotes/new"))
-                    : pathname === item.href ||
-                      pathname.startsWith(`${item.matchPrefix}/`);
+                    : item.href === "/admin/reflections"
+                      ? pathname === "/admin/reflections" ||
+                        (pathname.startsWith("/admin/reflections/") &&
+                          !pathname.startsWith("/admin/reflections/new"))
+                      : pathname === item.href ||
+                        pathname.startsWith(`${item.matchPrefix}/`);
             return (
               <Link
                 key={item.href}
@@ -99,6 +111,15 @@ export function AdminNav({ displayName, role }: AdminNavProps) {
             <Plus size={16} aria-hidden="true" />
             New card
           </Link>
+          {role === "founder" ? (
+            <Link
+              href="/admin/reflections/new"
+              className="inline-flex items-center gap-1 rounded-full border border-sage-dark bg-surface px-4 py-2 text-sm font-medium text-sage-dark hover:bg-sage-dark hover:text-white"
+            >
+              <Plus size={16} aria-hidden="true" />
+              New reflection
+            </Link>
+          ) : null}
           <button
             type="button"
             onClick={handleLogout}

@@ -2,13 +2,20 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 type AdminListPageSkeletonProps = {
   variant:
-    "cards" | "affirmations" | "quotes" | "submissions" | "issues" | "due";
+    | "cards"
+    | "affirmations"
+    | "quotes"
+    | "reflections"
+    | "submissions"
+    | "issues"
+    | "due";
 };
 
 const FILTER_COUNTS: Record<AdminListPageSkeletonProps["variant"], number> = {
   cards: 4,
   affirmations: 3,
   quotes: 3,
+  reflections: 3,
   submissions: 5,
   issues: 4,
   due: 3,
@@ -17,7 +24,10 @@ const FILTER_COUNTS: Record<AdminListPageSkeletonProps["variant"], number> = {
 export function AdminListPageSkeleton({ variant }: AdminListPageSkeletonProps) {
   const filterCount = FILTER_COUNTS[variant];
   const showCreateButton =
-    variant === "affirmations" || variant === "quotes" || variant === "cards";
+    variant === "affirmations" ||
+    variant === "quotes" ||
+    variant === "reflections" ||
+    variant === "cards";
 
   return (
     <div className="space-y-6">
@@ -43,7 +53,7 @@ export function AdminListPageSkeleton({ variant }: AdminListPageSkeletonProps) {
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="min-w-0 flex-1 space-y-2">
                 <Skeleton className="h-5 w-full max-w-xl" />
-                {variant === "cards" || variant === "due" ? (
+                {variant === "cards" || variant === "due" || variant === "reflections" ? (
                   <Skeleton className="h-4 w-2/3 max-w-md" />
                 ) : null}
                 {variant === "quotes" ? (
