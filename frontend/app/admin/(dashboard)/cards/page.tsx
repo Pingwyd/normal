@@ -27,12 +27,20 @@ export default async function AdminCardsPage({
             Create, edit, and publish card content.
           </p>
         </div>
-        <Link
-          href="/admin/cards/import"
-          className="rounded-full border border-sage-dark bg-surface px-4 py-2 text-sm font-medium text-sage-dark hover:bg-sage-dark hover:text-white"
-        >
-          Import draft
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href="/admin/cards/import"
+            className="rounded-full border border-sage-dark bg-surface px-4 py-2 text-sm font-medium text-sage-dark hover:bg-sage-dark hover:text-white"
+          >
+            Import draft
+          </Link>
+          <Link
+            href="/admin/research"
+            className="rounded-full border border-border-strong bg-surface px-4 py-2 text-sm font-medium text-sage-dark hover:border-sage"
+          >
+            AI research
+          </Link>
+        </div>
       </div>
 
       <div

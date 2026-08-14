@@ -22,6 +22,12 @@ const NAV_ITEMS = [
     matchPrefix: "/admin/cards/due",
   },
   {
+    href: "/admin/research",
+    label: "AI research",
+    matchPrefix: "/admin/research",
+    founderOnly: true as const,
+  },
+  {
     href: "/admin/affirmations",
     label: "Affirmations",
     matchPrefix: "/admin/affirmations",
