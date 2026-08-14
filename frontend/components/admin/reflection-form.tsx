@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { ContentBlockEditor } from "@/components/admin/content-block-editor";
+import { SelectField } from "@/components/ui/select-field";
 import {
   createReflectionAction,
   updateReflectionAction,
@@ -174,22 +175,23 @@ export function ReflectionForm({
             className="w-full rounded-lg border border-border-strong px-3 py-2 text-sm"
           />
         </div>
-        <div className="space-y-2">
-          <label htmlFor="reflection-format" className="text-sm font-medium">
-            Format *
-          </label>
-          <select
-            id="reflection-format"
-            value={format}
-            onChange={(event) =>
-              setFormat(event.target.value as "short" | "long")
-            }
-            className="w-full rounded-lg border border-border-strong px-3 py-2 text-sm"
-          >
-            <option value="short">Short (brief is the full content)</option>
-            <option value="long">Long (body in content blocks)</option>
-          </select>
-        </div>
+        <SelectField
+          id="reflection-format"
+          label="Format"
+          required
+          value={format}
+          onChange={(value) => setFormat(value as "short" | "long")}
+          options={[
+            {
+              value: "short",
+              label: "Short (brief is the full content)",
+            },
+            {
+              value: "long",
+              label: "Long (body in content blocks)",
+            },
+          ]}
+        />
       </div>
 
       <div className="space-y-2">
