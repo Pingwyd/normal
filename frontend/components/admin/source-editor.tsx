@@ -2,6 +2,8 @@
 
 import { Trash2 } from "lucide-react";
 
+import { DateField } from "@/components/ui/date-field";
+import { SelectField } from "@/components/ui/select-field";
 import {
   type EditorSource,
   defaultSource,
@@ -100,28 +102,23 @@ export function SourceEditor({ sources, onChange }: SourceEditorProps) {
                 className="rounded-lg border border-border-strong px-3 py-2 text-sm"
                 placeholder="URL"
               />
-              <select
+              <SelectField
+                variant="compact"
+                aria-label={`Source ${index + 1} tier`}
                 value={source.tier}
-                onChange={(event) =>
-                  updateSource(source.localId, { tier: event.target.value })
-                }
-                className="rounded-lg border border-border-strong px-3 py-2 text-sm"
-              >
-                {SOURCE_TIERS.map((tier) => (
-                  <option key={tier} value={tier}>
-                    {getSourceTierLabel(tier)}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="date"
+                onChange={(tier) => updateSource(source.localId, { tier })}
+                options={SOURCE_TIERS.map((tier) => ({
+                  value: tier,
+                  label: getSourceTierLabel(tier),
+                }))}
+              />
+              <DateField
+                variant="compact"
+                aria-label={`Source ${index + 1} accessed date`}
                 value={source.accessed_date}
-                onChange={(event) =>
-                  updateSource(source.localId, {
-                    accessed_date: event.target.value,
-                  })
+                onChange={(accessed_date) =>
+                  updateSource(source.localId, { accessed_date })
                 }
-                className="rounded-lg border border-border-strong px-3 py-2 text-sm"
               />
             </div>
           </div>

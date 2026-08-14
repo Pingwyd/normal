@@ -218,6 +218,51 @@ export async function fetchAdminQuote(quoteId: string) {
   return adminApiRequest<AdminQuoteDetail>(`/v1/admin/quotes/${quoteId}`);
 }
 
+export type AdminReflectionListItem = {
+  id: string;
+  title: string;
+  slug: string;
+  brief: string;
+  format: "short" | "long";
+  status: "draft" | "published";
+  is_crisis_adjacent: boolean;
+  updated_at: string;
+};
+
+export type AdminReflectionDetail = {
+  id: string;
+  title: string;
+  slug: string;
+  brief: string;
+  format: "short" | "long";
+  status: "draft" | "published";
+  is_crisis_adjacent: boolean;
+  published_at: string | null;
+  tag_ids: string[];
+  reflection_blocks: Array<{
+    id: string;
+    position: number;
+    type: string;
+    data: Record<string, unknown>;
+    context_note: string | null;
+  }>;
+  created_at: string;
+  updated_at: string;
+};
+
+export async function fetchAdminReflections(status?: string) {
+  const query = status ? `?status=${encodeURIComponent(status)}` : "";
+  return adminApiRequest<AdminReflectionListItem[]>(
+    `/v1/admin/reflections${query}`,
+  );
+}
+
+export async function fetchAdminReflection(reflectionId: string) {
+  return adminApiRequest<AdminReflectionDetail>(
+    `/v1/admin/reflections/${reflectionId}`,
+  );
+}
+
 export type AdminAnalyticsTopSavedCard = {
   card_id: string;
   question: string;

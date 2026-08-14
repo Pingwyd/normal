@@ -5,6 +5,7 @@ import { SiteMobileNav } from "@/components/layout/site-mobile-nav";
 
 const DESKTOP_LINKS = [
   { href: "/", label: "Browse" },
+  { href: "/reflections", label: "Reflections" },
   { href: "/affirmations", label: "Affirmations" },
   { href: "/quotes", label: "Quotes" },
   { href: "/suggest", label: "Submit a question" },

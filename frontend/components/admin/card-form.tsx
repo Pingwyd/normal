@@ -6,6 +6,7 @@ import { useState } from "react";
 
 import { ContentBlockEditor } from "@/components/admin/content-block-editor";
 import { SourceEditor } from "@/components/admin/source-editor";
+import { SelectField } from "@/components/ui/select-field";
 import {
   createCardAction,
   updateCardAction,
@@ -182,21 +183,17 @@ export function CardForm({
               className="mt-1 w-full rounded-lg border border-border-strong px-3 py-2"
             />
           </label>
-          <label className="block text-sm">
-            Category
-            <select
-              required
-              value={categoryId}
-              onChange={(event) => setCategoryId(event.target.value)}
-              className="mt-1 w-full rounded-lg border border-border-strong px-3 py-2"
-            >
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-          </label>
+          <SelectField
+            id="card-category"
+            label="Category"
+            required
+            value={categoryId}
+            onChange={setCategoryId}
+            options={categories.map((category) => ({
+              value: category.id,
+              label: category.name,
+            }))}
+          />
           <fieldset>
             <legend className="text-sm font-medium">Tags</legend>
             <div className="mt-2 flex flex-wrap gap-3">

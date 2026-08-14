@@ -172,7 +172,10 @@ def test_create_admin_reflection_accepts_chart_with_context_note() -> None:
 
         client_mock.table.side_effect = table_router
 
-        limit_execute = reflections_table.select.return_value.eq.return_value.limit.return_value.execute
+        limit_query = (
+            reflections_table.select.return_value.eq.return_value.limit.return_value
+        )
+        limit_execute = limit_query.execute
         limit_execute.side_effect = [
             MagicMock(data=[]),
             MagicMock(data=[_sample_reflection_row()]),
@@ -192,7 +195,9 @@ def test_create_admin_reflection_accepts_chart_with_context_note() -> None:
         reflection_blocks_table.insert.return_value.execute.return_value = MagicMock(
             data=[]
         )
-        blocks_select_execute = reflection_blocks_table.select.return_value.eq.return_value.order.return_value.execute
+        blocks_select = reflection_blocks_table.select.return_value
+        blocks_order_query = blocks_select.eq.return_value.order.return_value
+        blocks_select_execute = blocks_order_query.execute
         blocks_select_execute.return_value = MagicMock(
             data=[
                 {
@@ -250,7 +255,10 @@ def test_create_admin_reflection_allows_paragraph_without_context_note() -> None
 
         client_mock.table.side_effect = table_router
 
-        limit_execute = reflections_table.select.return_value.eq.return_value.limit.return_value.execute
+        limit_query = (
+            reflections_table.select.return_value.eq.return_value.limit.return_value
+        )
+        limit_execute = limit_query.execute
         limit_execute.side_effect = [
             MagicMock(data=[]),
             MagicMock(data=[_sample_reflection_row()]),
@@ -270,7 +278,9 @@ def test_create_admin_reflection_allows_paragraph_without_context_note() -> None
         reflection_blocks_table.insert.return_value.execute.return_value = MagicMock(
             data=[]
         )
-        blocks_select_execute = reflection_blocks_table.select.return_value.eq.return_value.order.return_value.execute
+        blocks_select = reflection_blocks_table.select.return_value
+        blocks_order_query = blocks_select.eq.return_value.order.return_value
+        blocks_select_execute = blocks_order_query.execute
         blocks_select_execute.return_value = MagicMock(
             data=[
                 {

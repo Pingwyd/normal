@@ -73,6 +73,7 @@ class Settings:
     vapid_private_key: str | None
     vapid_public_key: str | None
     vapid_contact_email: str | None
+    research_credentials_encryption_key: str | None
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -92,6 +93,9 @@ class Settings:
         vapid_private_key = os.getenv("VAPID_PRIVATE_KEY") or None
         vapid_public_key = os.getenv("VAPID_PUBLIC_KEY") or None
         vapid_contact_email = os.getenv("VAPID_CONTACT_EMAIL") or None
+        research_credentials_encryption_key = (
+            os.getenv("RESEARCH_CREDENTIALS_ENCRYPTION_KEY") or None
+        )
 
         if not supabase_url or not supabase_service_role_key:
             msg = "SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set"
@@ -115,6 +119,7 @@ class Settings:
             vapid_private_key=vapid_private_key,
             vapid_public_key=vapid_public_key,
             vapid_contact_email=vapid_contact_email,
+            research_credentials_encryption_key=research_credentials_encryption_key,
         )
 
 
