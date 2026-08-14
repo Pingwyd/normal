@@ -5,7 +5,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { DraftMissingTagsDialog } from "@/components/admin/draft-missing-tags-dialog";
 import { SelectField } from "@/components/ui/select-field";
+import { findMissingDraftTags } from "@/lib/admin/draft-tags";
 import {
   createDraftFromResearchJobAction,
   deleteResearchProviderKeyAction,
@@ -18,9 +20,13 @@ import {
 
 type CardResearchPanelProps = {
   initialProviders: ResearchProviderOption[];
+  existingTagNames: string[];
 };
 
-export function CardResearchPanel({ initialProviders }: CardResearchPanelProps) {
+export function CardResearchPanel({
+  initialProviders,
+  existingTagNames,
+}: CardResearchPanelProps) {
   const router = useRouter();
   const [providers, setProviders] =
     useState<ResearchProviderOption[]>(initialProviders);
@@ -32,6 +38,41 @@ export function CardResearchPanel({ initialProviders }: CardResearchPanelProps) 
   const [isSavingKey, setIsSavingKey] = useState(false);
   const [isStarting, setIsStarting] = useState(false);
   const [isCreatingDraft, setIsCreatingDraft] = useState(false);
+  const [missingTags, setMissingTags] = useState<string[]>([]);
+  const [showTagDialog, setShowTagDialog] = useState(false);
+
+  function readSuggestedTags(job: ResearchJob): string[] {
+    if (!job.result || typeof job.result !== "object") {
+      return [];
+    }
+    const suggested = (job.result as Record<string, unknown>).suggested_tags;
+    if (!Array.isArray(suggested)) {
+      return [];
+    }
+    return suggested.filter((tag): tag is string => typeof tag === "string");
+  }
+
+  async function runCreateDraft(createMissingTags: boolean) {
+    if (!activeJob) {
+      return;
+    }
+
+    setIsCreatingDraft(true);
+    const result = await createDraftFromResearchJobAction(activeJob.id, {
+      createMissingTags,
+    });
+    setIsCreatingDraft(false);
+
+    if (!result.ok) {
+      setError(result.message);
+      return;
+    }
+
+    setShowTagDialog(false);
+    setMissingTags([]);
+    router.push(`/admin/cards/${result.cardId}`);
+    router.refresh();
+  }
 
   const selectedProvider = useMemo(
     () => providers.find((item) => item.provider === provider) ?? null,
@@ -153,17 +194,19 @@ export function CardResearchPanel({ initialProviders }: CardResearchPanelProps) 
       return;
     }
     setError(null);
-    setIsCreatingDraft(true);
-    const result = await createDraftFromResearchJobAction(activeJob.id);
-    setIsCreatingDraft(false);
 
-    if (!result.ok) {
-      setError(result.message);
+    const missing = findMissingDraftTags(
+      readSuggestedTags(activeJob),
+      existingTagNames,
+    );
+
+    if (missing.length > 0) {
+      setMissingTags(missing);
+      setShowTagDialog(true);
       return;
     }
 
-    router.push(`/admin/cards/${result.cardId}`);
-    router.refresh();
+    await runCreateDraft(false);
   }
 
   return (
@@ -325,6 +368,19 @@ export function CardResearchPanel({ initialProviders }: CardResearchPanelProps) 
       >
         Or import a Cursor draft JSON file instead
       </Link>
+
+      <DraftMissingTagsDialog
+        isOpen={showTagDialog}
+        missingTags={missingTags}
+        isSubmitting={isCreatingDraft}
+        onConfirm={() => {
+          void runCreateDraft(true);
+        }}
+        onCancel={() => {
+          setShowTagDialog(false);
+          setMissingTags([]);
+        }}
+      />
     </div>
   );
 }

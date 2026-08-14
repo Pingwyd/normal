@@ -7,6 +7,7 @@ from app.auth.dependencies import require_role
 from app.auth.models import AdminContext, AdminRole
 from app.core.responses import success_envelope
 from app.research.admin_schemas import (
+    CreateDraftFromJobRequest,
     CreateResearchJobRequest,
     SaveProviderCredentialRequest,
 )
@@ -80,6 +81,11 @@ async def get_research_job_route(
 async def create_draft_from_research_job_route(
     job_id: UUID,
     admin: Annotated[AdminContext, Depends(require_founder)],
+    payload: CreateDraftFromJobRequest = CreateDraftFromJobRequest(),
 ) -> dict:
-    card = create_draft_from_job(admin, job_id)
+    card = create_draft_from_job(
+        admin,
+        job_id,
+        create_missing_tags=payload.create_missing_tags,
+    )
     return success_envelope(card.model_dump(mode="json"))

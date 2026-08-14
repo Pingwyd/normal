@@ -1,10 +1,14 @@
 import { CardResearchPanel } from "@/components/admin/card-research-panel";
 import { requireFounderSession } from "@/lib/admin/api";
+import { fetchAdminTags } from "@/lib/admin/queries";
 import { fetchResearchProvidersAction } from "@/lib/admin/research-actions";
 
 export default async function AdminResearchPage() {
   await requireFounderSession();
-  const providers = await fetchResearchProvidersAction();
+  const [providers, tags] = await Promise.all([
+    fetchResearchProvidersAction(),
+    fetchAdminTags(),
+  ]);
 
   if (!Array.isArray(providers)) {
     return (
@@ -26,7 +30,10 @@ export default async function AdminResearchPage() {
           as draft cards for source-by-source review.
         </p>
       </div>
-      <CardResearchPanel initialProviders={providers} />
+      <CardResearchPanel
+        initialProviders={providers}
+        existingTagNames={tags.map((tag) => tag.name)}
+      />
     </div>
   );
 }

@@ -25,8 +25,8 @@ from app.content.affirmations_service import (
     update_admin_affirmation,
 )
 from app.content.daily_content_schemas import DailyContentStatus
-from app.content.draft_import_schemas import CardDraftImport
-from app.content.draft_import_service import import_card_draft
+from app.content.draft_import_schemas import CardDraftImport, CardDraftImportRequest
+from app.content.draft_import_service import find_missing_tag_names, import_card_draft
 from app.content.quotes_schemas import AdminQuoteCreate, AdminQuoteUpdate
 from app.content.quotes_service import (
     create_admin_quote,
@@ -92,12 +92,25 @@ async def create_card_route(
     return success_envelope(card.model_dump(mode="json"))
 
 
+@router.post("/cards/import-draft/preview")
+async def preview_card_draft_import_route(
+    payload: CardDraftImport,
+    _admin: Annotated[AdminContext, Depends(require_admin)],
+) -> dict:
+    missing_tags = find_missing_tag_names(payload.suggested_tags)
+    return success_envelope({"missing_tags": missing_tags})
+
+
 @router.post("/cards/import-draft")
 async def import_card_draft_route(
-    payload: CardDraftImport,
+    payload: CardDraftImportRequest,
     admin: Annotated[AdminContext, Depends(require_admin)],
 ) -> dict:
-    card = import_card_draft(admin, payload)
+    card = import_card_draft(
+        admin,
+        payload,
+        create_missing_tags=payload.create_missing_tags,
+    )
     return success_envelope(card.model_dump(mode="json"))
 
 

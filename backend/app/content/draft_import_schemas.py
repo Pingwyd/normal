@@ -1,6 +1,16 @@
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.content.admin_schemas import ContentBlockInput, SourceInput
+from app.content.admin_schemas import SourceInput
+
+
+class DraftContentBlockInput(BaseModel):
+    """Draft JSON block: position is optional and assigned at import time."""
+
+    model_config = ConfigDict(extra="ignore")
+
+    type: str = Field(min_length=1)
+    data: dict = Field(default_factory=dict)
+    position: int | None = Field(default=None, ge=1)
 
 
 class CardDraftImport(BaseModel):
@@ -13,5 +23,11 @@ class CardDraftImport(BaseModel):
     suggested_category: str = Field(min_length=1)
     suggested_tags: list[str] = Field(default_factory=list)
     slug: str | None = Field(default=None, min_length=1)
-    content_blocks: list[ContentBlockInput] = Field(default_factory=list)
+    content_blocks: list[DraftContentBlockInput] = Field(default_factory=list)
     sources: list[SourceInput] = Field(default_factory=list)
+
+
+class CardDraftImportRequest(CardDraftImport):
+    """Import request body; may create tags when explicitly confirmed."""
+
+    create_missing_tags: bool = False

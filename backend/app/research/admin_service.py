@@ -170,7 +170,12 @@ def get_research_job(admin: AdminContext, job_id: UUID) -> dict:
     return _job_row_to_dict(response.data[0])
 
 
-def create_draft_from_job(admin: AdminContext, job_id: UUID) -> AdminCardResponse:
+def create_draft_from_job(
+    admin: AdminContext,
+    job_id: UUID,
+    *,
+    create_missing_tags: bool = False,
+) -> AdminCardResponse:
     job = get_research_job(admin, job_id)
     if job["status"] != "complete" or not job.get("result"):
         raise validation_error(
@@ -178,7 +183,11 @@ def create_draft_from_job(admin: AdminContext, job_id: UUID) -> AdminCardRespons
         )
 
     draft = CardDraftImport.model_validate(job["result"])
-    return import_card_draft(admin, draft)
+    return import_card_draft(
+        admin,
+        draft,
+        create_missing_tags=create_missing_tags,
+    )
 
 
 def execute_research_job(job_id: UUID, admin_id: UUID) -> None:

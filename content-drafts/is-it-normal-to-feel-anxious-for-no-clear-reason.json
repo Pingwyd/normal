@@ -1,0 +1,116 @@
+{
+  "question": "Is it normal to feel anxious for no clear reason?",
+  "suggested_category": "mind-emotions",
+  "suggested_tags": ["anxiety", "stress"],
+  "brief": "Yes, it's normal sometimes. If it lasts months, feels unmanageable, or gets in the way of daily life, that's worth checking out.",
+  "content_blocks": [
+    {
+      "type": "paragraph",
+      "data": {
+        "text": "Anxiety is your body's built-in reaction to stress, and health authorities note it can show up even when there's no current threat in front of you. So having moments where you feel on edge, uneasy, or worried without being able to point to a reason is a normal part of being human, not a sign that something is broken."
+      }
+    },
+    {
+      "type": "paragraph",
+      "data": {
+        "text": "There's even a name clinicians sometimes use for this: 'free-floating anxiety,' meaning worry or dread that isn't attached to a specific situation. It's worth knowing this is a descriptive term, not an official diagnosis. Occasional anxiety like this is different from an anxiety disorder, which is about how often, how intensely, and how long the feeling lasts."
+      }
+    },
+    {
+      "type": "paragraph",
+      "data": {
+        "text": "The honest line most health bodies draw is this: feeling anxious now and then is expected, but anxiety that is present most days for six months or more, feels difficult to control, is out of proportion to what's happening, and interferes with school, work, or relationships may point to generalized anxiety disorder (GAD). With GAD, the worry often doesn't have an obvious cause, which is part of what makes it hard to shake."
+      }
+    },
+    {
+      "type": "paragraph",
+      "data": {
+        "text": "For perspective: everyday anxiety is nearly universal, but the diagnosable disorder version is much less common. Cleveland Clinic reports that GAD affects about 3% of U.S. adults at any given time and about 5% of people at some point in their lives, and that fewer than half of those affected are currently receiving treatment for it."
+      }
+    },
+    {
+      "type": "chart",
+      "data": {
+        "title": "Generalized anxiety disorder prevalence in U.S. adults",
+        "y_label": "%",
+        "points": [
+          { "label": "At any given time (current)", "value": 3 },
+          { "label": "At some point in life (lifetime)", "value": 5 }
+        ]
+      }
+    },
+    {
+      "type": "pie_chart",
+      "data": {
+        "title": "Are people with GAD receiving treatment?",
+        "segments": [
+          { "label": "Receiving treatment", "value": 43 },
+          { "label": "Not receiving treatment", "value": 57 }
+        ]
+      }
+    },
+    {
+      "type": "quote_callout",
+      "data": {
+        "text": "Occasional anxiety is a normal part of life... Anxiety is the body's reaction to stress and can occur even if there is no current threat.",
+        "attribution": "National Institute of Mental Health (NIMH)"
+      }
+    },
+    {
+      "type": "paragraph",
+      "data": {
+        "text": "So: normal in small, passing doses, yes. But you don't have to just white-knuckle it if it's constant. If anxiety keeps showing up for no clear reason and it's wearing you down or getting in the way of your daily life, that's a good reason to talk to a doctor or a mental health professional. And if you ever have thoughts of harming yourself, treat that as urgent and reach out for immediate help."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "title": "Generalized Anxiety Disorder: What You Need to Know",
+      "author_or_org": "National Institute of Mental Health (NIMH)",
+      "url": "https://www.nimh.nih.gov/health/publications/generalized-anxiety-disorder-gad",
+      "tier": "expert_written",
+      "published_date": null,
+      "accessed_date": "2026-08-14"
+    },
+    {
+      "title": "Generalised anxiety disorder (GAD)",
+      "author_or_org": "NHS (UK National Health Service)",
+      "url": "https://www.nhs.uk/mental-health/conditions/generalised-anxiety-disorder-gad/",
+      "tier": "expert_written",
+      "published_date": "2024-10-22",
+      "accessed_date": "2026-08-14"
+    },
+    {
+      "title": "Generalised anxiety disorder (GAD)",
+      "author_or_org": "NHS inform (NHS Scotland)",
+      "url": "https://www.nhsinform.scot/illnesses-and-conditions/mental-health/generalised-anxiety-disorder-gad/",
+      "tier": "expert_written",
+      "published_date": "2026-07-06",
+      "accessed_date": "2026-08-14"
+    },
+    {
+      "title": "Generalized anxiety disorder - Symptoms and causes",
+      "author_or_org": "Mayo Clinic",
+      "url": "https://www.mayoclinic.org/diseases-conditions/generalized-anxiety-disorder/symptoms-causes/syc-20360803",
+      "tier": "expert_written",
+      "published_date": "2026-05-27",
+      "accessed_date": "2026-08-14"
+    },
+    {
+      "title": "Generalized Anxiety Disorder (GAD): Symptoms & Treatment",
+      "author_or_org": "Cleveland Clinic",
+      "url": "https://my.clevelandclinic.org/health/diseases/23940-generalized-anxiety-disorder-gad",
+      "tier": "expert_written",
+      "published_date": "2025-05-20",
+      "accessed_date": "2026-08-14"
+    },
+    {
+      "title": "Generalized Anxiety Disorder",
+      "author_or_org": "Merck Manual Professional Edition (John W. Barnhill, MD)",
+      "url": "https://www.merckmanuals.com/professional/psychiatric-disorders/anxiety-and-trauma-and-stressor-related-disorders/generalized-anxiety-disorder",
+      "tier": "expert_written",
+      "published_date": null,
+      "accessed_date": "2026-08-14"
+    }
+  ]
+}
