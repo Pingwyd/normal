@@ -12,7 +12,7 @@ export type CardDraftImportPayload = {
   suggested_tags?: string[];
   slug?: string;
   content_blocks?: Array<{
-    position: number;
+    position?: number;
     type: string;
     data: Record<string, unknown>;
   }>;
@@ -33,13 +33,17 @@ export type ImportCardDraftResult =
 
 export async function importCardDraftAction(
   payload: CardDraftImportPayload,
+  options?: { createMissingTags?: boolean },
 ): Promise<ImportCardDraftResult> {
   try {
     const card = await adminApiRequest<{ id: string }>(
       "/v1/admin/cards/import-draft",
       {
         method: "POST",
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          ...payload,
+          create_missing_tags: options?.createMissingTags ?? false,
+        }),
       },
     );
     revalidatePath("/admin/cards");

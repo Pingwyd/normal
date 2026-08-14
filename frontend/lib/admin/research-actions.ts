@@ -111,11 +111,17 @@ export async function fetchResearchJobAction(jobId: string): Promise<JobResult> 
 
 export async function createDraftFromResearchJobAction(
   jobId: string,
+  options?: { createMissingTags?: boolean },
 ): Promise<DraftResult> {
   try {
     const card = await adminApiRequest<{ id: string }>(
       `/v1/admin/research/jobs/${jobId}/create-draft`,
-      { method: "POST" },
+      {
+        method: "POST",
+        body: JSON.stringify({
+          create_missing_tags: options?.createMissingTags ?? false,
+        }),
+      },
     );
     revalidatePath("/admin/cards");
     return { ok: true, cardId: card.id };

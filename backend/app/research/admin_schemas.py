@@ -10,3 +10,7 @@ class SaveProviderCredentialRequest(BaseModel):
 class CreateResearchJobRequest(BaseModel):
     question: str = Field(min_length=1)
     provider: ResearchProvider
+
+
+class CreateDraftFromJobRequest(BaseModel):
+    create_missing_tags: bool = False

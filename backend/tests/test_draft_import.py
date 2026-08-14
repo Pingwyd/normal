@@ -8,6 +8,7 @@ from app.content.admin_schemas import CardStatus
 from app.content.draft_import_schemas import CardDraftImport
 from app.content.draft_import_service import (
     draft_import_to_admin_card_create,
+    find_missing_tag_names,
     import_card_draft,
 )
 from app.core.errors import ApiError
@@ -157,3 +158,143 @@ def test_import_draft_route_rejects_malformed_json() -> None:
 
     app.dependency_overrides.clear()
     assert response.status_code == 422
+    body = response.json()
+    assert body["error"]["code"] == "VALIDATION_ERROR"
+    assert body["data"] is None
+
+
+@patch("app.content.draft_import_service.get_supabase_client")
+def test_draft_import_auto_assigns_position_and_normalizes_charts(
+    mock_client: MagicMock,
+) -> None:
+    categories_table = _category_lookup_result(
+        [{"id": str(CATEGORY_ID), "requires_clinical_review": False}]
+    )
+    tags_table = MagicMock()
+    tags_table.select.return_value.execute.return_value = MagicMock(
+        data=[{"id": str(TAG_ID), "name": "anxiety"}]
+    )
+
+    def table(name: str) -> MagicMock:
+        if name == "categories":
+            return categories_table
+        if name == "tags":
+            return tags_table
+        raise AssertionError(f"Unexpected table: {name}")
+
+    mock_client.return_value.table.side_effect = table
+
+    draft = {
+        **VALID_DRAFT,
+        "suggested_tags": ["anxiety"],
+        "content_blocks": [
+            {"type": "paragraph", "data": {"text": "Intro."}},
+            {
+                "type": "chart",
+                "data": {
+                    "title": "Prevalence",
+                    "labels": ["Current", "Lifetime"],
+                    "values": [3, 5],
+                    "unit": "%",
+                },
+            },
+            {
+                "type": "pie_chart",
+                "data": {
+                    "title": "Treatment",
+                    "labels": ["Yes", "No"],
+                    "values": [43, 57],
+                },
+            },
+        ],
+    }
+
+    payload = draft_import_to_admin_card_create(CardDraftImport.model_validate(draft))
+
+    assert [block.position for block in payload.content_blocks] == [1, 2, 3]
+    chart = payload.content_blocks[1]
+    assert chart.type == "chart"
+    assert chart.data["points"] == [
+        {"label": "Current", "value": 3.0},
+        {"label": "Lifetime", "value": 5.0},
+    ]
+    assert chart.data["y_label"] == "%"
+    pie = payload.content_blocks[2]
+    assert pie.data["segments"] == [
+        {"label": "Yes", "value": 43.0},
+        {"label": "No", "value": 57.0},
+    ]
+
+
+@patch("app.content.draft_import_service.get_supabase_client")
+def test_find_missing_tag_names(mock_client: MagicMock) -> None:
+    tags_table = MagicMock()
+    tags_table.select.return_value.execute.return_value = MagicMock(
+        data=[{"id": str(TAG_ID), "name": "anxiety"}]
+    )
+    mock_client.return_value.table.return_value = tags_table
+
+    missing = find_missing_tag_names(["anxiety", "stress"])
+    assert missing == ["stress"]
+
+
+@patch("app.content.draft_import_service.create_tag")
+@patch("app.content.draft_import_service.get_supabase_client")
+def test_draft_import_creates_missing_tags_when_confirmed(
+    mock_client: MagicMock,
+    mock_create_tag: MagicMock,
+) -> None:
+    from datetime import UTC, datetime
+
+    from app.content.reference_schemas import TagResponse
+
+    stress_tag_id = UUID("88888888-8888-8888-8888-888888888888")
+    mock_create_tag.return_value = TagResponse(
+        id=stress_tag_id,
+        name="stress",
+        created_at=datetime.now(UTC),
+        updated_at=datetime.now(UTC),
+    )
+
+    categories_table = _category_lookup_result(
+        [{"id": str(CATEGORY_ID), "requires_clinical_review": False}]
+    )
+    tags_table = MagicMock()
+    tags_table.select.return_value.execute.return_value = MagicMock(
+        data=[{"id": str(TAG_ID), "name": "anxiety"}]
+    )
+
+    def table(name: str) -> MagicMock:
+        if name == "categories":
+            return categories_table
+        if name == "tags":
+            return tags_table
+        raise AssertionError(f"Unexpected table: {name}")
+
+    mock_client.return_value.table.side_effect = table
+
+    draft = CardDraftImport.model_validate(
+        {**VALID_DRAFT, "suggested_tags": ["anxiety", "stress"]}
+    )
+    payload = draft_import_to_admin_card_create(draft, create_missing_tags=True)
+
+    mock_create_tag.assert_called_once()
+    assert payload.tag_ids == [TAG_ID, stress_tag_id]
+
+
+def test_import_draft_preview_route_returns_missing_tags() -> None:
+    app.dependency_overrides[get_current_admin] = lambda: FOUNDER_CONTEXT
+
+    with patch(
+        "app.content.admin_router.find_missing_tag_names",
+        return_value=["stress"],
+    ):
+        response = client.post(
+            "/v1/admin/cards/import-draft/preview",
+            headers=AUTH_HEADER,
+            json=VALID_DRAFT,
+        )
+
+    app.dependency_overrides.clear()
+    assert response.status_code == 200
+    assert response.json()["data"]["missing_tags"] == ["stress"]
