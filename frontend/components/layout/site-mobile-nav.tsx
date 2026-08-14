@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react";
 
 const MOBILE_LINKS = [
   { href: "/", label: "Browse" },
+  { href: "/reflections", label: "Reflections" },
   { href: "/affirmations", label: "Affirmations" },
   { href: "/quotes", label: "Quotes" },
   { href: "/suggest", label: "Submit a question" },
