@@ -1,7 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
 type AdminFormPageSkeletonProps = {
-  variant: "card" | "affirmation" | "quote" | "submission" | "issue";
+  variant: "card" | "affirmation" | "quote" | "reflection" | "submission" | "issue";
 };
 
 export function AdminFormPageSkeleton({ variant }: AdminFormPageSkeletonProps) {
@@ -87,6 +87,38 @@ export function AdminFormPageSkeleton({ variant }: AdminFormPageSkeletonProps) {
               <Skeleton className="h-4 w-24" />
               <Skeleton className="h-11 w-full rounded-lg" />
             </div>
+          </>
+        ) : null}
+
+        {variant === "reflection" ? (
+          <>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-2 sm:col-span-2">
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-11 w-full rounded-lg" />
+              </div>
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-12" />
+                <Skeleton className="h-11 w-full rounded-lg" />
+              </div>
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-11 w-full rounded-lg" />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-12" />
+              <Skeleton className="h-28 w-full rounded-lg" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-12" />
+              <div className="flex flex-wrap gap-2">
+                {Array.from({ length: 4 }).map((_, index) => (
+                  <Skeleton key={index} className="h-8 w-20 rounded-full" />
+                ))}
+              </div>
+            </div>
+            <Skeleton className="h-32 w-full rounded-lg" />
           </>
         ) : null}
 
