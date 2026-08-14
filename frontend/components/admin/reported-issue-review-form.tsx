@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { SelectField } from "@/components/ui/select-field";
 import { updateReportedIssueAction } from "@/lib/admin/submission-actions";
 import type {
   AdminReportedIssue,
@@ -73,28 +74,16 @@ export function ReportedIssueReviewForm({
         </Link>
       </p>
 
-      <div>
-        <label
-          htmlFor="issue-status"
-          className="mb-1 block text-sm font-medium"
-        >
-          Status *
-        </label>
-        <select
-          id="issue-status"
-          value={status}
-          onChange={(event) =>
-            setStatus(event.target.value as AdminReportedIssueStatus)
-          }
-          className="w-full rounded-lg border border-border-strong bg-surface px-3 py-2 text-sm"
-        >
-          {STATUS_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </div>
+      <SelectField
+        id="issue-status"
+        label="Status"
+        required
+        value={status}
+        onChange={(nextValue) =>
+          setStatus(nextValue as AdminReportedIssueStatus)
+        }
+        options={STATUS_OPTIONS}
+      />
 
       <div>
         <label
