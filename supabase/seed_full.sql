@@ -371,6 +371,79 @@ VALUES (
     '{"context": "seed block demo"}'::jsonb
 );
 
+WITH inserted_reflection_short AS (
+    INSERT INTO reflections (
+        title,
+        slug,
+        brief,
+        format,
+        status,
+        published_at
+    )
+    VALUES (
+        'I thought this was just me',
+        'i-thought-this-was-just-me',
+        'For years I assumed I was the only person who replayed conversations on loop after social events. Talking to friends made it clear how common that habit is.',
+        'short',
+        'published',
+        NOW()
+    )
+    RETURNING id
+)
+INSERT INTO seed_ids (key, id)
+SELECT 'reflection_short', id FROM inserted_reflection_short;
+
+INSERT INTO reflection_tags (reflection_id, tag_id)
+VALUES (
+    (SELECT id FROM seed_ids WHERE key = 'reflection_short'),
+    (SELECT id FROM seed_ids WHERE key = 'tag')
+);
+
+WITH inserted_reflection_long AS (
+    INSERT INTO reflections (
+        title,
+        slug,
+        brief,
+        format,
+        status,
+        published_at
+    )
+    VALUES (
+        'What I learned from an informal poll',
+        'informal-poll-reflection',
+        'A longer piece about patterns I noticed after asking people in my life a few simple questions.',
+        'long',
+        'published',
+        NOW()
+    )
+    RETURNING id
+)
+INSERT INTO seed_ids (key, id)
+SELECT 'reflection_long', id FROM inserted_reflection_long;
+
+INSERT INTO reflection_tags (reflection_id, tag_id)
+VALUES (
+    (SELECT id FROM seed_ids WHERE key = 'reflection_long'),
+    (SELECT id FROM seed_ids WHERE key = 'tag')
+);
+
+INSERT INTO reflection_blocks (reflection_id, position, type, data, context_note)
+VALUES
+    (
+        (SELECT id FROM seed_ids WHERE key = 'reflection_long'),
+        1,
+        'paragraph',
+        '{"text": "I ran a small informal poll because I wanted to understand how people around me experience the same worry."}'::jsonb,
+        NULL
+    ),
+    (
+        (SELECT id FROM seed_ids WHERE key = 'reflection_long'),
+        2,
+        'chart',
+        '{"title": "How often do you replay conversations?", "x_label": "Response", "y_label": "Share of people", "points": [{"label": "Often", "value": 18}, {"label": "Sometimes", "value": 14}, {"label": "Rarely", "value": 8}]}'::jsonb,
+        'Informal poll of about 40 people in my life, not a scientific study.'
+    );
+
 COMMIT;
 
 SELECT key, id FROM seed_ids ORDER BY key;

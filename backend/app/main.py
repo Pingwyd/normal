@@ -13,6 +13,8 @@ from app.core.responses import error_envelope
 from app.favorites.router import router as favorites_router
 from app.notifications.admin_router import router as notifications_admin_router
 from app.notifications.router import router as notifications_router
+from app.reflections.admin_router import router as reflections_admin_router
+from app.reflections.router import router as reflections_router
 from app.submissions.admin_router import router as submissions_admin_router
 from app.submissions.router import router as submissions_router
 
@@ -40,6 +42,8 @@ app.include_router(notifications_router)
 app.include_router(notifications_admin_router)
 app.include_router(content_router)
 app.include_router(content_admin_router)
+app.include_router(reflections_router)
+app.include_router(reflections_admin_router)
 app.include_router(submissions_router)
 app.include_router(submissions_admin_router)
 app.include_router(analytics_admin_router)

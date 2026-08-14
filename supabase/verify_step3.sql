@@ -19,6 +19,9 @@ WITH expected_tables AS (
         'push_subscriptions',
         'quotes',
         'recovery_codes',
+        'reflection_blocks',
+        'reflection_tags',
+        'reflections',
         'reported_issues',
         'review_log',
         'sources',
@@ -84,6 +87,9 @@ UNION ALL SELECT 'newsletter_subscriptions', COUNT(*) FROM newsletter_subscripti
 UNION ALL SELECT 'push_subscriptions', COUNT(*) FROM push_subscriptions
 UNION ALL SELECT 'quotes', COUNT(*) FROM quotes
 UNION ALL SELECT 'recovery_codes', COUNT(*) FROM recovery_codes
+UNION ALL SELECT 'reflection_blocks', COUNT(*) FROM reflection_blocks
+UNION ALL SELECT 'reflection_tags', COUNT(*) FROM reflection_tags
+UNION ALL SELECT 'reflections', COUNT(*) FROM reflections
 UNION ALL SELECT 'reported_issues', COUNT(*) FROM reported_issues
 UNION ALL SELECT 'review_log', COUNT(*) FROM review_log
 UNION ALL SELECT 'sources', COUNT(*) FROM sources
