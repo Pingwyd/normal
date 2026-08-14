@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { SelectField } from "@/components/ui/select-field";
 import { updateSubmissionAction } from "@/lib/admin/submission-actions";
 import type {
   AdminCardListItem,
@@ -75,51 +76,34 @@ export function SubmissionReviewForm({
       onSubmit={handleSubmit}
       className="space-y-5 rounded-xl border border-border bg-surface p-6"
     >
-      <div>
-        <label
-          htmlFor="submission-status"
-          className="mb-1 block text-sm font-medium"
-        >
-          Status *
-        </label>
-        <select
-          id="submission-status"
-          value={status}
-          onChange={(event) =>
-            setStatus(event.target.value as AdminSubmissionStatus)
-          }
-          className="w-full rounded-lg border border-border-strong bg-surface px-3 py-2 text-sm"
-        >
-          {STATUS_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </div>
+      <SelectField
+        id="submission-status"
+        label="Status"
+        required
+        value={status}
+        onChange={(nextValue) =>
+          setStatus(nextValue as AdminSubmissionStatus)
+        }
+        options={STATUS_OPTIONS}
+      />
 
       {status === "published" ? (
         <div>
-          <label
-            htmlFor="resulting-card-id"
-            className="mb-1 block text-sm font-medium"
-          >
-            Published card *
-          </label>
-          <select
+          <SelectField
             id="resulting-card-id"
-            value={resultingCardId}
-            onChange={(event) => setResultingCardId(event.target.value)}
+            label="Published card"
             required
-            className="w-full rounded-lg border border-border-strong bg-surface px-3 py-2 text-sm"
-          >
-            <option value="">Select a card</option>
-            {cards.map((card) => (
-              <option key={card.id} value={card.id}>
-                {card.question}
-              </option>
-            ))}
-          </select>
+            value={resultingCardId}
+            onChange={setResultingCardId}
+            placeholder="Select a card"
+            options={[
+              { value: "", label: "Select a card", disabled: true },
+              ...cards.map((card) => ({
+                value: card.id,
+                label: card.question,
+              })),
+            ]}
+          />
           <p className="mt-1 text-xs text-muted">
             Publishing never auto-creates a card. Link the submission to an
             existing published card, or{" "}
