@@ -75,7 +75,8 @@ export function AdminNav({ displayName, role }: AdminNavProps) {
                 ? pathname === "/admin/cards" ||
                   (pathname.startsWith("/admin/cards/") &&
                     !pathname.startsWith("/admin/cards/due") &&
-                    !pathname.startsWith("/admin/cards/new"))
+                    !pathname.startsWith("/admin/cards/new") &&
+                    !pathname.startsWith("/admin/cards/import"))
                 : item.href === "/admin/affirmations"
                   ? pathname === "/admin/affirmations" ||
                     (pathname.startsWith("/admin/affirmations/") &&
