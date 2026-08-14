@@ -22,6 +22,7 @@ python -m venv .venv
 # Windows: .venv\Scripts\activate
 # macOS/Linux: source .venv/bin/activate
 pip install -r requirements-dev.txt
+# Copy .env.example to .env and fill in values (loaded automatically on startup)
 uvicorn app.main:app --reload
 ```
 

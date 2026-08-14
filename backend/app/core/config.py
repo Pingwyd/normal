@@ -1,10 +1,40 @@
 import os
 from dataclasses import dataclass
+from pathlib import Path
+
+_BACKEND_ROOT = Path(__file__).resolve().parents[2]
 
 _DEFAULT_CORS_ORIGINS = (
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 )
+
+
+def _read_env_text(path: Path) -> str:
+    raw = path.read_bytes()
+    if raw.startswith(b"\xff\xfe") or raw.startswith(b"\xfe\xff"):
+        return raw.decode("utf-16")
+    return raw.decode("utf-8-sig")
+
+
+def _load_env_file(path: Path) -> None:
+    if not path.is_file():
+        return
+
+    for line in _read_env_text(path).splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#") or "=" not in stripped:
+            continue
+        key, _, value = stripped.partition("=")
+        os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
+
+
+def _load_env_files() -> None:
+    for name in (".env", ".env.local"):
+        _load_env_file(_BACKEND_ROOT / name)
+
+
+_load_env_files()
 
 
 def _parse_cors_origins(raw_value: str | None = None) -> tuple[str, ...]:
