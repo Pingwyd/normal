@@ -12,6 +12,7 @@ export type EditorContentBlock = {
   localId: string;
   type: ContentBlockType;
   data: Record<string, unknown>;
+  context_note?: string;
 };
 
 export type EditorSource = {
@@ -81,6 +82,38 @@ export function blocksToPayload(blocks: EditorContentBlock[]) {
     type: block.type,
     data: block.data,
   }));
+}
+
+const DATA_BLOCK_TYPES = new Set<ContentBlockType>([
+  "chart",
+  "table",
+  "pie_chart",
+]);
+
+export function reflectionBlocksToPayload(blocks: EditorContentBlock[]) {
+  return blocks.map((block, index) => ({
+    position: index + 1,
+    type: block.type,
+    data: block.data,
+    context_note:
+      DATA_BLOCK_TYPES.has(block.type) && block.context_note?.trim()
+        ? block.context_note.trim()
+        : null,
+  }));
+}
+
+export function validateReflectionBlocksForPublish(
+  blocks: EditorContentBlock[],
+): string | null {
+  for (const block of blocks) {
+    if (
+      DATA_BLOCK_TYPES.has(block.type) &&
+      !block.context_note?.trim()
+    ) {
+      return `Each ${block.type.replaceAll("_", " ")} block needs a context note before publish (e.g. how the data was gathered).`;
+    }
+  }
+  return null;
 }
 
 export function getClinicalPublishMessage(role: string): string {

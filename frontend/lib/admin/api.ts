@@ -62,6 +62,14 @@ export async function requireAdminSession(): Promise<AdminSession> {
   return session;
 }
 
+export async function requireFounderSession(): Promise<AdminSession> {
+  const session = await requireAdminSession();
+  if (session.role !== "founder") {
+    redirect("/admin/cards");
+  }
+  return session;
+}
+
 export async function adminApiRequest<T>(
   path: string,
   init?: RequestInit,
