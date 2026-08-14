@@ -2,7 +2,9 @@ type CrisisResourceStripProps = {
   className?: string;
 };
 
-export function CrisisResourceStrip({ className = "" }: CrisisResourceStripProps) {
+export function CrisisResourceStrip({
+  className = "",
+}: CrisisResourceStripProps) {
   return (
     <div
       className={`flex flex-col gap-4 rounded-xl border border-border bg-surface px-5 py-4 sm:flex-row sm:items-center sm:justify-between ${className}`.trim()}

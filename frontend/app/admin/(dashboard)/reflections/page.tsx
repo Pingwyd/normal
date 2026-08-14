@@ -23,9 +23,7 @@ export default async function AdminReflectionsPage({
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl text-foreground">
-            Reflections
-          </h1>
+          <h1 className="font-display text-3xl text-foreground">Reflections</h1>
           <p className="text-sm text-muted">
             Founder personal reflections for the public Reflections section.
           </p>

@@ -76,7 +76,8 @@ function buildCalendarDays(viewDate: Date) {
   }
 
   while (cells.length % 7 !== 0) {
-    const last = cells[cells.length - 1]?.date ?? new Date(year, month, daysInMonth);
+    const last =
+      cells[cells.length - 1]?.date ?? new Date(year, month, daysInMonth);
     const next = new Date(last);
     next.setDate(last.getDate() + 1);
     cells.push({ date: next, inMonth: false });
@@ -157,7 +158,11 @@ export function DateField({
     if (disabled) {
       return;
     }
-    if (event.key === "Enter" || event.key === " " || event.key === "ArrowDown") {
+    if (
+      event.key === "Enter" ||
+      event.key === " " ||
+      event.key === "ArrowDown"
+    ) {
       event.preventDefault();
       openCalendar();
     }
@@ -193,7 +198,11 @@ export function DateField({
         }`}
       >
         <span className="inline-flex min-w-0 items-center gap-2 truncate">
-          <Calendar size={16} aria-hidden="true" className="shrink-0 text-sage" />
+          <Calendar
+            size={16}
+            aria-hidden="true"
+            className="shrink-0 text-sage"
+          />
           {formatDisplayDate(value, placeholder)}
         </span>
         <ChevronDown

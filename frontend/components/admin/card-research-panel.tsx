@@ -135,9 +135,7 @@ export function CardResearchPanel({
     if (result.provider) {
       setProviders((current) =>
         current.map((item) =>
-          item.provider === result.provider!.provider
-            ? result.provider!
-            : item,
+          item.provider === result.provider!.provider ? result.provider! : item,
         ),
       );
     }
@@ -214,11 +212,13 @@ export function CardResearchPanel({
       <section className="space-y-4 rounded-xl border border-border bg-surface p-6">
         <div className="flex items-center gap-2">
           <KeyRound size={18} className="text-sage-dark" aria-hidden="true" />
-          <h2 className="text-lg font-medium text-foreground">Provider and API key</h2>
+          <h2 className="text-lg font-medium text-foreground">
+            Provider and API key
+          </h2>
         </div>
         <p className="text-sm text-muted">
-          Keys are encrypted on the server and stored per provider. Switch providers
-          anytime; saved keys stay available when you switch back.
+          Keys are encrypted on the server and stored per provider. Switch
+          providers anytime; saved keys stay available when you switch back.
         </p>
 
         <SelectField
@@ -289,7 +289,9 @@ export function CardResearchPanel({
       <section className="space-y-4 rounded-xl border border-border bg-surface p-6">
         <div className="flex items-center gap-2">
           <Sparkles size={18} className="text-sage-dark" aria-hidden="true" />
-          <h2 className="text-lg font-medium text-foreground">Research question</h2>
+          <h2 className="text-lg font-medium text-foreground">
+            Research question
+          </h2>
         </div>
 
         <label className="block space-y-2 text-sm">
@@ -314,7 +316,9 @@ export function CardResearchPanel({
           {isStarting || activeJob?.status === "pending" ? (
             <Loader2 size={16} className="animate-spin" aria-hidden="true" />
           ) : null}
-          {activeJob?.status === "pending" ? "Researching..." : "Start research"}
+          {activeJob?.status === "pending"
+            ? "Researching..."
+            : "Start research"}
         </button>
       </section>
 
@@ -323,11 +327,15 @@ export function CardResearchPanel({
           <h2 className="text-lg font-medium text-foreground">Job status</h2>
           <p className="text-sm text-muted">
             Provider: {activeJob.provider} · Status:{" "}
-            <span className="font-mono uppercase text-sage">{activeJob.status}</span>
+            <span className="font-mono uppercase text-sage">
+              {activeJob.status}
+            </span>
           </p>
 
           {activeJob.status === "pending" ? (
-            <p className="text-sm text-muted">Research is running. This can take a minute.</p>
+            <p className="text-sm text-muted">
+              Research is running. This can take a minute.
+            </p>
           ) : null}
 
           {activeJob.status === "failed" ? (

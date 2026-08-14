@@ -26,8 +26,8 @@ export default async function AdminResearchPage() {
       <div>
         <h1 className="font-display text-3xl text-foreground">AI research</h1>
         <p className="text-sm text-muted">
-          Run provider-backed research from the admin dashboard. Results always land
-          as draft cards for source-by-source review.
+          Run provider-backed research from the admin dashboard. Results always
+          land as draft cards for source-by-source review.
         </p>
       </div>
       <CardResearchPanel

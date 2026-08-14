@@ -53,7 +53,9 @@ export function AdminListPageSkeleton({ variant }: AdminListPageSkeletonProps) {
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="min-w-0 flex-1 space-y-2">
                 <Skeleton className="h-5 w-full max-w-xl" />
-                {variant === "cards" || variant === "due" || variant === "reflections" ? (
+                {variant === "cards" ||
+                variant === "due" ||
+                variant === "reflections" ? (
                   <Skeleton className="h-4 w-2/3 max-w-md" />
                 ) : null}
                 {variant === "quotes" ? (

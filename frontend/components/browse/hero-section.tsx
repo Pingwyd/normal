@@ -15,8 +15,7 @@ const PAUSE_MS = 2400;
 
 function longestPrompt(prompts: string[]): string {
   return prompts.reduce(
-    (longest, current) =>
-      current.length > longest.length ? current : longest,
+    (longest, current) => (current.length > longest.length ? current : longest),
     prompts[0] ?? "",
   );
 }
@@ -127,7 +126,9 @@ export function HeroSection() {
         </span>
         <span className="absolute inset-x-0 top-0">
           Is it normal to{" "}
-          <span className="border-b-[3px] border-accent pb-0.5">{displayText}</span>
+          <span className="border-b-[3px] border-accent pb-0.5">
+            {displayText}
+          </span>
           <span
             className="ml-0.5 inline-block h-[1em] w-[3px] animate-pulse bg-sage-dark align-[-0.1em]"
             aria-hidden="true"

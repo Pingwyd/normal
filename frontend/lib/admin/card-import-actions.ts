@@ -28,8 +28,7 @@ export type CardDraftImportPayload = {
 };
 
 export type ImportCardDraftResult =
-  | { ok: true; cardId: string }
-  | { ok: false; code: string; message: string };
+  { ok: true; cardId: string } | { ok: false; code: string; message: string };
 
 export async function importCardDraftAction(
   payload: CardDraftImportPayload,

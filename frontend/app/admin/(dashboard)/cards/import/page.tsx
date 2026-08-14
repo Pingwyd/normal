@@ -13,7 +13,8 @@ export default async function ImportCardDraftPage() {
           Import card draft
         </h1>
         <p className="text-sm text-muted">
-          Load a Cursor-generated research draft into the card editor for review.
+          Load a Cursor-generated research draft into the card editor for
+          review.
         </p>
       </div>
       <CardDraftImportForm existingTagNames={tags.map((tag) => tag.name)} />

@@ -10,7 +10,9 @@ type ReflectionDetailViewProps = {
   reflection: ReflectionDetail;
 };
 
-export function ReflectionDetailView({ reflection }: ReflectionDetailViewProps) {
+export function ReflectionDetailView({
+  reflection,
+}: ReflectionDetailViewProps) {
   const isLong = reflection.format === "long";
 
   return (
@@ -25,9 +27,7 @@ export function ReflectionDetailView({ reflection }: ReflectionDetailViewProps) 
         </Link>
       </div>
 
-      {reflection.is_crisis_adjacent ? (
-        <CrisisResourceStrip />
-      ) : null}
+      {reflection.is_crisis_adjacent ? <CrisisResourceStrip /> : null}
 
       <header className="space-y-4 border-b border-border pb-8">
         <p className="font-mono text-[10.5px] uppercase tracking-wide text-accent">

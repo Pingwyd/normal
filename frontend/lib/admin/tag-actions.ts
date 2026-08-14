@@ -7,10 +7,11 @@ import { ApiRequestError } from "@/lib/api/errors";
 import type { AdminTag } from "@/lib/admin/queries";
 
 export type TagActionResult =
-  | { ok: true; tag?: AdminTag }
-  | { ok: false; code: string; message: string };
+  { ok: true; tag?: AdminTag } | { ok: false; code: string; message: string };
 
-export async function createAdminTagAction(name: string): Promise<TagActionResult> {
+export async function createAdminTagAction(
+  name: string,
+): Promise<TagActionResult> {
   try {
     const tag = await adminApiRequest<AdminTag>("/v1/admin/tags", {
       method: "POST",
@@ -30,7 +31,9 @@ export async function createAdminTagAction(name: string): Promise<TagActionResul
   }
 }
 
-export async function deleteAdminTagAction(tagId: string): Promise<TagActionResult> {
+export async function deleteAdminTagAction(
+  tagId: string,
+): Promise<TagActionResult> {
   try {
     await adminApiRequest(`/v1/admin/tags/${tagId}`, {
       method: "DELETE",

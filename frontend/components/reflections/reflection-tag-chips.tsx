@@ -14,7 +14,10 @@ function buildHref(tag?: string): string {
   return `/reflections?tag=${encodeURIComponent(tag)}`;
 }
 
-export function ReflectionTagChips({ tags, activeTag }: ReflectionTagChipsProps) {
+export function ReflectionTagChips({
+  tags,
+  activeTag,
+}: ReflectionTagChipsProps) {
   if (tags.length === 0) {
     return null;
   }

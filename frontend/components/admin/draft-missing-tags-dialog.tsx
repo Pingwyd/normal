@@ -91,7 +91,8 @@ export function DraftMissingTagsDialog({
           ))}
         </ul>
         <p className="text-xs text-muted">
-          You can also create tags manually under Admin &gt; Tags before importing.
+          You can also create tags manually under Admin &gt; Tags before
+          importing.
         </p>
       </div>
 

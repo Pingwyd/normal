@@ -22,8 +22,7 @@ export type ReflectionFormPayload = {
 };
 
 export type SaveReflectionResult =
-  | { ok: true; id: string }
-  | { ok: false; code: string; message: string };
+  { ok: true; id: string } | { ok: false; code: string; message: string };
 
 export async function createReflectionAction(
   payload: ReflectionFormPayload,

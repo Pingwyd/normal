@@ -1,7 +1,8 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
 type AdminFormPageSkeletonProps = {
-  variant: "card" | "affirmation" | "quote" | "reflection" | "submission" | "issue";
+  variant:
+    "card" | "affirmation" | "quote" | "reflection" | "submission" | "issue";
 };
 
 export function AdminFormPageSkeleton({ variant }: AdminFormPageSkeletonProps) {

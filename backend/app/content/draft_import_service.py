@@ -120,7 +120,7 @@ def _resolve_tag_ids(
 def _coerce_number(value: object) -> float | None:
     if isinstance(value, bool):
         return None
-    if isinstance(value, (int, float)):
+    if isinstance(value, int | float):
         return float(value)
     if isinstance(value, str):
         cleaned = value.strip().rstrip("%")

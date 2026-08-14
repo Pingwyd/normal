@@ -7,7 +7,10 @@ import { ReflectionTagChips } from "@/components/reflections/reflection-tag-chip
 import { ReflectionsLoadMore } from "@/components/reflections/reflections-load-more";
 import { ApiRequestError } from "@/lib/api/errors";
 import type { ReflectionTag } from "@/lib/api/reflection-types";
-import { fetchAccumulatedReflections, fetchReflectionsPageServer } from "@/lib/reflections/server-api";
+import {
+  fetchAccumulatedReflections,
+  fetchReflectionsPageServer,
+} from "@/lib/reflections/server-api";
 
 export const dynamic = "force-dynamic";
 
@@ -50,13 +53,13 @@ export default async function ReflectionsPage({
   try {
     const [page, tagDiscovery] = await Promise.all([
       fetchAccumulatedReflections({ tag, after, limit: 20 }),
-      tag
-        ? Promise.resolve(null)
-        : fetchReflectionsPageServer({ limit: 50 }),
+      tag ? Promise.resolve(null) : fetchReflectionsPageServer({ limit: 50 }),
     ]);
     items = page.items;
     meta = page.meta;
-    filterTags = tagDiscovery ? collectTags(tagDiscovery.items) : collectTags(items);
+    filterTags = tagDiscovery
+      ? collectTags(tagDiscovery.items)
+      : collectTags(items);
   } catch (error) {
     errorMessage =
       error instanceof ApiRequestError

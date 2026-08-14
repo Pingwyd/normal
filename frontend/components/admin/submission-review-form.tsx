@@ -81,9 +81,7 @@ export function SubmissionReviewForm({
         label="Status"
         required
         value={status}
-        onChange={(nextValue) =>
-          setStatus(nextValue as AdminSubmissionStatus)
-        }
+        onChange={(nextValue) => setStatus(nextValue as AdminSubmissionStatus)}
         options={STATUS_OPTIONS}
       />
 

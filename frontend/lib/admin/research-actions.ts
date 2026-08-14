@@ -23,17 +23,13 @@ export type ResearchJob = {
   completed_at: string | null;
 };
 
-type ActionResult =
-  | { ok: true }
-  | { ok: false; code: string; message: string };
+type ActionResult = { ok: true } | { ok: false; code: string; message: string };
 
 type JobResult =
-  | { ok: true; job: ResearchJob }
-  | { ok: false; code: string; message: string };
+  { ok: true; job: ResearchJob } | { ok: false; code: string; message: string };
 
 type DraftResult =
-  | { ok: true; cardId: string }
-  | { ok: false; code: string; message: string };
+  { ok: true; cardId: string } | { ok: false; code: string; message: string };
 
 export async function fetchResearchProvidersAction(): Promise<
   ResearchProviderOption[] | { ok: false; message: string }
@@ -45,7 +41,10 @@ export async function fetchResearchProvidersAction(): Promise<
   } catch (error) {
     return {
       ok: false,
-      message: error instanceof ApiRequestError ? error.message : "Failed to load providers.",
+      message:
+        error instanceof ApiRequestError
+          ? error.message
+          : "Failed to load providers.",
     };
   }
 }
@@ -73,9 +72,12 @@ export async function deleteResearchProviderKeyAction(
   provider: string,
 ): Promise<ActionResult> {
   try {
-    await adminApiRequest(`/v1/admin/research/providers/${provider}/credentials`, {
-      method: "DELETE",
-    });
+    await adminApiRequest(
+      `/v1/admin/research/providers/${provider}/credentials`,
+      {
+        method: "DELETE",
+      },
+    );
     revalidatePath("/admin/research");
     return { ok: true };
   } catch (error) {
@@ -98,7 +100,9 @@ export async function startResearchJobAction(
   }
 }
 
-export async function fetchResearchJobAction(jobId: string): Promise<JobResult> {
+export async function fetchResearchJobAction(
+  jobId: string,
+): Promise<JobResult> {
   try {
     const job = await adminApiRequest<ResearchJob>(
       `/v1/admin/research/jobs/${jobId}`,

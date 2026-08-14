@@ -26,7 +26,9 @@ function parseDraftFile(text: string): CardDraftImportPayload {
 
   const draft = parsed as Record<string, unknown>;
   if (typeof draft.question !== "string" || !draft.question.trim()) {
-    throw new Error('The draft file must include a non-empty "question" field.');
+    throw new Error(
+      'The draft file must include a non-empty "question" field.',
+    );
   }
   if (typeof draft.brief !== "string" || !draft.brief.trim()) {
     throw new Error('The draft file must include a non-empty "brief" field.');

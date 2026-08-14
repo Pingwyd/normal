@@ -106,10 +106,7 @@ export function validateReflectionBlocksForPublish(
   blocks: EditorContentBlock[],
 ): string | null {
   for (const block of blocks) {
-    if (
-      DATA_BLOCK_TYPES.has(block.type) &&
-      !block.context_note?.trim()
-    ) {
+    if (DATA_BLOCK_TYPES.has(block.type) && !block.context_note?.trim()) {
       return `Each ${block.type.replaceAll("_", " ")} block needs a context note before publish (e.g. how the data was gathered).`;
     }
   }
