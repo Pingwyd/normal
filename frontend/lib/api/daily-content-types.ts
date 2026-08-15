@@ -1,6 +1,6 @@
 import type { PaginationMeta } from "@/lib/api/types";
 
-export type DailyContentStatus = "draft" | "published";
+export type DailyContentStatus = "draft" | "published" | "unpublished";
 
 export type TagSummary = {
   id: string;

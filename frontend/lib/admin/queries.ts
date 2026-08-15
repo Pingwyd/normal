@@ -41,6 +41,7 @@ export type AdminCardDetail = {
   brief: string;
   slug: string;
   status: "draft" | "published" | "unpublished";
+  deletable: boolean;
   requires_clinical_review: boolean;
   tag_ids: string[];
   content_blocks: Array<{
@@ -165,14 +166,15 @@ export async function fetchAdminReportedIssue(issueId: string) {
 export type AdminAffirmationListItem = {
   id: string;
   text: string;
-  status: "draft" | "published";
+  status: "draft" | "published" | "unpublished";
   updated_at: string;
 };
 
 export type AdminAffirmationDetail = {
   id: string;
   text: string;
-  status: "draft" | "published";
+  status: "draft" | "published" | "unpublished";
+  deletable: boolean;
   tag_ids: string[];
   created_at: string;
   updated_at: string;
@@ -182,7 +184,7 @@ export type AdminQuoteListItem = {
   id: string;
   text: string;
   attributed_to: string;
-  status: "draft" | "published";
+  status: "draft" | "published" | "unpublished";
   updated_at: string;
 };
 
@@ -191,7 +193,8 @@ export type AdminQuoteDetail = {
   text: string;
   attributed_to: string;
   source_url: string | null;
-  status: "draft" | "published";
+  status: "draft" | "published" | "unpublished";
+  deletable: boolean;
   created_at: string;
   updated_at: string;
 };
@@ -224,7 +227,7 @@ export type AdminReflectionListItem = {
   slug: string;
   brief: string;
   format: "short" | "long";
-  status: "draft" | "published";
+  status: "draft" | "published" | "unpublished";
   is_crisis_adjacent: boolean;
   updated_at: string;
 };
@@ -235,7 +238,8 @@ export type AdminReflectionDetail = {
   slug: string;
   brief: string;
   format: "short" | "long";
-  status: "draft" | "published";
+  status: "draft" | "published" | "unpublished";
+  deletable: boolean;
   is_crisis_adjacent: boolean;
   published_at: string | null;
   tag_ids: string[];

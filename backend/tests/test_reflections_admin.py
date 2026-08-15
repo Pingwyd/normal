@@ -45,6 +45,7 @@ SAMPLE_ADMIN_REFLECTION = AdminReflectionResponse(
     brief="A longer piece about patterns I noticed.",
     format=ReflectionFormat.LONG,
     status=ReflectionStatus.PUBLISHED,
+    deletable=False,
     is_crisis_adjacent=False,
     published_at=CREATED_AT,
     tag_ids=[TAG_ID],
@@ -129,6 +130,7 @@ def test_create_reflection_admin_route(mock_create: MagicMock) -> None:
 def test_create_admin_reflection_rejects_chart_without_context_note() -> None:
     with pytest.raises(ApiError) as exc_info:
         create_admin_reflection(
+            ADMIN_CONTEXT,
             AdminReflectionCreate(
                 title="Example reflection",
                 slug="example-reflection",
@@ -141,7 +143,7 @@ def test_create_admin_reflection_rejects_chart_without_context_note() -> None:
                         data={"title": "Example chart"},
                     )
                 ],
-            )
+            ),
         )
 
     assert exc_info.value.status_code == 422
@@ -158,6 +160,7 @@ def test_create_admin_reflection_accepts_chart_with_context_note() -> None:
         reflection_tags_table = MagicMock()
         reflection_blocks_table = MagicMock()
         tags_table = MagicMock()
+        review_log_table = MagicMock()
 
         def table_router(name: str) -> MagicMock:
             if name == "reflections":
@@ -168,9 +171,14 @@ def test_create_admin_reflection_accepts_chart_with_context_note() -> None:
                 return reflection_blocks_table
             if name == "tags":
                 return tags_table
+            if name == "review_log":
+                return review_log_table
             raise AssertionError(f"Unexpected table: {name}")
 
         client_mock.table.side_effect = table_router
+
+        review_log_execute = review_log_table.select.return_value.eq.return_value.eq.return_value.eq.return_value.limit.return_value.execute
+        review_log_execute.return_value = MagicMock(data=[])
 
         limit_query = (
             reflections_table.select.return_value.eq.return_value.limit.return_value
@@ -215,6 +223,7 @@ def test_create_admin_reflection_accepts_chart_with_context_note() -> None:
         tags_select_execute.return_value = MagicMock(data=[])
 
         result = create_admin_reflection(
+            ADMIN_CONTEXT,
             AdminReflectionCreate(
                 title="Example reflection",
                 slug="example-reflection",
@@ -228,7 +237,7 @@ def test_create_admin_reflection_accepts_chart_with_context_note() -> None:
                         context_note="Informal poll, not a scientific study.",
                     )
                 ],
-            )
+            ),
         )
 
     assert result.reflection_blocks[0].context_note is not None
@@ -243,6 +252,7 @@ def test_create_admin_reflection_allows_paragraph_without_context_note() -> None
         reflections_table = MagicMock()
         reflection_tags_table = MagicMock()
         reflection_blocks_table = MagicMock()
+        review_log_table = MagicMock()
 
         def table_router(name: str) -> MagicMock:
             if name == "reflections":
@@ -251,9 +261,14 @@ def test_create_admin_reflection_allows_paragraph_without_context_note() -> None
                 return reflection_tags_table
             if name == "reflection_blocks":
                 return reflection_blocks_table
+            if name == "review_log":
+                return review_log_table
             raise AssertionError(f"Unexpected table: {name}")
 
         client_mock.table.side_effect = table_router
+
+        review_log_execute = review_log_table.select.return_value.eq.return_value.eq.return_value.eq.return_value.limit.return_value.execute
+        review_log_execute.return_value = MagicMock(data=[])
 
         limit_query = (
             reflections_table.select.return_value.eq.return_value.limit.return_value
@@ -298,6 +313,7 @@ def test_create_admin_reflection_allows_paragraph_without_context_note() -> None
         tags_select_execute.return_value = MagicMock(data=[])
 
         create_admin_reflection(
+            ADMIN_CONTEXT,
             AdminReflectionCreate(
                 title="Example reflection",
                 slug="example-reflection",
@@ -310,7 +326,7 @@ def test_create_admin_reflection_allows_paragraph_without_context_note() -> None
                         data={"text": "Plain reflection text."},
                     )
                 ],
-            )
+            ),
         )
 
 
@@ -342,6 +358,7 @@ def test_update_admin_reflection_rejects_chart_without_context_note(
 
     with pytest.raises(ApiError) as exc_info:
         update_admin_reflection(
+            ADMIN_CONTEXT,
             REFLECTION_ID,
             AdminReflectionUpdate(
                 reflection_blocks=[
@@ -361,6 +378,7 @@ def test_update_admin_reflection_rejects_chart_without_context_note(
 def test_create_admin_reflection_rejects_blocks_on_short_format() -> None:
     with pytest.raises(ApiError) as exc_info:
         create_admin_reflection(
+            ADMIN_CONTEXT,
             AdminReflectionCreate(
                 title="Short reflection",
                 slug="short-reflection",
@@ -373,7 +391,7 @@ def test_create_admin_reflection_rejects_blocks_on_short_format() -> None:
                         data={"text": "Should not be allowed."},
                     )
                 ],
-            )
+            ),
         )
 
     assert exc_info.value.status_code == 422

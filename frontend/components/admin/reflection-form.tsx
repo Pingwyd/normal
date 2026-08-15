@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { ContentBlockEditor } from "@/components/admin/content-block-editor";
+import { ContentLifecycleActions } from "@/components/admin/content-lifecycle-actions";
 import { SelectField } from "@/components/ui/select-field";
 import {
   createReflectionAction,
@@ -67,6 +68,8 @@ export function ReflectionForm({
   const [isSaving, setIsSaving] = useState(false);
 
   const isLong = format === "long";
+  const currentStatus = initialReflection?.status ?? "draft";
+  const showPublishButton = currentStatus !== "published";
   const publicHref =
     initialReflection?.status === "published"
       ? `/reflections/${initialReflection.slug}`
@@ -262,6 +265,16 @@ export function ReflectionForm({
         />
       ) : null}
 
+      {mode === "edit" && reflectionId && initialReflection ? (
+        <ContentLifecycleActions
+          contentType="reflection"
+          contentId={reflectionId}
+          status={initialReflection.status}
+          deletable={initialReflection.deletable}
+          disabled={isSaving}
+        />
+      ) : null}
+
       {error ? (
         <p className="text-sm text-warning-text" role="alert">
           {error}
@@ -281,13 +294,13 @@ export function ReflectionForm({
         </button>
         <button
           type="button"
-          disabled={isSaving}
+          disabled={isSaving || !showPublishButton}
           onClick={() => {
             void handleSave("published");
           }}
           className="rounded-full bg-sage-dark px-4 py-2 text-sm font-medium text-white disabled:opacity-60"
         >
-          Publish
+          {currentStatus === "unpublished" ? "Republish" : "Publish"}
         </button>
         <Link
           href="/admin/reflections"

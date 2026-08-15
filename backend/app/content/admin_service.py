@@ -14,7 +14,9 @@ from app.content.admin_schemas import (
     RelatedOverrideInput,
     SourceInput,
 )
+from app.content.lifecycle import assert_deletable_draft, is_deletable_draft
 from app.content.revalidation import trigger_card_revalidation
+from app.content.review_log import ReviewEntityType, insert_review_log
 from app.content.schemas import ContentBlockResponse, SourceResponse
 from app.core.errors import conflict, forbidden, not_found
 
@@ -44,26 +46,6 @@ def _assert_can_publish(
     if admin.role == AdminRole.FOUNDER:
         return
     raise forbidden("You do not have permission to publish this card.")
-
-
-def _insert_review_log(
-    client,
-    *,
-    card_id: UUID,
-    action: str,
-    admin: AdminContext,
-    notes: str | None = None,
-) -> None:
-    client.table("review_log").insert(
-        {
-            "entity_type": "card",
-            "entity_id": str(card_id),
-            "action": action,
-            "performed_by": str(admin.admin_id),
-            "performed_by_name_snapshot": admin.display_name,
-            "notes": notes,
-        }
-    ).execute()
 
 
 def _replace_card_tags(client, card_id: UUID, tag_ids: list[UUID]) -> None:
@@ -182,6 +164,12 @@ def _build_admin_card_response(client, card_row: dict) -> AdminCardResponse:
         brief=card_row["brief"],
         slug=card_row["slug"],
         status=CardStatus(card_row["status"]),
+        deletable=is_deletable_draft(
+            client,
+            entity_type=ReviewEntityType.CARD,
+            entity_id=card_id,
+            current_status=card_row["status"],
+        ),
         requires_clinical_review=card_row["requires_clinical_review"],
         save_count=card_row["save_count"],
         last_reviewed_by=(
@@ -315,7 +303,13 @@ def create_admin_card(
     _replace_related_overrides(client, card_id, payload.related_overrides)
 
     if is_publish:
-        _insert_review_log(client, card_id=card_id, action="published", admin=admin)
+        insert_review_log(
+            client,
+            entity_type=ReviewEntityType.CARD,
+            entity_id=card_id,
+            action="published",
+            admin=admin,
+        )
         trigger_card_revalidation(payload.slug)
 
     return get_admin_card(card_id)
@@ -394,6 +388,10 @@ def update_admin_card(
         previous_status != CardStatus.PUBLISHED
         and target_status == CardStatus.PUBLISHED
     )
+    is_unpublish_transition = (
+        previous_status == CardStatus.PUBLISHED
+        and target_status == CardStatus.UNPUBLISHED
+    )
     _apply_publish_metadata(
         card_updates,
         admin=admin,
@@ -412,12 +410,62 @@ def update_admin_card(
     if payload.related_overrides is not None:
         _replace_related_overrides(client, card_id, payload.related_overrides)
 
+    slug = payload.slug or existing["slug"]
     if is_publish_transition:
-        slug = payload.slug or existing["slug"]
-        _insert_review_log(client, card_id=card_id, action="published", admin=admin)
+        insert_review_log(
+            client,
+            entity_type=ReviewEntityType.CARD,
+            entity_id=card_id,
+            action="published",
+            admin=admin,
+        )
+        trigger_card_revalidation(slug)
+    elif is_unpublish_transition:
+        insert_review_log(
+            client,
+            entity_type=ReviewEntityType.CARD,
+            entity_id=card_id,
+            action="unpublished",
+            admin=admin,
+        )
         trigger_card_revalidation(slug)
 
     return get_admin_card(card_id)
+
+
+def delete_admin_card(card_id: UUID) -> None:
+    client = get_supabase_client()
+    existing_response = (
+        client.table("cards")
+        .select("id, status")
+        .eq("id", str(card_id))
+        .limit(1)
+        .execute()
+    )
+    if not existing_response.data:
+        raise not_found("That card could not be found.")
+
+    existing = existing_response.data[0]
+    assert_deletable_draft(
+        client,
+        entity_type=ReviewEntityType.CARD,
+        entity_id=card_id,
+        current_status=existing["status"],
+    )
+
+    submission_ref = (
+        client.table("submissions")
+        .select("id")
+        .eq("resulting_card_id", str(card_id))
+        .limit(1)
+        .execute()
+    )
+    if submission_ref.data:
+        raise conflict("This card is linked from a submission and cannot be deleted.")
+
+    response = client.table("cards").delete().eq("id", str(card_id)).execute()
+    if not response.data:
+        raise not_found("That card could not be found.")
 
 
 def list_cards_due_for_review(

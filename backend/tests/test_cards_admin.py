@@ -47,6 +47,7 @@ SAMPLE_ADMIN_CARD = AdminCardResponse(
     brief="Very common.",
     slug="feel-anxious",
     status=CardStatus.DRAFT,
+    deletable=True,
     requires_clinical_review=False,
     save_count=0,
     last_reviewed_by=None,

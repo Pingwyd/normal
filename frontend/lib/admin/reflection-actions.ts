@@ -10,7 +10,7 @@ export type ReflectionFormPayload = {
   slug: string;
   brief: string;
   format: "short" | "long";
-  status: "draft" | "published";
+  status: "draft" | "published" | "unpublished";
   is_crisis_adjacent: boolean;
   tag_ids: string[];
   reflection_blocks: Array<{
@@ -23,6 +23,9 @@ export type ReflectionFormPayload = {
 
 export type SaveReflectionResult =
   { ok: true; id: string } | { ok: false; code: string; message: string };
+
+export type DeleteReflectionResult =
+  { ok: true } | { ok: false; code: string; message: string };
 
 export async function createReflectionAction(
   payload: ReflectionFormPayload,
@@ -78,4 +81,29 @@ function mapSaveError(error: unknown): SaveReflectionResult {
       ? error.message
       : "Something went wrong while saving.";
   return { ok: false, code: "INTERNAL_ERROR", message };
+}
+
+export async function deleteReflectionAction(
+  reflectionId: string,
+): Promise<DeleteReflectionResult> {
+  try {
+    await adminApiRequest<{ deleted: boolean; id: string }>(
+      `/v1/admin/reflections/${reflectionId}`,
+      {
+        method: "DELETE",
+      },
+    );
+    revalidatePath("/admin/reflections");
+    revalidatePath("/reflections");
+    return { ok: true };
+  } catch (error) {
+    if (error instanceof ApiRequestError) {
+      return { ok: false, code: error.code, message: error.message };
+    }
+    return {
+      ok: false,
+      code: "INTERNAL_ERROR",
+      message: "Could not delete that reflection.",
+    };
+  }
 }

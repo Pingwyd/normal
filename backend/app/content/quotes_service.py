@@ -1,8 +1,10 @@
 from datetime import UTC, datetime
 from uuid import UUID
 
+from app.auth.models import AdminContext
 from app.auth.service import get_supabase_client
 from app.content.daily_content_schemas import DailyContentStatus
+from app.content.lifecycle import assert_deletable_draft, is_deletable_draft
 from app.content.pagination import decode_created_at_cursor, encode_created_at_cursor
 from app.content.quotes_schemas import (
     AdminQuoteCreate,
@@ -12,6 +14,8 @@ from app.content.quotes_schemas import (
     ListQuotesParams,
     QuoteSummary,
 )
+from app.content.revalidation import trigger_quote_revalidation
+from app.content.review_log import ReviewEntityType, insert_review_log
 from app.core.errors import not_found, validation_error
 
 
@@ -46,7 +50,8 @@ def _row_to_summary(row: dict) -> QuoteSummary:
     )
 
 
-def _build_admin_quote_response(quote_row: dict) -> AdminQuoteResponse:
+def _build_admin_quote_response(client, quote_row: dict) -> AdminQuoteResponse:
+    quote_id = UUID(quote_row["id"])
     created_at = _parse_timestamp(quote_row.get("created_at"))
     updated_at = _parse_timestamp(quote_row.get("updated_at"))
     if created_at is None or updated_at is None:
@@ -54,11 +59,17 @@ def _build_admin_quote_response(quote_row: dict) -> AdminQuoteResponse:
         raise validation_error(msg)
 
     return AdminQuoteResponse(
-        id=UUID(quote_row["id"]),
+        id=quote_id,
         text=quote_row["text"],
         attributed_to=quote_row["attributed_to"],
         source_url=quote_row.get("source_url"),
         status=DailyContentStatus(quote_row["status"]),
+        deletable=is_deletable_draft(
+            client,
+            entity_type=ReviewEntityType.QUOTE,
+            entity_id=quote_id,
+            current_status=quote_row["status"],
+        ),
         created_at=created_at,
         updated_at=updated_at,
     )
@@ -123,7 +134,7 @@ def get_admin_quote(quote_id: UUID) -> AdminQuoteResponse:
     )
     if not response.data:
         raise not_found("That quote could not be found.")
-    return _build_admin_quote_response(response.data[0])
+    return _build_admin_quote_response(client, response.data[0])
 
 
 def list_admin_quotes(
@@ -157,7 +168,10 @@ def list_admin_quotes(
     return items
 
 
-def create_admin_quote(payload: AdminQuoteCreate) -> AdminQuoteResponse:
+def create_admin_quote(
+    admin: AdminContext,
+    payload: AdminQuoteCreate,
+) -> AdminQuoteResponse:
     _assert_quote_publishable(
         status=payload.status,
         attributed_to=payload.attributed_to,
@@ -182,10 +196,23 @@ def create_admin_quote(payload: AdminQuoteCreate) -> AdminQuoteResponse:
         msg = "Quote creation did not return a row."
         raise RuntimeError(msg)
 
-    return _build_admin_quote_response(response.data[0])
+    quote_row = response.data[0]
+    quote_id = UUID(quote_row["id"])
+    if payload.status == DailyContentStatus.PUBLISHED:
+        insert_review_log(
+            client,
+            entity_type=ReviewEntityType.QUOTE,
+            entity_id=quote_id,
+            action="published",
+            admin=admin,
+        )
+        trigger_quote_revalidation(quote_id)
+
+    return _build_admin_quote_response(client, quote_row)
 
 
 def update_admin_quote(
+    admin: AdminContext,
     quote_id: UUID,
     payload: AdminQuoteUpdate,
 ) -> AdminQuoteResponse:
@@ -201,11 +228,8 @@ def update_admin_quote(
         raise not_found("That quote could not be found.")
 
     existing = existing_response.data[0]
-    target_status = (
-        payload.status
-        if payload.status is not None
-        else DailyContentStatus(existing["status"])
-    )
+    previous_status = DailyContentStatus(existing["status"])
+    target_status = payload.status if payload.status is not None else previous_status
     target_attributed_to = (
         payload.attributed_to
         if payload.attributed_to is not None
@@ -236,4 +260,56 @@ def update_admin_quote(
     if quote_updates:
         client.table("quotes").update(quote_updates).eq("id", str(quote_id)).execute()
 
+    is_publish_transition = (
+        previous_status != DailyContentStatus.PUBLISHED
+        and target_status == DailyContentStatus.PUBLISHED
+    )
+    is_unpublish_transition = (
+        previous_status == DailyContentStatus.PUBLISHED
+        and target_status == DailyContentStatus.UNPUBLISHED
+    )
+    if is_publish_transition:
+        insert_review_log(
+            client,
+            entity_type=ReviewEntityType.QUOTE,
+            entity_id=quote_id,
+            action="published",
+            admin=admin,
+        )
+        trigger_quote_revalidation(quote_id)
+    elif is_unpublish_transition:
+        insert_review_log(
+            client,
+            entity_type=ReviewEntityType.QUOTE,
+            entity_id=quote_id,
+            action="unpublished",
+            admin=admin,
+        )
+        trigger_quote_revalidation(quote_id)
+
     return get_admin_quote(quote_id)
+
+
+def delete_admin_quote(quote_id: UUID) -> None:
+    client = get_supabase_client()
+    existing_response = (
+        client.table("quotes")
+        .select("id, status")
+        .eq("id", str(quote_id))
+        .limit(1)
+        .execute()
+    )
+    if not existing_response.data:
+        raise not_found("That quote could not be found.")
+
+    existing = existing_response.data[0]
+    assert_deletable_draft(
+        client,
+        entity_type=ReviewEntityType.QUOTE,
+        entity_id=quote_id,
+        current_status=existing["status"],
+    )
+
+    response = client.table("quotes").delete().eq("id", str(quote_id)).execute()
+    if not response.data:
+        raise not_found("That quote could not be found.")
