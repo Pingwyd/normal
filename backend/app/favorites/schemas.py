@@ -54,7 +54,10 @@ class FavoriteQuoteContent(BaseModel):
 
 
 class FavoriteListItem(FavoriteItem):
-    content: FavoriteCardContent | FavoriteAffirmationContent | FavoriteQuoteContent
+    available: bool = True
+    content: (
+        FavoriteCardContent | FavoriteAffirmationContent | FavoriteQuoteContent | None
+    ) = None
 
 
 class FavoriteToggleRequest(BaseModel):

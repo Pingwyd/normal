@@ -10,6 +10,7 @@ from app.reflections.schemas import ReflectionBlockResponse, ReflectionFormat
 class ReflectionStatus(StrEnum):
     DRAFT = "draft"
     PUBLISHED = "published"
+    UNPUBLISHED = "unpublished"
 
 
 class ReflectionBlockInput(BaseModel):
@@ -59,6 +60,7 @@ class AdminReflectionResponse(BaseModel):
     brief: str
     format: ReflectionFormat
     status: ReflectionStatus
+    deletable: bool
     is_crisis_adjacent: bool
     published_at: datetime | None
     tag_ids: list[UUID]

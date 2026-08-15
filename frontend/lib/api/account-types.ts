@@ -37,8 +37,12 @@ export type FavoriteItem = {
 };
 
 export type FavoriteListItem = FavoriteItem & {
+  available: boolean;
   content:
-    FavoriteCardContent | FavoriteAffirmationContent | FavoriteQuoteContent;
+    | FavoriteCardContent
+    | FavoriteAffirmationContent
+    | FavoriteQuoteContent
+    | null;
 };
 
 export type FavoriteToggleResponse = {

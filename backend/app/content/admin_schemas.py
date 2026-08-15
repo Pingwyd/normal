@@ -67,6 +67,7 @@ class AdminCardResponse(BaseModel):
     brief: str
     slug: str
     status: CardStatus
+    deletable: bool
     requires_clinical_review: bool
     save_count: int
     last_reviewed_by: UUID | None

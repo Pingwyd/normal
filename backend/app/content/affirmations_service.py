@@ -1,6 +1,7 @@
 from datetime import UTC, datetime
 from uuid import UUID
 
+from app.auth.models import AdminContext
 from app.auth.service import get_supabase_client
 from app.content.affirmations_schemas import (
     AdminAffirmationCreate,
@@ -11,7 +12,10 @@ from app.content.affirmations_schemas import (
     ListAffirmationsParams,
 )
 from app.content.daily_content_schemas import DailyContentStatus, TagSummary
+from app.content.lifecycle import assert_deletable_draft, is_deletable_draft
 from app.content.pagination import decode_created_at_cursor, encode_created_at_cursor
+from app.content.revalidation import trigger_affirmation_revalidation
+from app.content.review_log import ReviewEntityType, insert_review_log
 from app.core.errors import not_found, validation_error
 
 
@@ -116,6 +120,12 @@ def _build_admin_affirmation_response(
         id=affirmation_id,
         text=affirmation_row["text"],
         status=DailyContentStatus(affirmation_row["status"]),
+        deletable=is_deletable_draft(
+            client,
+            entity_type=ReviewEntityType.AFFIRMATION,
+            entity_id=affirmation_id,
+            current_status=affirmation_row["status"],
+        ),
         tag_ids=[UUID(row["tag_id"]) for row in tag_response.data],
         created_at=created_at,
         updated_at=updated_at,
@@ -224,6 +234,7 @@ def list_admin_affirmations(
 
 
 def create_admin_affirmation(
+    admin: AdminContext,
     payload: AdminAffirmationCreate,
 ) -> AdminAffirmationResponse:
     client = get_supabase_client()
@@ -247,23 +258,39 @@ def create_admin_affirmation(
     affirmation_row = response.data[0]
     affirmation_id = UUID(affirmation_row["id"])
     _replace_affirmation_tags(client, affirmation_id, payload.tag_ids)
+
+    if payload.status == DailyContentStatus.PUBLISHED:
+        insert_review_log(
+            client,
+            entity_type=ReviewEntityType.AFFIRMATION,
+            entity_id=affirmation_id,
+            action="published",
+            admin=admin,
+        )
+        trigger_affirmation_revalidation(affirmation_id)
+
     return get_admin_affirmation(affirmation_id)
 
 
 def update_admin_affirmation(
+    admin: AdminContext,
     affirmation_id: UUID,
     payload: AdminAffirmationUpdate,
 ) -> AdminAffirmationResponse:
     client = get_supabase_client()
     existing_response = (
         client.table("affirmations")
-        .select("id")
+        .select("id, status")
         .eq("id", str(affirmation_id))
         .limit(1)
         .execute()
     )
     if not existing_response.data:
         raise not_found("That affirmation could not be found.")
+
+    existing = existing_response.data[0]
+    previous_status = DailyContentStatus(existing["status"])
+    target_status = payload.status if payload.status is not None else previous_status
 
     affirmation_updates: dict[str, object] = {}
     if payload.text is not None:
@@ -280,4 +307,58 @@ def update_admin_affirmation(
         _validate_tag_ids(client, payload.tag_ids)
         _replace_affirmation_tags(client, affirmation_id, payload.tag_ids)
 
+    is_publish_transition = (
+        previous_status != DailyContentStatus.PUBLISHED
+        and target_status == DailyContentStatus.PUBLISHED
+    )
+    is_unpublish_transition = (
+        previous_status == DailyContentStatus.PUBLISHED
+        and target_status == DailyContentStatus.UNPUBLISHED
+    )
+    if is_publish_transition:
+        insert_review_log(
+            client,
+            entity_type=ReviewEntityType.AFFIRMATION,
+            entity_id=affirmation_id,
+            action="published",
+            admin=admin,
+        )
+        trigger_affirmation_revalidation(affirmation_id)
+    elif is_unpublish_transition:
+        insert_review_log(
+            client,
+            entity_type=ReviewEntityType.AFFIRMATION,
+            entity_id=affirmation_id,
+            action="unpublished",
+            admin=admin,
+        )
+        trigger_affirmation_revalidation(affirmation_id)
+
     return get_admin_affirmation(affirmation_id)
+
+
+def delete_admin_affirmation(affirmation_id: UUID) -> None:
+    client = get_supabase_client()
+    existing_response = (
+        client.table("affirmations")
+        .select("id, status")
+        .eq("id", str(affirmation_id))
+        .limit(1)
+        .execute()
+    )
+    if not existing_response.data:
+        raise not_found("That affirmation could not be found.")
+
+    existing = existing_response.data[0]
+    assert_deletable_draft(
+        client,
+        entity_type=ReviewEntityType.AFFIRMATION,
+        entity_id=affirmation_id,
+        current_status=existing["status"],
+    )
+
+    response = (
+        client.table("affirmations").delete().eq("id", str(affirmation_id)).execute()
+    )
+    if not response.data:
+        raise not_found("That affirmation could not be found.")

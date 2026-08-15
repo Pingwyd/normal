@@ -1,7 +1,11 @@
 from datetime import UTC, datetime
 from uuid import UUID
 
+from app.auth.models import AdminContext
 from app.auth.service import get_supabase_client
+from app.content.lifecycle import assert_deletable_draft, is_deletable_draft
+from app.content.revalidation import trigger_reflection_revalidation
+from app.content.review_log import ReviewEntityType, insert_review_log
 from app.core.errors import conflict, not_found, validation_error
 from app.reflections.admin_schemas import (
     AdminReflectionCreate,
@@ -162,6 +166,12 @@ def _build_admin_reflection_response(
         brief=reflection_row["brief"],
         format=reflection_format,
         status=ReflectionStatus(reflection_row["status"]),
+        deletable=is_deletable_draft(
+            client,
+            entity_type=ReviewEntityType.REFLECTION,
+            entity_id=reflection_id,
+            current_status=reflection_row["status"],
+        ),
         is_crisis_adjacent=reflection_row["is_crisis_adjacent"],
         published_at=_parse_timestamp(reflection_row.get("published_at")),
         tag_ids=[UUID(row["tag_id"]) for row in tag_response.data],
@@ -225,6 +235,7 @@ def list_admin_reflections(
 
 
 def create_admin_reflection(
+    admin: AdminContext,
     payload: AdminReflectionCreate,
 ) -> AdminReflectionResponse:
     client = get_supabase_client()
@@ -281,10 +292,21 @@ def create_admin_reflection(
             payload.reflection_blocks,
         )
 
+    if payload.status == ReflectionStatus.PUBLISHED:
+        insert_review_log(
+            client,
+            entity_type=ReviewEntityType.REFLECTION,
+            entity_id=reflection_id,
+            action="published",
+            admin=admin,
+        )
+        trigger_reflection_revalidation(payload.slug)
+
     return get_admin_reflection(reflection_id)
 
 
 def update_admin_reflection(
+    admin: AdminContext,
     reflection_id: UUID,
     payload: AdminReflectionUpdate,
 ) -> AdminReflectionResponse:
@@ -352,6 +374,10 @@ def update_admin_reflection(
         previous_status != ReflectionStatus.PUBLISHED
         and target_status == ReflectionStatus.PUBLISHED
     )
+    is_unpublish_transition = (
+        previous_status == ReflectionStatus.PUBLISHED
+        and target_status == ReflectionStatus.UNPUBLISHED
+    )
     _apply_publish_metadata(
         reflection_updates,
         is_publish_transition=is_publish_transition,
@@ -383,4 +409,51 @@ def update_admin_reflection(
             "reflection_id", str(reflection_id)
         ).execute()
 
+    slug = payload.slug or existing["slug"]
+    if is_publish_transition:
+        insert_review_log(
+            client,
+            entity_type=ReviewEntityType.REFLECTION,
+            entity_id=reflection_id,
+            action="published",
+            admin=admin,
+        )
+        trigger_reflection_revalidation(slug)
+    elif is_unpublish_transition:
+        insert_review_log(
+            client,
+            entity_type=ReviewEntityType.REFLECTION,
+            entity_id=reflection_id,
+            action="unpublished",
+            admin=admin,
+        )
+        trigger_reflection_revalidation(slug)
+
     return get_admin_reflection(reflection_id)
+
+
+def delete_admin_reflection(reflection_id: UUID) -> None:
+    client = get_supabase_client()
+    existing_response = (
+        client.table("reflections")
+        .select("id, status")
+        .eq("id", str(reflection_id))
+        .limit(1)
+        .execute()
+    )
+    if not existing_response.data:
+        raise not_found("That reflection could not be found.")
+
+    existing = existing_response.data[0]
+    assert_deletable_draft(
+        client,
+        entity_type=ReviewEntityType.REFLECTION,
+        entity_id=reflection_id,
+        current_status=existing["status"],
+    )
+
+    response = (
+        client.table("reflections").delete().eq("id", str(reflection_id)).execute()
+    )
+    if not response.data:
+        raise not_found("That reflection could not be found.")

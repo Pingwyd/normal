@@ -58,3 +58,16 @@ def recovery_exhausted(
     message: str = "No unused recovery codes remain.",
 ) -> ApiError:
     return ApiError(code="RECOVERY_EXHAUSTED", message=message, status_code=400)
+
+
+def cannot_delete_published_content(
+    message: str = (
+        "This item cannot be deleted because it has been published before. "
+        "Unpublish it instead."
+    ),
+) -> ApiError:
+    return ApiError(
+        code="CANNOT_DELETE_PUBLISHED_CONTENT",
+        message=message,
+        status_code=422,
+    )

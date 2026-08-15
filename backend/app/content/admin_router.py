@@ -9,6 +9,7 @@ from app.auth.models import AdminContext, AdminRole
 from app.content.admin_schemas import AdminCardCreate, AdminCardUpdate, CardStatus
 from app.content.admin_service import (
     create_admin_card,
+    delete_admin_card,
     get_admin_card,
     list_admin_cards,
     list_cards_due_for_review,
@@ -20,6 +21,7 @@ from app.content.affirmations_schemas import (
 )
 from app.content.affirmations_service import (
     create_admin_affirmation,
+    delete_admin_affirmation,
     get_admin_affirmation,
     list_admin_affirmations,
     update_admin_affirmation,
@@ -30,6 +32,7 @@ from app.content.draft_import_service import find_missing_tag_names, import_card
 from app.content.quotes_schemas import AdminQuoteCreate, AdminQuoteUpdate
 from app.content.quotes_service import (
     create_admin_quote,
+    delete_admin_quote,
     get_admin_quote,
     list_admin_quotes,
     update_admin_quote,
@@ -122,6 +125,15 @@ async def update_card_route(
 ) -> dict:
     card = update_admin_card(admin, card_id, payload)
     return success_envelope(card.model_dump(mode="json"))
+
+
+@router.delete("/cards/{card_id}")
+async def delete_card_route(
+    card_id: UUID,
+    _admin: Annotated[AdminContext, Depends(require_admin)],
+) -> dict:
+    delete_admin_card(card_id)
+    return success_envelope({"deleted": True, "id": str(card_id)})
 
 
 @router.get("/categories")
@@ -219,9 +231,9 @@ async def get_affirmation_admin_route(
 @router.post("/affirmations")
 async def create_affirmation_admin_route(
     payload: AdminAffirmationCreate,
-    _admin: Annotated[AdminContext, Depends(require_admin)],
+    admin: Annotated[AdminContext, Depends(require_admin)],
 ) -> dict:
-    affirmation = create_admin_affirmation(payload)
+    affirmation = create_admin_affirmation(admin, payload)
     return success_envelope(affirmation.model_dump(mode="json"))
 
 
@@ -229,10 +241,19 @@ async def create_affirmation_admin_route(
 async def update_affirmation_admin_route(
     affirmation_id: UUID,
     payload: AdminAffirmationUpdate,
+    admin: Annotated[AdminContext, Depends(require_admin)],
+) -> dict:
+    affirmation = update_admin_affirmation(admin, affirmation_id, payload)
+    return success_envelope(affirmation.model_dump(mode="json"))
+
+
+@router.delete("/affirmations/{affirmation_id}")
+async def delete_affirmation_admin_route(
+    affirmation_id: UUID,
     _admin: Annotated[AdminContext, Depends(require_admin)],
 ) -> dict:
-    affirmation = update_admin_affirmation(affirmation_id, payload)
-    return success_envelope(affirmation.model_dump(mode="json"))
+    delete_admin_affirmation(affirmation_id)
+    return success_envelope({"deleted": True, "id": str(affirmation_id)})
 
 
 @router.get("/quotes")
@@ -256,9 +277,9 @@ async def get_quote_admin_route(
 @router.post("/quotes")
 async def create_quote_admin_route(
     payload: AdminQuoteCreate,
-    _admin: Annotated[AdminContext, Depends(require_admin)],
+    admin: Annotated[AdminContext, Depends(require_admin)],
 ) -> dict:
-    quote = create_admin_quote(payload)
+    quote = create_admin_quote(admin, payload)
     return success_envelope(quote.model_dump(mode="json"))
 
 
@@ -266,7 +287,16 @@ async def create_quote_admin_route(
 async def update_quote_admin_route(
     quote_id: UUID,
     payload: AdminQuoteUpdate,
+    admin: Annotated[AdminContext, Depends(require_admin)],
+) -> dict:
+    quote = update_admin_quote(admin, quote_id, payload)
+    return success_envelope(quote.model_dump(mode="json"))
+
+
+@router.delete("/quotes/{quote_id}")
+async def delete_quote_admin_route(
+    quote_id: UUID,
     _admin: Annotated[AdminContext, Depends(require_admin)],
 ) -> dict:
-    quote = update_admin_quote(quote_id, payload)
-    return success_envelope(quote.model_dump(mode="json"))
+    delete_admin_quote(quote_id)
+    return success_envelope({"deleted": True, "id": str(quote_id)})

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { ContentBlockEditor } from "@/components/admin/content-block-editor";
+import { ContentLifecycleActions } from "@/components/admin/content-lifecycle-actions";
 import { SourceEditor } from "@/components/admin/source-editor";
 import { SelectField } from "@/components/ui/select-field";
 import {
@@ -92,6 +93,8 @@ export function CardForm({
 
   const founderBlockedFromPublish =
     role === "founder" && requiresClinicalReview;
+  const currentStatus = initialCard?.status ?? "draft";
+  const showPublishButton = currentStatus !== "published";
 
   function buildPayload(status: CardFormPayload["status"]): CardFormPayload {
     return {
@@ -228,6 +231,17 @@ export function CardForm({
       <ContentBlockEditor blocks={blocks} onChange={setBlocks} />
       <SourceEditor sources={sources} onChange={setSources} />
 
+      {mode === "edit" && cardId && initialCard ? (
+        <ContentLifecycleActions
+          contentType="card"
+          contentId={cardId}
+          status={initialCard.status}
+          deletable={initialCard.deletable}
+          disabled={isSaving}
+          requiresClinicalReview={requiresClinicalReview}
+        />
+      ) : null}
+
       {error ? (
         <p
           className="rounded-lg border border-warning-border bg-warning-surface px-4 py-3 text-sm text-foreground"
@@ -252,11 +266,11 @@ export function CardForm({
         </button>
         <button
           type="button"
-          disabled={isSaving || founderBlockedFromPublish}
+          disabled={isSaving || founderBlockedFromPublish || !showPublishButton}
           onClick={() => handleSave("published")}
           className="rounded-full bg-sage-dark px-5 py-2.5 text-sm font-medium text-white disabled:opacity-60"
         >
-          Publish
+          {currentStatus === "unpublished" ? "Republish" : "Publish"}
         </button>
         <Link
           href="/admin/cards"
