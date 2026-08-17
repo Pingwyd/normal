@@ -286,7 +286,9 @@ def test_create_admin_affirmation_inserts_tags(
 
     client_mock.table.side_effect = table_router
 
-    review_log_execute = review_log_table.select.return_value.eq.return_value.eq.return_value.eq.return_value.limit.return_value.execute
+    review_log_query = review_log_table.select.return_value
+    review_log_query = review_log_query.eq.return_value.eq.return_value
+    review_log_execute = review_log_query.eq.return_value.limit.return_value.execute
     review_log_execute.return_value = MagicMock(data=[])
 
     tags_table.select.return_value.in_.return_value.execute.return_value = MagicMock(

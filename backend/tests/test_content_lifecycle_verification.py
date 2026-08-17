@@ -54,7 +54,9 @@ def test_verify_unpublished_card_hidden_and_favorite_unavailable(
 ) -> None:
     public_table = MagicMock()
     mock_public_client.return_value.table.return_value = public_table
-    public_execute = public_table.select.return_value.eq.return_value.eq.return_value.limit.return_value.execute
+    public_query = public_table.select.return_value
+    public_query = public_query.eq.return_value.eq.return_value
+    public_execute = public_query.limit.return_value.execute
     public_execute.return_value = MagicMock(data=[])
 
     with pytest.raises(ApiError) as exc_info:

@@ -177,7 +177,9 @@ def test_create_admin_reflection_accepts_chart_with_context_note() -> None:
 
         client_mock.table.side_effect = table_router
 
-        review_log_execute = review_log_table.select.return_value.eq.return_value.eq.return_value.eq.return_value.limit.return_value.execute
+        review_log_query = review_log_table.select.return_value
+        review_log_query = review_log_query.eq.return_value.eq.return_value
+        review_log_execute = review_log_query.eq.return_value.limit.return_value.execute
         review_log_execute.return_value = MagicMock(data=[])
 
         limit_query = (
@@ -267,7 +269,9 @@ def test_create_admin_reflection_allows_paragraph_without_context_note() -> None
 
         client_mock.table.side_effect = table_router
 
-        review_log_execute = review_log_table.select.return_value.eq.return_value.eq.return_value.eq.return_value.limit.return_value.execute
+        review_log_query = review_log_table.select.return_value
+        review_log_query = review_log_query.eq.return_value.eq.return_value
+        review_log_execute = review_log_query.eq.return_value.limit.return_value.execute
         review_log_execute.return_value = MagicMock(data=[])
 
         limit_query = (
