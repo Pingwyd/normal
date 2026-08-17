@@ -225,6 +225,16 @@ def _enrich_favorite_items(favorites: list[FavoriteItem]) -> list[FavoriteListIt
             content = quote_content.get(favorite.content_id)
 
         if content is None:
+            enriched.append(
+                FavoriteListItem(
+                    id=favorite.id,
+                    content_type=favorite.content_type,
+                    content_id=favorite.content_id,
+                    created_at=favorite.created_at,
+                    available=False,
+                    content=None,
+                )
+            )
             continue
 
         enriched.append(
@@ -233,6 +243,7 @@ def _enrich_favorite_items(favorites: list[FavoriteItem]) -> list[FavoriteListIt
                 content_type=favorite.content_type,
                 content_id=favorite.content_id,
                 created_at=favorite.created_at,
+                available=True,
                 content=content,
             )
         )

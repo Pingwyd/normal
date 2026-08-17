@@ -22,6 +22,9 @@ export type QuoteFormPayload = {
 export type SaveDailyContentResult =
   { ok: true; id: string } | { ok: false; code: string; message: string };
 
+export type DeleteDailyContentResult =
+  { ok: true } | { ok: false; code: string; message: string };
+
 export async function createAffirmationAction(
   payload: AffirmationFormPayload,
 ): Promise<SaveDailyContentResult> {
@@ -106,4 +109,49 @@ function mapSaveError(error: unknown): SaveDailyContentResult {
       ? error.message
       : "Something went wrong while saving.";
   return { ok: false, code: "INTERNAL_ERROR", message };
+}
+
+export async function deleteAffirmationAction(
+  affirmationId: string,
+): Promise<DeleteDailyContentResult> {
+  try {
+    await adminApiRequest<{ deleted: boolean; id: string }>(
+      `/v1/admin/affirmations/${affirmationId}`,
+      {
+        method: "DELETE",
+      },
+    );
+    revalidatePath("/admin/affirmations");
+    return { ok: true };
+  } catch (error) {
+    return mapDeleteError(error);
+  }
+}
+
+export async function deleteQuoteAction(
+  quoteId: string,
+): Promise<DeleteDailyContentResult> {
+  try {
+    await adminApiRequest<{ deleted: boolean; id: string }>(
+      `/v1/admin/quotes/${quoteId}`,
+      {
+        method: "DELETE",
+      },
+    );
+    revalidatePath("/admin/quotes");
+    return { ok: true };
+  } catch (error) {
+    return mapDeleteError(error);
+  }
+}
+
+function mapDeleteError(error: unknown): DeleteDailyContentResult {
+  if (error instanceof ApiRequestError) {
+    return { ok: false, code: error.code, message: error.message };
+  }
+  return {
+    ok: false,
+    code: "INTERNAL_ERROR",
+    message: "Could not delete that item.",
+  };
 }

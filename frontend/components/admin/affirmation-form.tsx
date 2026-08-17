@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { ContentLifecycleActions } from "@/components/admin/content-lifecycle-actions";
 import {
   createAffirmationAction,
   updateAffirmationAction,
@@ -30,6 +31,8 @@ export function AffirmationForm({
   );
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const currentStatus = initialAffirmation?.status ?? "draft";
+  const showPublishButton = currentStatus !== "published";
 
   function toggleTag(tagId: string) {
     setTagIds((current) =>
@@ -111,6 +114,16 @@ export function AffirmationForm({
         </div>
       </fieldset>
 
+      {mode === "edit" && affirmationId && initialAffirmation ? (
+        <ContentLifecycleActions
+          contentType="affirmation"
+          contentId={affirmationId}
+          status={initialAffirmation.status}
+          deletable={initialAffirmation.deletable}
+          disabled={isSaving}
+        />
+      ) : null}
+
       {error ? (
         <p className="text-sm text-warning-text" role="alert">
           {error}
@@ -130,13 +143,13 @@ export function AffirmationForm({
         </button>
         <button
           type="button"
-          disabled={isSaving}
+          disabled={isSaving || !showPublishButton}
           onClick={() => {
             void handleSave("published");
           }}
           className="rounded-full bg-sage-dark px-4 py-2 text-sm font-medium text-white disabled:opacity-60"
         >
-          Publish
+          {currentStatus === "unpublished" ? "Republish" : "Publish"}
         </button>
         <Link
           href="/admin/affirmations"

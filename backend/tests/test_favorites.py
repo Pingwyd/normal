@@ -44,6 +44,7 @@ SAMPLE_FAVORITE_LIST_ITEM = FavoriteListItem(
     content_type=FavoriteContentType.CARD,
     content_id=CARD_ID,
     created_at=CREATED_AT,
+    available=True,
     content=FavoriteCardContent(
         question="What matters most today?",
         slug="what-matters-most",
@@ -152,7 +153,7 @@ def test_list_favorites_with_invalid_content_type_returns_422(
 @patch("app.favorites.service._load_affirmation_content_map")
 @patch("app.favorites.service._load_card_content_map")
 @patch("app.favorites.service.get_supabase_client")
-def test_list_account_favorites_enriches_and_filters_unpublished(
+def test_list_account_favorites_enriches_and_marks_unpublished_unavailable(
     mock_get_client: MagicMock,
     mock_load_cards: MagicMock,
     mock_load_affirmations: MagicMock,
@@ -192,9 +193,14 @@ def test_list_account_favorites_enriches_and_filters_unpublished(
 
     favorites = list_account_favorites(ACCOUNT_ID)
 
-    assert len(favorites) == 1
+    assert len(favorites) == 2
     assert favorites[0].content_type == FavoriteContentType.CARD
+    assert favorites[0].available is True
+    assert favorites[0].content is not None
     assert favorites[0].content.question == "What matters most today?"
+    assert favorites[1].content_type == FavoriteContentType.AFFIRMATION
+    assert favorites[1].available is False
+    assert favorites[1].content is None
 
 
 @patch("app.favorites.service._enrich_favorite_items")
@@ -224,6 +230,7 @@ def test_list_account_favorites_applies_content_type_filter(
             content_type=FavoriteContentType.QUOTE,
             content_id=QUOTE_ID,
             created_at=CREATED_AT,
+            available=True,
             content=FavoriteQuoteContent(
                 text="Be here now.",
                 attributed_to="Ram Dass",

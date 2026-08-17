@@ -34,6 +34,7 @@ class AdminAffirmationResponse(BaseModel):
     id: UUID
     text: str
     status: DailyContentStatus
+    deletable: bool
     tag_ids: list[UUID]
     created_at: datetime
     updated_at: datetime

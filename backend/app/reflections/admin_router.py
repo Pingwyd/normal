@@ -13,6 +13,7 @@ from app.reflections.admin_schemas import (
 )
 from app.reflections.admin_service import (
     create_admin_reflection,
+    delete_admin_reflection,
     get_admin_reflection,
     list_admin_reflections,
     update_admin_reflection,
@@ -45,9 +46,9 @@ async def get_reflection_admin_route(
 @router.post("/reflections")
 async def create_reflection_admin_route(
     payload: AdminReflectionCreate,
-    _admin: Annotated[AdminContext, Depends(require_founder)],
+    admin: Annotated[AdminContext, Depends(require_founder)],
 ) -> dict:
-    reflection = create_admin_reflection(payload)
+    reflection = create_admin_reflection(admin, payload)
     return success_envelope(reflection.model_dump(mode="json"))
 
 
@@ -55,7 +56,16 @@ async def create_reflection_admin_route(
 async def update_reflection_admin_route(
     reflection_id: UUID,
     payload: AdminReflectionUpdate,
+    admin: Annotated[AdminContext, Depends(require_founder)],
+) -> dict:
+    reflection = update_admin_reflection(admin, reflection_id, payload)
+    return success_envelope(reflection.model_dump(mode="json"))
+
+
+@router.delete("/reflections/{reflection_id}")
+async def delete_reflection_admin_route(
+    reflection_id: UUID,
     _admin: Annotated[AdminContext, Depends(require_founder)],
 ) -> dict:
-    reflection = update_admin_reflection(reflection_id, payload)
-    return success_envelope(reflection.model_dump(mode="json"))
+    delete_admin_reflection(reflection_id)
+    return success_envelope({"deleted": True, "id": str(reflection_id)})

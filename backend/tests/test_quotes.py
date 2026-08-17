@@ -46,6 +46,7 @@ SAMPLE_ADMIN_QUOTE = AdminQuoteResponse(
     attributed_to=SAMPLE_QUOTE.attributed_to,
     source_url=SAMPLE_QUOTE.source_url,
     status=DailyContentStatus.PUBLISHED,
+    deletable=False,
     created_at=CREATED_AT,
     updated_at=CREATED_AT,
 )
@@ -102,11 +103,12 @@ def test_create_quote_admin_route(mock_create_quote: MagicMock) -> None:
 def test_create_admin_quote_rejects_publish_without_source_url() -> None:
     with pytest.raises(ApiError) as exc_info:
         create_admin_quote(
+            ADMIN_CONTEXT,
             AdminQuoteCreate(
                 text="Example quote.",
                 attributed_to="Example Author",
                 status=DailyContentStatus.PUBLISHED,
-            )
+            ),
         )
 
     assert exc_info.value.status_code == 422
@@ -138,6 +140,7 @@ def test_update_admin_quote_rejects_publish_without_source_url(
 
     with pytest.raises(ApiError) as exc_info:
         update_admin_quote(
+            ADMIN_CONTEXT,
             QUOTE_ID,
             AdminQuoteUpdate(status=DailyContentStatus.PUBLISHED),
         )
@@ -171,11 +174,12 @@ def test_create_admin_quote_allows_draft_without_source_url(
     )
 
     result = create_admin_quote(
+        ADMIN_CONTEXT,
         AdminQuoteCreate(
             text=SAMPLE_QUOTE.text,
             attributed_to=SAMPLE_QUOTE.attributed_to,
             status=DailyContentStatus.DRAFT,
-        )
+        ),
     )
 
     assert result.status == DailyContentStatus.DRAFT

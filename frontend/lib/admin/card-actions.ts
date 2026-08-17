@@ -30,6 +30,9 @@ export type SaveCardResult =
   | { ok: true; cardId: string }
   | { ok: false; code: string; message: string; clinicalGate?: boolean };
 
+export type DeleteCardResult =
+  { ok: true } | { ok: false; code: string; message: string };
+
 export async function createCardAction(
   payload: CardFormPayload,
 ): Promise<SaveCardResult> {
@@ -88,4 +91,28 @@ function mapSaveError(
       ? error.message
       : "Something went wrong while saving.";
   return { ok: false, code: "INTERNAL_ERROR", message };
+}
+
+export async function deleteCardAction(
+  cardId: string,
+): Promise<DeleteCardResult> {
+  try {
+    await adminApiRequest<{ deleted: boolean; id: string }>(
+      `/v1/admin/cards/${cardId}`,
+      {
+        method: "DELETE",
+      },
+    );
+    revalidatePath("/admin/cards");
+    return { ok: true };
+  } catch (error) {
+    if (error instanceof ApiRequestError) {
+      return { ok: false, code: error.code, message: error.message };
+    }
+    return {
+      ok: false,
+      code: "INTERNAL_ERROR",
+      message: "Could not delete that card.",
+    };
+  }
 }

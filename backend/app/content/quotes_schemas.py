@@ -38,6 +38,7 @@ class AdminQuoteResponse(BaseModel):
     attributed_to: str
     source_url: str | None
     status: DailyContentStatus
+    deletable: bool
     created_at: datetime
     updated_at: datetime
 

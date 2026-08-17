@@ -49,6 +49,7 @@ SAMPLE_ADMIN_AFFIRMATION = AdminAffirmationResponse(
     id=AFFIRMATION_ID,
     text="I can handle uncertain moments with patience.",
     status=DailyContentStatus.PUBLISHED,
+    deletable=False,
     tag_ids=[TAG_A_ID, TAG_B_ID],
     created_at=CREATED_AT,
     updated_at=CREATED_AT,
@@ -232,7 +233,7 @@ def test_update_admin_affirmation_replaces_tag_associations(
     )
     affirmation_tags_table.insert.return_value.execute.return_value = MagicMock(data=[])
     affirmations_select_execute.side_effect = [
-        MagicMock(data=[{"id": str(AFFIRMATION_ID)}]),
+        MagicMock(data=[{"id": str(AFFIRMATION_ID), "status": "draft"}]),
         MagicMock(
             data=[
                 {
@@ -250,6 +251,7 @@ def test_update_admin_affirmation_replaces_tag_associations(
     )
 
     result = update_admin_affirmation(
+        ADMIN_CONTEXT,
         AFFIRMATION_ID,
         AdminAffirmationUpdate(tag_ids=[TAG_B_ID]),
     )
@@ -269,6 +271,7 @@ def test_create_admin_affirmation_inserts_tags(
     affirmations_table = MagicMock()
     affirmation_tags_table = MagicMock()
     tags_table = MagicMock()
+    review_log_table = MagicMock()
 
     def table_router(name: str) -> MagicMock:
         if name == "affirmations":
@@ -277,9 +280,16 @@ def test_create_admin_affirmation_inserts_tags(
             return affirmation_tags_table
         if name == "tags":
             return tags_table
+        if name == "review_log":
+            return review_log_table
         raise AssertionError(f"Unexpected table: {name}")
 
     client_mock.table.side_effect = table_router
+
+    review_log_query = review_log_table.select.return_value
+    review_log_query = review_log_query.eq.return_value.eq.return_value
+    review_log_execute = review_log_query.eq.return_value.limit.return_value.execute
+    review_log_execute.return_value = MagicMock(data=[])
 
     tags_table.select.return_value.in_.return_value.execute.return_value = MagicMock(
         data=[{"id": str(TAG_A_ID)}, {"id": str(TAG_B_ID)}]
@@ -321,10 +331,11 @@ def test_create_admin_affirmation_inserts_tags(
     )
 
     result = create_admin_affirmation(
+        ADMIN_CONTEXT,
         AdminAffirmationCreate(
             text=SAMPLE_AFFIRMATION.text,
             tag_ids=[TAG_A_ID, TAG_B_ID],
-        )
+        ),
     )
 
     affirmation_tags_table.insert.assert_called_once()

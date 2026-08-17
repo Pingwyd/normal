@@ -7,6 +7,7 @@ from pydantic import BaseModel
 class DailyContentStatus(StrEnum):
     DRAFT = "draft"
     PUBLISHED = "published"
+    UNPUBLISHED = "unpublished"
 
 
 class TagSummary(BaseModel):

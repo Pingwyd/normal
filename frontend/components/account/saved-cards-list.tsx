@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { AlertCircle } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -121,6 +122,39 @@ function SavedItemsTabs({ activeTab }: { activeTab: SavedTab }) {
   );
 }
 
+function SavedUnavailablePreview({
+  contentType,
+}: {
+  contentType: FavoriteContentType;
+}) {
+  const labels: Record<FavoriteContentType, string> = {
+    card: "card",
+    affirmation: "affirmation",
+    quote: "quote",
+  };
+
+  return (
+    <article className="rounded-3xl border border-dashed border-border-strong bg-surface-muted p-6">
+      <div className="flex items-start gap-3">
+        <AlertCircle
+          size={20}
+          className="mt-0.5 shrink-0 text-muted"
+          aria-hidden="true"
+        />
+        <div className="space-y-1">
+          <h2 className="font-display text-lg text-foreground">
+            No longer available
+          </h2>
+          <p className="text-sm text-muted">
+            This saved {labels[contentType]} is not on the public site right
+            now. It will reappear here if it is published again.
+          </p>
+        </div>
+      </div>
+    </article>
+  );
+}
+
 function SavedCardPreview({
   contentId,
   content,
@@ -233,6 +267,10 @@ function SavedQuotePreview({
 }
 
 function SavedFavoritePreview({ favorite }: { favorite: FavoriteListItem }) {
+  if (!favorite.available) {
+    return <SavedUnavailablePreview contentType={favorite.content_type} />;
+  }
+
   if (favorite.content_type === "card") {
     return (
       <SavedCardPreview
@@ -240,6 +278,10 @@ function SavedFavoritePreview({ favorite }: { favorite: FavoriteListItem }) {
         content={favorite.content as FavoriteCardContent}
       />
     );
+  }
+
+  if (favorite.content === null) {
+    return <SavedUnavailablePreview contentType={favorite.content_type} />;
   }
 
   if (favorite.content_type === "affirmation") {
